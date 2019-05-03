@@ -6,3 +6,4 @@ Sample codes for my CUDA programming book
   * Will be in Chinese
   * Teaches CUDA programming step by step
   * Has a real world project: developing a molecular dynamics code from the ground up
+  * Provides all the source codes
