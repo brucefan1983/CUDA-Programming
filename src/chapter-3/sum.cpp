@@ -8,16 +8,16 @@ int main(void)
 {
     int N = 1024 * 1024;
     int M = sizeof(double) * N;
-    double *x = new double[M];
-    double *y = new double[M];
-    double *z = new double[M];
+    double *x = (double*) malloc(M);
+    double *y = (double*) malloc(M);
+    double *z = (double*) malloc(M);
     for (int n = 0; n < N; ++n)
     {
         x[n] = 1.0; y[n] = 2.0; z[n] = 0.0;
     }
     sum(x, y, z, N);
     check(z, N);
-    delete [] x; delete [] y; delete [] z;
+    free(x); free(y); free(z);
     return 0;
 }
 
