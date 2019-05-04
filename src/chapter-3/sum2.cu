@@ -8,9 +8,9 @@ int main(void)
 {
     int N = 1024 * 1024;
     int M = sizeof(double) * N;
-    double *x = (double*) malloc(M);
-    double *y = (double*) malloc(M);
-    double *z = (double*) malloc(M);
+    double *x = new double[M];
+    double *y = new double[M];
+    double *z = new double[M];
     for (int n = 0; n < N; ++n)
     {
         x[n] = 1.0; y[n] = 2.0; z[n] = 0.0;
@@ -27,7 +27,7 @@ int main(void)
     sum<<<grid_size, block_size>>>(g_x, g_y, g_z, N);
     cudaMemcpy(z, g_z, M, cudaMemcpyDeviceToHost);
     check(z, N);
-    free(x); free(y); free(z);
+    delete [] x; delete [] y; delete [] z;
     cudaFree(g_x); cudaFree(g_y); cudaFree(g_z);
     return 0;
 }
