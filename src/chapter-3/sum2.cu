@@ -21,7 +21,6 @@ int main(void)
     cudaMalloc((void **)&g_z, M);
     cudaMemcpy(g_x, x, M, cudaMemcpyHostToDevice);
     cudaMemcpy(g_y, y, M, cudaMemcpyHostToDevice);
-    cudaMemcpy(g_z, z, M, cudaMemcpyHostToDevice);
     int block_size = 128;
     int grid_size = N / block_size;
     sum<<<grid_size, block_size>>>(g_x, g_y, g_z, N);
