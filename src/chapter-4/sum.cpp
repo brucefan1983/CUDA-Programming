@@ -1,6 +1,7 @@
-#include <math.h> // for abs() function
-#include <stdio.h>
-#include <time.h>
+#include <math.h> // fabs()
+#include <stdlib.h> // malloc() and free() 
+#include <stdio.h> // printf()
+#include <time.h> // clock(), clock_t, and CLOCKS_PER_SEC
 #define EPSILON 1.0e-14 // a small number
 void sum(double *x, double *y, double *z, int N);
 void check(double *z, int N);
