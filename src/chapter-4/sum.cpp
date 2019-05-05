@@ -1,7 +1,8 @@
-#include <math.h> // fabs()
+#include <math.h> // for abs() function
 #include <stdio.h>
+#include <time.h>
 #define EPSILON 1.0e-14 // a small number
-void __global__ sum(double *x, double *y, double *z, int N);
+void sum(double *x, double *y, double *z, int N);
 void check(double *z, int N);
 
 int main(void)
@@ -15,26 +16,19 @@ int main(void)
     {
         x[n] = 1.0; y[n] = 2.0; z[n] = 0.0;
     }
-    double *g_x, *g_y, *g_z;
-    cudaMalloc((void **)&g_x, M);
-    cudaMalloc((void **)&g_y, M);
-    cudaMalloc((void **)&g_z, M);
-    cudaMemcpy(g_x, x, M, cudaMemcpyHostToDevice);
-    cudaMemcpy(g_y, y, M, cudaMemcpyHostToDevice);
-    int block_size = 128;
-    int grid_size = (N - 1) / block_size + 1;
-    sum<<<grid_size, block_size>>>(g_x, g_y, g_z, N);
-    cudaMemcpy(z, g_z, M, cudaMemcpyDeviceToHost);
+    clock_t time_begin = clock();
+    sum(x, y, z, N);
+    clock_t time_finish = clock();
+    double time_used = (time_finish - time_begin) / double(CLOCKS_PER_SEC);
+    printf("Time used for host function = %f s.\n", time_used);
     check(z, N);
     free(x); free(y); free(z);
-    cudaFree(g_x); cudaFree(g_y); cudaFree(g_z);
     return 0;
 }
 
-void __global__ sum(double *x, double *y, double *z, int N)
+void sum(double *x, double *y, double *z, int N)
 {
-    int n = blockDim.x * blockIdx.x + threadIdx.x;
-    if (n < N) { z[n] = x[n] + y[n]; }
+    for (int n = 0; n < N; ++n) { z[n] = x[n] + y[n]; }
 }
 
 void check(double *z, int N)

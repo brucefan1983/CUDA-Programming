@@ -1,4 +1,4 @@
-#include <math.h> // for abs() function
+#include <math.h> // fabs()
 #include <stdio.h>
 #define EPSILON 1.0e-14 // a small number
 void __global__ sum(double *x, double *y, double *z, int N);

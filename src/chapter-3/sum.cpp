@@ -1,10 +1,11 @@
-#include <math.h> // for abs() function
+#include <math.h> // fabs()
+#include <stdlib.h> // malloc() and free() 
 #include <stdio.h>
 #define EPSILON 1.0e-14 // a small number
 void sum(double *x, double *y, double *z, int N);
 void check(double *z, int N);
 
-int main(void)
+int main(void) 
 {
     int N = 1024 * 1024;
     int M = sizeof(double) * N;
