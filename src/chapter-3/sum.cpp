@@ -7,7 +7,7 @@ void check(double *z, int N);
 
 int main(void) 
 {
-    int N = 1024 * 1024;
+    int N = 1024 * 100000;
     int M = sizeof(double) * N;
     double *x = (double*) malloc(M);
     double *y = (double*) malloc(M);
