@@ -1,0 +1,76 @@
+#include <stdlib.h>
+#include <math.h>
+#include <stdio.h>
+#include <time.h>
+
+void read_xy(int N, double *x, double *y);
+void find_neighbor
+(int N, int MN, int *NN, int *NL, double *x, double *y, double cutoff);
+void print_neighbor(int N, int MN, int *NN, int *NL);
+
+int main(void)
+{
+    int N; // number of atoms
+    int MN = 4; // maximum number of neighbors for each atom
+    double cutoff = 1.9; // in units of Angstrom
+    int *NN = (int*) malloc(N * sizeof(int));
+    int *NL = (int*) malloc(N * MN * sizeof(int));
+    double *x  = (double*) malloc(N * sizeof(double));
+    double *y  = (double*) malloc(N * sizeof(double));
+    read_xy(N, x, y);
+    find_neighbor(N, MN, NN, NL, x, y, cutoff);
+    print_neighbor(N, MN, NN, NL);
+    free(NN); free(NL); free(x); free(y);
+    return 0;
+}
+
+void read_xy(int N, double *x, double *y)
+{
+    double Lx, Ly;
+    FILE *fid = fopen("xy.txt", "r");
+    fscanf(fid, "%d", &N);
+    fscanf(fid, "%lf%lf", &Lx, &Ly);
+    for (int n = 0; n < N; ++n)
+    {
+        int count = fscanf(fid, "%lf%lf", &x[n], &y[n]);
+        if (count != 2) { printf("Error for reading xy.in"); exit(1);}
+    }
+    fclose(fid);
+}
+
+void find_neighbor
+(int N, int MN, int *NN, int *NL, double *x, double *y, double cutoff)
+{
+    for (int n = 0; n < N; n++) { NN[n] = 0; }
+    for (int n1 = 0; n1 < N; n1++)
+    {
+        for (int n2 = 0; n2 < N; n2++)
+        {
+            if (n1 == n2) continue;
+            double x12 = x[n2] - x[n1];
+            double y12 = y[n2] - y[n1];
+            double  distance = sqrt(x12 * x12 + y12 * y12);
+            if (distance < cutoff)
+            {
+                NL[n1 * MN + NN[n1]++] = n2;
+            }
+            if (NN[n1] > MN) { printf("Error: MN is too small.\n"); exit(1); }
+        }
+    }
+}
+
+void print_neighbor(int N, int MN, int *NN, int *NL)
+{
+    FILE *fid = fopen("neighbor1.txt", "w");
+    for (int n = 0; n < N; ++n)
+    {
+        fprintf(fid, "%d", NN[n]);
+        for (int k = 0; k < NN[n]; ++k)
+        {
+            fprintf(fid, " %d", NL[n * MN + k]);
+        }
+        fprintf(fid, "\n");
+    }
+    fclose(fid);
+}
+
