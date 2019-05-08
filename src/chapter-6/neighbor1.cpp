@@ -26,10 +26,10 @@ int main(void)
 
 void read_xy(int N, double *x, double *y)
 {
-    double Lx, Ly;
     FILE *fid = fopen("xy.txt", "r");
     if (NULL == fid) { printf("Cannot open xy.in"); exit(1); }
     fscanf(fid, "%d", &N);
+    double Lx, Ly;
     fscanf(fid, "%lf%lf", &Lx, &Ly);
     for (int n = 0; n < N; ++n)
     {
