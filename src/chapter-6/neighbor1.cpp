@@ -53,11 +53,9 @@ void find_neighbor
             double x12 = x[n2] - x[n1];
             double y12 = y[n2] - y[n1];
             double  distance = sqrt(x12 * x12 + y12 * y12);
-            if (distance < cutoff)
-            {
-                NL[n1 * MN + NN[n1]++] = n2;
-            }
-            if (NN[n1] > MN) { printf("Error: MN is too small.\n"); exit(1); }
+            if (distance < cutoff) { NL[n1 * MN + NN[n1]++] = n2; }
+            if (NN[n1] > MN)
+            { printf("Error: MN is too small.\n"); exit(1); }
         }
     }
 }
