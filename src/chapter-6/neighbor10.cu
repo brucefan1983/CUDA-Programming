@@ -42,7 +42,7 @@ void read_xy(int N, double *x, double *y)
 }
 
 void __global__ gpu_find_neighbor
-(int N, int MN, int *g_NN, int *g_NL, double *g_x, double *g_y, double cutoff2)
+(int N, int *g_NN, int *g_NL, double *g_x, double *g_y, double cutoff2)
 {
     int n1 = blockIdx.x * blockDim.x + threadIdx.x; // from thread to atom
     if (n1 < N)
@@ -76,7 +76,7 @@ void find_neighbor
     int block_size = 128;
     int grid_size = (N - 1) / block_size + 1;
     gpu_find_neighbor<<<grid_size, block_size>>>
-    (N, MN, g_NN, g_NL, g_x, g_y, cutoff * cutoff);
+    (N, g_NN, g_NL, g_x, g_y, cutoff * cutoff);
     cudaMemcpy(NN, g_NN, N * sizeof(int), cudaMemcpyDeviceToHost);
     cudaMemcpy(NL, g_NL, N * MN * sizeof(int), cudaMemcpyDeviceToHost);
     cudaFree(g_NN); cudaFree(g_NL); cudaFree(g_x); cudaFree(g_y);
@@ -84,7 +84,7 @@ void find_neighbor
 
 void print_neighbor(int N, int MN, int *NN, int *NL)
 {
-    FILE *fid = fopen("neighbor9.txt", "w");
+    FILE *fid = fopen("neighbor10.txt", "w");
     for (int n = 0; n < N; ++n)
     {
         fprintf(fid, "%d", NN[n]);
