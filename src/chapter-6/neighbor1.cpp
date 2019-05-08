@@ -10,7 +10,7 @@ void print_neighbor(int N, int MN, int *NN, int *NL);
 
 int main(void)
 {
-    int N; // number of atoms
+    int N = 22464; // number of atoms
     int MN = 4; // maximum number of neighbors for each atom
     double cutoff = 1.9; // in units of Angstrom
     int *NN = (int*) malloc(N * sizeof(int));
@@ -18,7 +18,11 @@ int main(void)
     double *x  = (double*) malloc(N * sizeof(double));
     double *y  = (double*) malloc(N * sizeof(double));
     read_xy(N, x, y);
+    clock_t time_begin = clock();
     find_neighbor(N, MN, NN, NL, x, y, cutoff);
+    clock_t time_finish = clock();
+    double time_used = (time_finish - time_begin) / double(CLOCKS_PER_SEC);
+    printf("Time used for host function = %f s.\n", time_used);
     print_neighbor(N, MN, NN, NL);
     free(NN); free(NL); free(x); free(y);
     return 0;
