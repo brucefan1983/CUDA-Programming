@@ -25,13 +25,14 @@ for n=1:N
     xy1=xy(n,:);
     for k=1:neighbor1(n,1)
         xy2=xy(neighbor1(n,1+k),:);
-        x=(xy1(1)+xy2(1))/2;
-        y=(xy1(2)+xy2(2))/2;
-        plot(x,y,'r.');
-        %x=[x,linspace(xy1(1),xy2(1),10)];
-        %y=[y,linspace(xy1(2),xy2(2),10)];
-        %plot(x,y,'r-');
+        %x=(xy1(1)+xy2(1))/2;
+        %y=(xy1(2)+xy2(2))/2;
+        %plot(x,y,'r.');
+        x=linspace(xy1(1),xy2(1),10);
+        y=linspace(xy1(2),xy2(2),10);
+        plot(x,y,'r-');
     end
+    if (mod(n,1000)==0);disp(n);end;
 end
 axis equal;
 xlim([60,180]);
