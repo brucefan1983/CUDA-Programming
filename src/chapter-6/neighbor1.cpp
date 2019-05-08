@@ -28,12 +28,14 @@ void read_xy(int N, double *x, double *y)
 {
     FILE *fid = fopen("xy.txt", "r");
     if (NULL == fid) { printf("Cannot open xy.in"); exit(1); }
-    fscanf(fid, "%d", &N);
+    int count = fscanf(fid, "%d", &N);
+    if (count != 1) { printf("Error for reading xy.in"); exit(1); }
     double Lx, Ly;
-    fscanf(fid, "%lf%lf", &Lx, &Ly);
+    count = fscanf(fid, "%lf%lf", &Lx, &Ly);
+    if (count != 2) { printf("Error for reading xy.in"); exit(1); }
     for (int n = 0; n < N; ++n)
     {
-        int count = fscanf(fid, "%lf%lf", &x[n], &y[n]);
+        count = fscanf(fid, "%lf%lf", &x[n], &y[n]);
         if (count != 2) { printf("Error for reading xy.in"); exit(1); }
     }
     fclose(fid);
