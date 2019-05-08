@@ -86,7 +86,7 @@ void find_neighbor
 
 void print_neighbor(int N, int MN, int *NN, int *NL)
 {
-    FILE *fid = fopen("neighbor5.txt", "w");
+    FILE *fid = fopen("neighbor6.txt", "w");
     for (int n = 0; n < N; ++n)
     {
         fprintf(fid, "%d", NN[n]);
