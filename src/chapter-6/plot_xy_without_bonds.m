@@ -1,6 +1,7 @@
 clear;close all;
 fid=fopen("xy.txt");
 N=sscanf(fgetl(fid),'%d');
+box=sscanf(fgetl(fid),'%f',[1,2]);
 xy=zeros(N,2);
 for n=1:N
     xy(n,:)=sscanf(fgetl(fid),'%f',[1,2]);
