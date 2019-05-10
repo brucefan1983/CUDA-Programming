@@ -1,4 +1,4 @@
-## Chapter 2: Thread organization in CUDA
+# Chapter 2: Thread organization in CUDA
 
 ## Source files for the chapter
 
