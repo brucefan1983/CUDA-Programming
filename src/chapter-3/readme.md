@@ -4,7 +4,7 @@
 
 
 | file   |      compile      |  run |
-|----------|:-------------:|------:|
+|----------|:-------------|------:|
 | sum.cpp |  g++ -O3 sum.cpp | ./a.out |
 | sum1.cu |  nvcc -arch=sm_35 sum1.cu | ./a.out |
 | sum2.cu |  nvcc -arch=sm_35 sum2.cu | ./a.out |
