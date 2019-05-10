@@ -1,4 +1,4 @@
-# Chapter 6: Using shared memory properly
+# Chapter 7: Using shared memory properly
 
 ## Source files for the chapter
 
@@ -9,5 +9,6 @@
 | length3.cu |  nvcc -arch=sm_35 -O3 length3.cu | nvprof --unified-memory-profiling off ./a.out |
 | length4.cu |  nvcc -arch=sm_35 -O3 length4.cu | nvprof --unified-memory-profiling off ./a.out |
 | length5.cu |  nvcc -arch=sm_35 -O3 length5.cu | nvprof --unified-memory-profiling off ./a.out |
+| length6.cpp |  g++ -O3 length6.cpp | ./a.out |
 
 
