@@ -1,7 +1,5 @@
 #include <stdlib.h> // malloc() and free()
 #include <stdio.h> // printf()
-#include <math.h> // sqrt()
-#include <time.h> // clock_t, clock(), and CLOCKS_PER_SEC
 double get_length(double *x, int N);
 
 int main(void)

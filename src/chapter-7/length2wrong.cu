@@ -1,7 +1,5 @@
 #include <stdlib.h> // malloc() and free()
 #include <stdio.h> // printf()
-#include <math.h> // sqrt()
-#include <time.h> // clock_t, clock(), and CLOCKS_PER_SEC
 double get_length(double *x, int N);
 
 int main(void)
@@ -49,11 +47,7 @@ double get_length(double *x, int N)
     double *g_x;
     cudaMalloc((void**)&g_x, sizeof(double) * N);
     cudaMemcpy(g_x, x, sizeof(double) * N, cudaMemcpyHostToDevice);
-    for (int n = 0; n < 100000; n++)
-    {
-        cudaMemcpy(g_x, x, sizeof(double) * N, cudaMemcpyHostToDevice);
-        get_length<<<1, 1024>>>(g_x, g_length, N);
-    }
+    get_length<<<1, 1024>>>(g_x, g_length, N);
     double *cpu_length = (double *) malloc(sizeof(double));
     cudaMemcpy(cpu_length, g_length, sizeof(double), cudaMemcpyDeviceToHost);
     cudaFree(g_length);
