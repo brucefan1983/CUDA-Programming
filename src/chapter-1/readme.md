@@ -1,3 +1,3 @@
-## Chapter 1: GPU 硬件与 CUDA 程序开发平台概述
+## Chapter 1: GPU hardware and CUDA programming tools
 
 ## There is no source code for this chapter.
