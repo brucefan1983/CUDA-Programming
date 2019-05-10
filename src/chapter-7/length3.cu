@@ -11,7 +11,11 @@ int main(void)
     {
         x[n] = 1.0;
     }
-    double length = get_length(x, N);
+    double length = 0.0;
+    for (int n = 0; n < 1000; ++n)
+    {
+        length = get_length(x, N);
+    }
     printf("length = %g.\n", length);
     free(x);
     return 0;

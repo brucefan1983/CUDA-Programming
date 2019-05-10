@@ -21,7 +21,7 @@ int main(void)
     }
     clock_t time_finish = clock();
     double time_used = (time_finish - time_begin) / double(CLOCKS_PER_SEC);
-    printf("Time used for 100000 host function callings = %f s.\n", time_used);
+    printf("Time used for 1000 host function callings = %f s.\n", time_used);
     printf("length = %g.\n", length);
     free(x);
     return 0;

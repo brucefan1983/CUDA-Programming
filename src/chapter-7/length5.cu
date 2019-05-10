@@ -11,7 +11,11 @@ int main(void)
     {
         x[n] = 1.0;
     }
-    double length = get_length(x, N);
+    double length = 0.0;
+    for (int n = 0; n < 1000; ++n)
+    {
+        length = get_length(x, N);
+    }
     printf("length = %g.\n", length);
     free(x);
     return 0;
@@ -34,14 +38,10 @@ void __global__ get_length(double *g_x, double *g_length, int N)
         s_x[tid] = tmp * tmp;
     }
     __syncthreads();
-    if (tid < 512) { s_x[tid] += s_x[tid + 512]; }
-    __syncthreads();
-    if (tid < 256) { s_x[tid] += s_x[tid + 256]; } 
-    __syncthreads();
-    if (tid < 128) { s_x[tid] += s_x[tid + 128]; } 
-    __syncthreads();
-    if (tid <  64) { s_x[tid] += s_x[tid + 64]; }  
-    __syncthreads();
+    if (tid < 512) { s_x[tid] += s_x[tid + 512]; } __syncthreads();
+    if (tid < 256) { s_x[tid] += s_x[tid + 256]; } __syncthreads();
+    if (tid < 128) { s_x[tid] += s_x[tid + 128]; } __syncthreads();
+    if (tid <  64) { s_x[tid] += s_x[tid + 64]; }  __syncthreads();
     if (tid < 32)
     { 
         warp_reduce(s_x, tid); 
