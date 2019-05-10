@@ -10,5 +10,11 @@
 | length4.cu |  nvcc -arch=sm_35 -O3 length4.cu | nvprof --unified-memory-profiling off ./a.out |
 | length5.cu |  nvcc -arch=sm_35 -O3 length5.cu | nvprof --unified-memory-profiling off ./a.out |
 | length6.cpp |  g++ -O3 length6.cpp | ./a.out |
+| length7.cu |  nvcc -arch=sm_35 -O3 length7.cu | nvprof --unified-memory-profiling off ./a.out |
+| length8.cu |  nvcc -arch=sm_35 -O3 length8.cu | nvprof --unified-memory-profiling off ./a.out |
+| length9.cu |  nvcc -arch=sm_35 -O3 length9.cu | nvprof --unified-memory-profiling off ./a.out |
+| length10.cu |  nvcc -arch=sm_35 -O3 length10.cu | nvprof --unified-memory-profiling off ./a.out |
+| length11.cu |  nvcc -arch=sm_35 -O3 length11.cu | nvprof --unified-memory-profiling off ./a.out |
+| length12.cu |  nvcc -arch=sm_35 -O3 length12.cu | nvprof --unified-memory-profiling off ./a.out |
 
 
