@@ -1,6 +1,6 @@
 # Chapter 7: Using shared memory properly
 
-## Source files for the chapter
+## Source files for this chapter
 
 | file   |      compile      |  run |
 |----------|:-------------|------:|
