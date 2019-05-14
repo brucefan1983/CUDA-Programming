@@ -1,4 +1,4 @@
-# Chapter 13: A multi-file C-style C++ program for molecular dynamics simulation
+# Chapter 13: A multi-file C-style program for molecular dynamics simulation
 
 ## How to compile and run?
   * type `make` to compile
