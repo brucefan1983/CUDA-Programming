@@ -1,6 +1,6 @@
 # Chapter 8: Using CUDA libraries
 
-## Source files for the chapter
+## Source files for this chapter
 
 | file   |      compile      |  run |
 |----------|:-------------|------:|
