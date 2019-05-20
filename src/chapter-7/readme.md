@@ -1,4 +1,4 @@
-# Chapter 6: Using global memory and registers properly
+# Chapter 7: Using global memory and registers properly
 
 ## Source files for the chapter
 
