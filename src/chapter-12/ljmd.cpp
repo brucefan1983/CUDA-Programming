@@ -8,27 +8,24 @@
 
 void apply_mic
 (
-    double lx, double ly, double lz, double lxh, double lyh, 
-    double lzh, double *x12, double *y12, double *z12
+    double *box, double *x12, double *y12, double *z12
 )
 {
-    if (*x12 < - lxh)      { *x12 += lx; } 
-    else if (*x12 > + lxh) { *x12 -= lx; }
-    if (*y12 < - lyh)      { *y12 += ly; } 
-    else if (*y12 > + lyh) { *y12 -= ly; }
-    if (*z12 < - lzh)      { *z12 += lz; } 
-    else if (*z12 > + lzh) { *z12 -= lz; }
+    if      (*x12 < - box[3]) { *x12 += box[0]; } 
+    else if (*x12 > + box[3]) { *x12 -= box[0]; }
+    if      (*y12 < - box[4]) { *y12 += box[1]; } 
+    else if (*y12 > + box[4]) { *y12 -= box[1]; }
+    if      (*z12 < - box[5]) { *z12 += box[2]; } 
+    else if (*z12 > + box[5]) { *z12 -= box[2]; }
 }
 
 void find_neighbor
 (
     int N, int *NN, int *NL, double *x, double *y, double *z, 
-    double lx, double ly, double lz, int MN, double cutoff
+    double *box, int MN
 )              
 {
-    double lxh = lx * 0.5;
-    double lyh = ly * 0.5;
-    double lzh = lz * 0.5; 
+    double cutoff = 11.0;
     double cutoff_square = cutoff * cutoff;
     for (int n = 0; n < N; n++) {NN[n] = 0;}
     for (int n1 = 0; n1 < N - 1; n1++)
@@ -38,10 +35,7 @@ void find_neighbor
             double x12 = x[n2] - x[n1];
             double y12 = y[n2] - y[n1];
             double z12 = z[n2] - z[n1];
-            apply_mic
-            (
-                lx, ly, lz, lxh, lyh, lzh, &x12, &y12, &z12
-            );
+            apply_mic(box, &x12, &y12, &z12);
             double  d_square = x12*x12 + y12*y12 + z12*z12;
             if (d_square < cutoff_square)
             {        
@@ -59,9 +53,7 @@ void find_neighbor
 
 void initialize_position 
 (
-    int nx, int ny, int nz,
-    double ax, double ay, double az, 
-    double *x, double *y, double *z
+    int nx, double ax, double *x, double *y, double *z
 )
 {
     double x0[4] = {0.0, 0.0, 0.5, 0.5};
@@ -70,15 +62,15 @@ void initialize_position
     int n = 0;
     for (int ix = 0; ix < nx; ++ix)
     {
-        for (int iy = 0; iy < ny; ++iy)
+        for (int iy = 0; iy < nx; ++iy)
         {
-            for (int iz = 0; iz < nz; ++iz)
+            for (int iz = 0; iz < nx; ++iz)
             {
                 for (int i = 0; i < 4; ++i)
                 {
                     x[n] = (ix + x0[i]) * ax;
-                    y[n] = (iy + y0[i]) * ay;
-                    z[n] = (iz + z0[i]) * az;
+                    y[n] = (iy + y0[i]) * ax;
+                    z[n] = (iz + z0[i]) * ax;
                     n++;
                 }
             }
@@ -136,8 +128,7 @@ void initialize_velocity
 
 void find_force
 (
-    int N, int *NN, int *NL, int MN, 
-    double lx, double ly, double lz,
+    int N, int *NN, int *NL, int MN, double *box,
     double *x, double *y, double *z, 
     double *fx, double *fy, double *fz,
     double *vx, double *vy, double *vz,
@@ -157,9 +148,6 @@ void find_force
     const double e4s12 = 4.0 * epsilon * sigma_12;
     *potential = 0.0;
     for (int n = 0; n < N; ++n) { fx[n]=fy[n]=fz[n]=0.0; }
-    double lxh = lx * 0.5;
-    double lyh = ly * 0.5;
-    double lzh = lz * 0.5;
     for (int i = 0; i < N; ++i)
     {
         for (int k = 0; k < NN[i]; k++)
@@ -169,10 +157,7 @@ void find_force
             double x_ij = x[j] - x[i];
             double y_ij = y[j] - y[i];
             double z_ij = z[j] - z[i];
-            apply_mic
-            (
-                lx, ly, lz, lxh, lyh, lzh, &x_ij, &y_ij, &z_ij
-            );
+            apply_mic(box, &x_ij, &y_ij, &z_ij);
             double r_2 = x_ij*x_ij + y_ij*y_ij + z_ij*z_ij;
             if (r_2 > cutoff_square) { continue; }
             double r_4 = r_2 * r_2;
@@ -219,8 +204,7 @@ void integrate
 
 void equilibration
 (
-    int Ne, int N, int *NN, int *NL, int MN, 
-    double lx, double ly, double lz,
+    int Ne, int N, int *NN, int *NL, int MN, double *box,
     double T_0, double time_step, double *m, 
     double *fx, double *fy, double *fz, 
     double *vx, double *vy, double *vz, 
@@ -237,7 +221,7 @@ void equilibration
         );
         find_force
         (
-            N, NN, NL, MN, lx, ly, lz, x, y, z, 
+            N, NN, NL, MN, box, x, y, z, 
             fx, fy, fz, vx, vy, vz, &potential
         );
         integrate
@@ -255,7 +239,7 @@ void equilibration
 void production
 (
     int Np, int Ns, int N, int *NN, int *NL, int MN,
-    double lx, double ly, double lz,
+    double *box,
     double T_0, double time_step, double *m,
     double *fx, double *fy, double *fz,
     double *vx, double *vy, double *vz, 
@@ -274,7 +258,7 @@ void production
         );
         find_force
         (
-            N, NN, NL, MN, lx, ly, lz, x, y, z, 
+            N, NN, NL, MN, box, x, y, z, 
             fx, fy, fz, vx, vy, vz, &potential
         );
         integrate
@@ -316,23 +300,22 @@ void production
 
 int main(void)
 {
-    srand(time(NULL));
+    //srand(time(NULL));
     int nx = 4;
-    int ny = nx;
-    int nz = ny;
-    int N = 4 * nx * ny * nz;
+    int N = 4 * nx * nx * nx;
     int Ne = 20000;
     int Np = 20000;
     int Ns = 100;
     int MN = 200;
     double T_0 = 60.0;
     double ax = 5.385;
-    double ay = ax;
-    double az = ax;
-    double lx = ax * nx;
-    double ly = ay * ny;
-    double lz = az * nz;
-    double cutoff = 11.0;
+    double box[6];
+    box[0] = ax * nx;
+    box[1] = ax * nx;
+    box[2] = ax * nx;
+    box[3] = box[0] * 0.5;
+    box[4] = box[1] * 0.5;
+    box[5] = box[2] * 0.5;
     double time_step = 5.0 / TIME_UNIT_CONVERSION;
     int *NN = (int*) malloc(N * sizeof(int));
     int *NL = (int*) malloc(N * MN * sizeof(int));
@@ -347,17 +330,17 @@ int main(void)
     double *fy = (double*) malloc(N * sizeof(double));
     double *fz = (double*) malloc(N * sizeof(double));
     for (int n = 0; n < N; ++n) { m[n] = 40.0; }
-    initialize_position(nx, ny, nz, ax, ay, az, x, y, z);
+    initialize_position(nx, ax, x, y, z);
     initialize_velocity(N, T_0, m, vx, vy, vz);
-    find_neighbor(N, NN, NL, x, y, z, lx, ly, lz, MN, cutoff);
+    find_neighbor(N, NN, NL, x, y, z, box, MN);
     equilibration
     (
-        Ne, N, NN, NL, MN, lx, ly, lz, T_0, time_step, 
+        Ne, N, NN, NL, MN, box, T_0, time_step, 
         m, fx, fy, fz, vx, vy, vz, x, y, z
     );
     production
     (
-        Np, Ns, N, NN, NL, MN, lx, ly, lz, T_0, time_step, 
+        Np, Ns, N, NN, NL, MN, box, T_0, time_step, 
         m, fx, fy, fz, vx, vy, vz, x, y, z
     );
     free(NN); free(NL); free(m);  free(x);  free(y);  free(z);
