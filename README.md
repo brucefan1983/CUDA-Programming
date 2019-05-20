@@ -1,9 +1,9 @@
 # CUDA-Programming
-Sample codes for my CUDA programming book
+Source codes for my CUDA programming book
 
 ## About the book
   * To be published by the end of 2019
-  * Will be in Chinese
+  * The language for the book is Chinese
   * Teaches CUDA programming step by step
   * Has a real world project: developing a molecular dynamics code from the ground up
-  * Provides all the source codes
+  * Provides ALL the source codes
