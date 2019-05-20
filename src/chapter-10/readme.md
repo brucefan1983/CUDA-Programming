@@ -1,4 +1,4 @@
-# Chapter 8: Using CUDA libraries
+# Chapter 10: Using CUDA libraries
 
 ## Source files for this chapter
 
