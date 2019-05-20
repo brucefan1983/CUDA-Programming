@@ -1,4 +1,4 @@
-# Chapter 4: The crucial ingredients for obtaining speedup
+# Chapter 5: The crucial ingredients for obtaining speedup
 
 ## Source files for the chapter
 
