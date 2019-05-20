@@ -21,8 +21,8 @@ void apply_mic
 
 void find_neighbor
 (
-    int N, int *NN, int *NL, double *x, double *y, double *z, 
-    double *box, int MN
+    int N, int MN, int *NN, int *NL, double *box,
+    double *x, double *y, double *z
 )              
 {
     double cutoff = 11.0;
@@ -332,7 +332,7 @@ int main(void)
     for (int n = 0; n < N; ++n) { m[n] = 40.0; }
     initialize_position(nx, ax, x, y, z);
     initialize_velocity(N, T_0, m, vx, vy, vz);
-    find_neighbor(N, NN, NL, x, y, z, box, MN);
+    find_neighbor(N, MN, NN, NL, box, x, y, z);
     equilibration
     (
         Ne, N, NN, NL, MN, box, T_0, time_step, 

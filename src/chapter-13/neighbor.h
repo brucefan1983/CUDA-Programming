@@ -1,5 +1,4 @@
 #pragma once
 #include "common.h"
 
-void find_neighbor(int N, Atom *atom, double *box, int MN);          
-
+void find_neighbor(int N, int MN, double *box, Atom *atom);

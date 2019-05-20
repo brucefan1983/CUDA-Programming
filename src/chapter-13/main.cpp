@@ -32,7 +32,7 @@ int main(void)
     for (int n = 0; n < N; ++n) { atom.m[n] = 40.0; }
     initialize_position(nx, ax, &atom);
     initialize_velocity(N, T_0, &atom);
-    find_neighbor(N, &atom, box, MN);
+    find_neighbor(N, MN, box, &atom);
     equilibration(Ne, N, MN, box, T_0, time_step, &atom);
     production(Np, Ns, N, MN, box, T_0, time_step, &atom);
     deallocate_memory(&atom);
