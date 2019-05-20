@@ -2,15 +2,16 @@
 #include "mic.h"
 
 void find_force
-(
-    int N, int *NN, int *NL, int MN, 
-    double lx, double ly, double lz,
-    double *x, double *y, double *z, 
-    double *fx, double *fy, double *fz,
-    double *vx, double *vy, double *vz,
-    double *potential
-)
+(int N, int MN, double *box, Atom *atom, double *potential)
 {
+    int *NN = atom->NN;
+    int *NL = atom->NL;
+    double *x = atom->x;
+    double *y = atom->y;
+    double *z = atom->z;
+    double *fx = atom->fx;
+    double *fy = atom->fy;
+    double *fz = atom->fz;
     const double epsilon = 1.032e-2;
     const double sigma = 3.405;
     const double cutoff = 10.0;
@@ -24,9 +25,6 @@ void find_force
     const double e4s12 = 4.0 * epsilon * sigma_12;
     *potential = 0.0;
     for (int n = 0; n < N; ++n) { fx[n]=fy[n]=fz[n]=0.0; }
-    double lxh = lx * 0.5;
-    double lyh = ly * 0.5;
-    double lzh = lz * 0.5;
     for (int i = 0; i < N; ++i)
     {
         for (int k = 0; k < NN[i]; k++)
@@ -36,10 +34,7 @@ void find_force
             double x_ij = x[j] - x[i];
             double y_ij = y[j] - y[i];
             double z_ij = z[j] - z[i];
-            apply_mic
-            (
-                lx, ly, lz, lxh, lyh, lzh, &x_ij, &y_ij, &z_ij
-            );
+            apply_mic(box, &x_ij, &y_ij, &z_ij);
             double r_2 = x_ij*x_ij + y_ij*y_ij + z_ij*z_ij;
             if (r_2 > cutoff_square) { continue; }
             double r_4 = r_2 * r_2;

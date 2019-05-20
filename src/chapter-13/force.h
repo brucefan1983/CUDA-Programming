@@ -1,12 +1,6 @@
 #pragma once
+#include "common.h"
 
 void find_force
-(
-    int N, int *NN, int *NL, int MN, 
-    double lx, double ly, double lz,
-    double *x, double *y, double *z, 
-    double *fx, double *fy, double *fz,
-    double *vx, double *vy, double *vz,
-    double *potential
-);
+(int N, int MN, double *box, Atom *atom, double *potential);
 

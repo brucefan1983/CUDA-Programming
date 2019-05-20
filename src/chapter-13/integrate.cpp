@@ -1,5 +1,4 @@
 #include "integrate.h"
-#include "common.h"
 #include "force.h"
 #include <stdio.h>
 #include <math.h>
@@ -7,10 +6,13 @@
 
 static void scale_velocity
 (
-    int N, double T_0, double *m, 
-    double *vx, double *vy, double *vz
+    int N, double T_0, Atom *atom
 )
-{  
+{
+    double *m = atom->m;
+    double *vx = atom->vx;
+    double *vy = atom->vy;
+    double *vz = atom->vz;
     double temperature = 0.0;
     for (int n = 0; n < N; ++n) 
     {
@@ -28,14 +30,18 @@ static void scale_velocity
 }
 
 static void integrate
-(
-    int N, double time_step, double *m, 
-    double *fx, double *fy, double *fz, 
-    double *vx, double *vy, double *vz, 
-    double *x, double *y, double *z, 
-    int flag
-)
+(int N, double time_step, Atom *atom, int flag)
 {
+    double *m = atom->m;
+    double *x = atom->x;
+    double *y = atom->y;
+    double *z = atom->z;
+    double *vx = atom->vx;
+    double *vy = atom->vy;
+    double *vz = atom->vz;
+    double *fx = atom->fx;
+    double *fy = atom->fy;
+    double *fz = atom->fz;
     double time_step_half = time_step * 0.5;
     for (int n = 0; n < N; ++n)
     {
@@ -57,32 +63,18 @@ static void integrate
 
 void equilibration
 (
-    int Ne, int N, int *NN, int *NL, int MN, 
-    double lx, double ly, double lz,
-    double T_0, double time_step, double *m, 
-    double *fx, double *fy, double *fz, 
-    double *vx, double *vy, double *vz, 
-    double *x, double *y, double *z
+    int Ne, int N, int MN, double *box,
+    double T_0, double time_step, Atom *atom
 )
 {
     clock_t time_begin = clock();
     double potential;
     for (int step = 0; step < Ne; ++step)
     { 
-        integrate
-        (
-            N, time_step, m, fx, fy, fz, vx, vy, vz, x, y, z, 1
-        );
-        find_force
-        (
-            N, NN, NL, MN, lx, ly, lz, x, y, z, 
-            fx, fy, fz, vx, vy, vz, &potential
-        );
-        integrate
-        (
-            N, time_step, m, fx, fy, fz, vx, vy, vz, x, y, z, 2
-        );
-        scale_velocity(N, T_0, m, vx, vy, vz);
+        integrate(N, time_step, atom, 1);
+        find_force(N, MN, box, atom, &potential);
+        integrate(N, time_step, atom, 2);
+        scale_velocity(N, T_0, atom);
     } 
     clock_t time_finish = clock();
     double time_used = (time_finish - time_begin) 
@@ -92,33 +84,23 @@ void equilibration
 
 void production
 (
-    int Np, int Ns, int N, int *NN, int *NL, int MN,
-    double lx, double ly, double lz,
-    double T_0, double time_step, double *m,
-    double *fx, double *fy, double *fz,
-    double *vx, double *vy, double *vz, 
-    double *x, double *y, double *z
+    int Np, int Ns, int N, int MN, double *box, 
+    double T_0, double time_step, Atom *atom
 )
 {
+    double *m = atom->m;
+    double *vx = atom->vx;
+    double *vy = atom->vy;
+    double *vz = atom->vz;
     double time_begin = clock();
     FILE *fid_e = fopen("energy.txt", "w");
     FILE *fid_v = fopen("velocity.txt", "w");
     double potential;
     for (int step = 0; step < Np; ++step)
     {  
-        integrate
-        (
-            N, time_step, m, fx, fy, fz, vx, vy, vz, x, y, z, 1
-        );
-        find_force
-        (
-            N, NN, NL, MN, lx, ly, lz, x, y, z, 
-            fx, fy, fz, vx, vy, vz, &potential
-        );
-        integrate
-        (
-            N, time_step, m, fx, fy, fz, vx, vy, vz, x, y, z, 2
-        );
+        integrate(N, time_step, atom, 1);
+        find_force(N, MN, box, atom, &potential);
+        integrate(N, time_step, atom, 2);
         if (0 == step % Ns)
         {
             double ek = 0.0;

@@ -1,14 +1,13 @@
 #include "initialize.h"
-#include "common.h"
 #include <stdlib.h>
 #include <math.h>
 
-static void scale_velocity
-(
-    int N, double T_0, double *m, 
-    double *vx, double *vy, double *vz
-)
-{  
+static void scale_velocity(int N, double T_0, Atom *atom)
+{
+    double *m = atom->m;
+    double *vx = atom->vx;
+    double *vy = atom->vy;
+    double *vz = atom->vz;
     double temperature = 0.0;
     for (int n = 0; n < N; ++n) 
     {
@@ -25,28 +24,26 @@ static void scale_velocity
     }
 }
 
-void initialize_position 
-(
-    int nx, int ny, int nz,
-    double ax, double ay, double az, 
-    double *x, double *y, double *z
-)
+void initialize_position(int nx, double ax, Atom *atom)
 {
+    double *x = atom->x;
+    double *y = atom->y;
+    double *z = atom->z;
     double x0[4] = {0.0, 0.0, 0.5, 0.5};
     double y0[4] = {0.0, 0.5, 0.0, 0.5}; 
     double z0[4] = {0.0, 0.5, 0.5, 0.0};
     int n = 0;
     for (int ix = 0; ix < nx; ++ix)
     {
-        for (int iy = 0; iy < ny; ++iy)
+        for (int iy = 0; iy < nx; ++iy)
         {
-            for (int iz = 0; iz < nz; ++iz)
+            for (int iz = 0; iz < nx; ++iz)
             {
                 for (int i = 0; i < 4; ++i)
                 {
                     x[n] = (ix + x0[i]) * ax;
-                    y[n] = (iy + y0[i]) * ay;
-                    z[n] = (iz + z0[i]) * az;
+                    y[n] = (iy + y0[i]) * ax;
+                    z[n] = (iz + z0[i]) * ax;
                     n++;
                 }
             }
@@ -54,12 +51,12 @@ void initialize_position
     }
 }
   
-void initialize_velocity
-(
-    int N, double T_0, double *m, 
-    double *vx, double *vy, double *vz
-)
+void initialize_velocity(int N, double T_0, Atom *atom)
 {
+    double *m = atom->m;
+    double *vx = atom->vx;
+    double *vy = atom->vy;
+    double *vz = atom->vz;
     double momentum_average[3] = {0.0, 0.0, 0.0};
     for (int n = 0; n < N; ++n)
     { 
@@ -77,6 +74,6 @@ void initialize_velocity
         vy[n] -= momentum_average[1] / m[n];
         vz[n] -= momentum_average[2] / m[n]; 
     }
-    scale_velocity(N, T_0, m, vx, vy, vz);
+    scale_velocity(N, T_0, atom);
 }
 
