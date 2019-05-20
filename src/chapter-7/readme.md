@@ -1,20 +1,20 @@
-# Chapter 7: Using shared memory properly
+# Chapter 6: Using global memory and registers properly
 
-## Source files for this chapter
+## Source files for the chapter
 
 | file   |      compile      |  run |
 |----------|:-------------|------:|
-| length1.cpp |  g++ -O3 length1.cpp | ./a.out |
-| length2wrong.cu |  nvcc -arch=sm_35 -O3 length2wrong.cu | nvprof --unified-memory-profiling off ./a.out |
-| length3.cu |  nvcc -arch=sm_35 -O3 length3.cu | nvprof --unified-memory-profiling off ./a.out |
-| length4.cu |  nvcc -arch=sm_35 -O3 length4.cu | nvprof --unified-memory-profiling off ./a.out |
-| length5.cu |  nvcc -arch=sm_35 -O3 length5.cu | nvprof --unified-memory-profiling off ./a.out |
-| length6.cpp |  g++ -O3 length6.cpp | ./a.out |
-| length7.cu |  nvcc -arch=sm_35 -O3 length7.cu | nvprof --unified-memory-profiling off ./a.out |
-| length8.cu |  nvcc -arch=sm_35 -O3 length8.cu | nvprof --unified-memory-profiling off ./a.out |
-| length9.cu |  nvcc -arch=sm_35 -O3 length9.cu | nvprof --unified-memory-profiling off ./a.out |
-| length10.cu |  nvcc -arch=sm_35 -O3 length10.cu | nvprof --unified-memory-profiling off ./a.out |
-| length11.cu |  nvcc -arch=sm_35 -O3 length11.cu | nvprof --unified-memory-profiling off ./a.out |
-| length12.cu |  nvcc -arch=sm_35 -O3 length12.cu | nvprof --unified-memory-profiling off ./a.out |
-
+| xy.txt |  not applicable | just make sure that it exists |
+| neighbor1.cpp |  g++ -O3 neighbor1.cpp | ./a.out |
+| neighbor2.cpp |  g++ -O3 neighbor2.cpp | ./a.out |
+| neighbor3.cpp |  g++ -O3 neighbor3.cpp | ./a.out |
+| neighbor4wrong.cu |  nvcc -arch=sm_35 neighbor4wrong.cu | nvprof --unified-memory-profiling off ./a.out |
+| neighbor5.cu |  nvcc -arch=sm_35 neighbor5.cu | nvprof --unified-memory-profiling off ./a.out |
+| neighbor6.cu |  nvcc -arch=sm_35 neighbor6.cu | nvprof --unified-memory-profiling off ./a.out |
+| neighbor7.cu |  nvcc -arch=sm_35 neighbor7.cu | nvprof --unified-memory-profiling off ./a.out |
+| neighbor8.cu |  nvcc -arch=sm_35 neighbor8.cu | nvprof --unified-memory-profiling off ./a.out |
+| neighbor9.cu |  nvcc -arch=sm_35 neighbor9.cu | nvprof --unified-memory-profiling off ./a.out |
+| neighbor10.cu |  nvcc -arch=sm_35 neighbor10.cu | nvprof --unified-memory-profiling off ./a.out |
+| plot_xy_without_bonds.m |  not needed | type plot_xy_without_bonds in Matlab command window |
+| plot_xy_with_bonds.m |  not needed | type plot_xy_with_bonds in Matlab command window |
 
