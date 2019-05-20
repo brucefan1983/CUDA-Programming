@@ -1,4 +1,4 @@
-# Chapter 12: A standalone C-style program for molecular dynamics simulation
+# Chapter 12: A standalone C++ program for molecular dynamics simulation
 
 ## Source files for this chapter
 
