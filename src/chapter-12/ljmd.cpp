@@ -6,6 +6,54 @@
 #define K_B                   8.617343e-5 
 #define TIME_UNIT_CONVERSION  1.018051e+1
 
+struct Atom
+{
+    int *NN;
+    int *NL;
+    double *m;
+    double *x;
+    double *y;
+    double *z;
+    double *vx;
+    double *vy;
+    double *vz;
+    double *fx;
+    double *fy;
+    double *fz;
+};
+
+void allocate_memory(int N, int MN, Atom *atom)
+{
+    atom->NN = (int*) malloc(N * sizeof(int));
+    atom->NL = (int*) malloc(N * MN * sizeof(int));
+    atom->m  = (double*) malloc(N * sizeof(double));
+    atom->x  = (double*) malloc(N * sizeof(double));
+    atom->y  = (double*) malloc(N * sizeof(double));
+    atom->z  = (double*) malloc(N * sizeof(double));
+    atom->vx = (double*) malloc(N * sizeof(double));
+    atom->vy = (double*) malloc(N * sizeof(double));
+    atom->vz = (double*) malloc(N * sizeof(double));
+    atom->fx = (double*) malloc(N * sizeof(double));
+    atom->fy = (double*) malloc(N * sizeof(double));
+    atom->fz = (double*) malloc(N * sizeof(double));
+}
+
+void deallocate_memory(Atom *atom)
+{
+    free(atom->NN);
+    free(atom->NL);
+    free(atom->m);
+    free(atom->x);
+    free(atom->y);
+    free(atom->z);
+    free(atom->vx);
+    free(atom->vy);
+    free(atom->vz);
+    free(atom->fx);
+    free(atom->fy);
+    free(atom->fz);
+}
+
 void apply_mic
 (
     double *box, double *x12, double *y12, double *z12
@@ -19,12 +67,13 @@ void apply_mic
     else if (*z12 > + box[5]) { *z12 -= box[2]; }
 }
 
-void find_neighbor
-(
-    int N, int MN, int *NN, int *NL, double *box,
-    double *x, double *y, double *z
-)              
+void find_neighbor(int N, int MN, double *box, Atom *atom)
 {
+    int *NN = atom->NN;
+    int *NL = atom->NL;
+    double *x = atom->x;
+    double *y = atom->y;
+    double *z = atom->z;
     double cutoff = 11.0;
     double cutoff_square = cutoff * cutoff;
     for (int n = 0; n < N; n++) {NN[n] = 0;}
@@ -51,11 +100,11 @@ void find_neighbor
     } 
 }
 
-void initialize_position 
-(
-    int nx, double ax, double *x, double *y, double *z
-)
+void initialize_position(int nx, double ax, Atom *atom)
 {
+    double *x = atom->x;
+    double *y = atom->y;
+    double *z = atom->z;
     double x0[4] = {0.0, 0.0, 0.5, 0.5};
     double y0[4] = {0.0, 0.5, 0.0, 0.5}; 
     double z0[4] = {0.0, 0.5, 0.5, 0.0};
@@ -78,12 +127,12 @@ void initialize_position
     }
 } 
 
-void scale_velocity
-(
-    int N, double T_0, double *m, 
-    double *vx, double *vy, double *vz
-)
-{  
+void scale_velocity(int N, double T_0, Atom *atom)
+{
+    double *m = atom->m;
+    double *vx = atom->vx;
+    double *vy = atom->vy;
+    double *vz = atom->vz;  
     double temperature = 0.0;
     for (int n = 0; n < N; ++n) 
     {
@@ -100,12 +149,12 @@ void scale_velocity
     }
 }  
      
-void initialize_velocity
-(
-    int N, double T_0, double *m, 
-    double *vx, double *vy, double *vz
-)
+void initialize_velocity(int N, double T_0, Atom *atom)
 {
+    double *m = atom->m;
+    double *vx = atom->vx;
+    double *vy = atom->vy;
+    double *vz = atom->vz;
     double momentum_average[3] = {0.0, 0.0, 0.0};
     for (int n = 0; n < N; ++n)
     { 
@@ -123,18 +172,20 @@ void initialize_velocity
         vy[n] -= momentum_average[1] / m[n];
         vz[n] -= momentum_average[2] / m[n]; 
     }
-    scale_velocity(N, T_0, m, vx, vy, vz);
+    scale_velocity(N, T_0, atom);
 }
 
 void find_force
-(
-    int N, int *NN, int *NL, int MN, double *box,
-    double *x, double *y, double *z, 
-    double *fx, double *fy, double *fz,
-    double *vx, double *vy, double *vz,
-    double *potential
-)
+(int N, int MN, double *box, Atom *atom, double *potential)
 {
+    int *NN = atom->NN;
+    int *NL = atom->NL;
+    double *x = atom->x;
+    double *y = atom->y;
+    double *z = atom->z;
+    double *fx = atom->fx;
+    double *fy = atom->fy;
+    double *fz = atom->fz;
     const double epsilon = 1.032e-2;
     const double sigma = 3.405;
     const double cutoff = 10.0;
@@ -174,15 +225,18 @@ void find_force
     }
 }
 
-void integrate
-(
-    int N, double time_step, double *m, 
-    double *fx, double *fy, double *fz, 
-    double *vx, double *vy, double *vz, 
-    double *x, double *y, double *z, 
-    int flag
-)
+void integrate(int N, double time_step, Atom *atom, int flag)
 {
+    double *m = atom->m;
+    double *x = atom->x;
+    double *y = atom->y;
+    double *z = atom->z;
+    double *vx = atom->vx;
+    double *vy = atom->vy;
+    double *vz = atom->vz;
+    double *fx = atom->fx;
+    double *fy = atom->fy;
+    double *fz = atom->fz;
     double time_step_half = time_step * 0.5;
     for (int n = 0; n < N; ++n)
     {
@@ -204,31 +258,18 @@ void integrate
 
 void equilibration
 (
-    int Ne, int N, int *NN, int *NL, int MN, double *box,
-    double T_0, double time_step, double *m, 
-    double *fx, double *fy, double *fz, 
-    double *vx, double *vy, double *vz, 
-    double *x, double *y, double *z
+    int Ne, int N, int MN, double *box,
+    double T_0, double time_step, Atom *atom
 )
 {
     clock_t time_begin = clock();
     double potential;
     for (int step = 0; step < Ne; ++step)
-    { 
-        integrate
-        (
-            N, time_step, m, fx, fy, fz, vx, vy, vz, x, y, z, 1
-        );
-        find_force
-        (
-            N, NN, NL, MN, box, x, y, z, 
-            fx, fy, fz, vx, vy, vz, &potential
-        );
-        integrate
-        (
-            N, time_step, m, fx, fy, fz, vx, vy, vz, x, y, z, 2
-        );
-        scale_velocity(N, T_0, m, vx, vy, vz);
+    {
+        integrate(N, time_step, atom, 1);
+        find_force(N, MN, box, atom, &potential);
+        integrate(N, time_step, atom, 2);
+        scale_velocity(N, T_0, atom);
     } 
     clock_t time_finish = clock();
     double time_used = (time_finish - time_begin) 
@@ -238,33 +279,23 @@ void equilibration
 
 void production
 (
-    int Np, int Ns, int N, int *NN, int *NL, int MN,
-    double *box,
-    double T_0, double time_step, double *m,
-    double *fx, double *fy, double *fz,
-    double *vx, double *vy, double *vz, 
-    double *x, double *y, double *z
+    int Np, int Ns, int N, int MN, double *box, 
+    double T_0, double time_step, Atom *atom
 )
 {
+    double *m = atom->m;
+    double *vx = atom->vx;
+    double *vy = atom->vy;
+    double *vz = atom->vz;
     double time_begin = clock();
     FILE *fid_e = fopen("energy.txt", "w");
     FILE *fid_v = fopen("velocity.txt", "w");
     double potential;
     for (int step = 0; step < Np; ++step)
     {  
-        integrate
-        (
-            N, time_step, m, fx, fy, fz, vx, vy, vz, x, y, z, 1
-        );
-        find_force
-        (
-            N, NN, NL, MN, box, x, y, z, 
-            fx, fy, fz, vx, vy, vz, &potential
-        );
-        integrate
-        (
-            N, time_step, m, fx, fy, fz, vx, vy, vz, x, y, z, 2
-        );
+        integrate(N, time_step, atom, 1);
+        find_force(N, MN, box, atom, &potential);
+        integrate(N, time_step, atom, 2);
         if (0 == step % Ns)
         {
             double ek = 0.0;
@@ -317,34 +348,15 @@ int main(void)
     box[4] = box[1] * 0.5;
     box[5] = box[2] * 0.5;
     double time_step = 5.0 / TIME_UNIT_CONVERSION;
-    int *NN = (int*) malloc(N * sizeof(int));
-    int *NL = (int*) malloc(N * MN * sizeof(int));
-    double *m  = (double*) malloc(N * sizeof(double));
-    double *x  = (double*) malloc(N * sizeof(double));
-    double *y  = (double*) malloc(N * sizeof(double));
-    double *z  = (double*) malloc(N * sizeof(double));
-    double *vx = (double*) malloc(N * sizeof(double));
-    double *vy = (double*) malloc(N * sizeof(double));
-    double *vz = (double*) malloc(N * sizeof(double));
-    double *fx = (double*) malloc(N * sizeof(double));
-    double *fy = (double*) malloc(N * sizeof(double));
-    double *fz = (double*) malloc(N * sizeof(double));
-    for (int n = 0; n < N; ++n) { m[n] = 40.0; }
-    initialize_position(nx, ax, x, y, z);
-    initialize_velocity(N, T_0, m, vx, vy, vz);
-    find_neighbor(N, MN, NN, NL, box, x, y, z);
-    equilibration
-    (
-        Ne, N, NN, NL, MN, box, T_0, time_step, 
-        m, fx, fy, fz, vx, vy, vz, x, y, z
-    );
-    production
-    (
-        Np, Ns, N, NN, NL, MN, box, T_0, time_step, 
-        m, fx, fy, fz, vx, vy, vz, x, y, z
-    );
-    free(NN); free(NL); free(m);  free(x);  free(y);  free(z);
-    free(vx); free(vy); free(vz); free(fx); free(fy); free(fz);
+    Atom atom;
+    allocate_memory(N, MN, &atom);
+    for (int n = 0; n < N; ++n) { atom.m[n] = 40.0; }
+    initialize_position(nx, ax, &atom);
+    initialize_velocity(N, T_0, &atom);
+    find_neighbor(N, MN, box, &atom);
+    equilibration(Ne, N, MN, box, T_0, time_step, &atom);
+    production(Np, Ns, N, MN, box, T_0, time_step, &atom);
+    deallocate_memory(&atom);
     return 0;
 }
 
