@@ -20,6 +20,7 @@ struct Atom
     double *fx;
     double *fy;
     double *fz;
+    double *box;
 };
 
 void allocate_memory(int N, int MN, Atom *atom)
@@ -36,6 +37,7 @@ void allocate_memory(int N, int MN, Atom *atom)
     atom->fx = (double*) malloc(N * sizeof(double));
     atom->fy = (double*) malloc(N * sizeof(double));
     atom->fz = (double*) malloc(N * sizeof(double));
+    atom->box = (double*) malloc(6 * sizeof(double));
 }
 
 void deallocate_memory(Atom *atom)
@@ -52,6 +54,7 @@ void deallocate_memory(Atom *atom)
     free(atom->fx);
     free(atom->fy);
     free(atom->fz);
+    free(atom->box);
 }
 
 void apply_mic
@@ -67,13 +70,14 @@ void apply_mic
     else if (*z12 > + box[5]) { *z12 -= box[2]; }
 }
 
-void find_neighbor(int N, int MN, double *box, Atom *atom)
+void find_neighbor(int N, int MN, Atom *atom)
 {
     int *NN = atom->NN;
     int *NL = atom->NL;
     double *x = atom->x;
     double *y = atom->y;
     double *z = atom->z;
+    double *box = atom->box;
     double cutoff = 11.0;
     double cutoff_square = cutoff * cutoff;
     for (int n = 0; n < N; n++) {NN[n] = 0;}
@@ -102,6 +106,12 @@ void find_neighbor(int N, int MN, double *box, Atom *atom)
 
 void initialize_position(int nx, double ax, Atom *atom)
 {
+    atom->box[0] = ax * nx;
+    atom->box[1] = ax * nx;
+    atom->box[2] = ax * nx;
+    atom->box[3] = atom->box[0] * 0.5;
+    atom->box[4] = atom->box[1] * 0.5;
+    atom->box[5] = atom->box[2] * 0.5;
     double *x = atom->x;
     double *y = atom->y;
     double *z = atom->z;
@@ -176,7 +186,7 @@ void initialize_velocity(int N, double T_0, Atom *atom)
 }
 
 void find_force
-(int N, int MN, double *box, Atom *atom, double *potential)
+(int N, int MN, Atom *atom, double *potential)
 {
     int *NN = atom->NN;
     int *NL = atom->NL;
@@ -186,6 +196,7 @@ void find_force
     double *fx = atom->fx;
     double *fy = atom->fy;
     double *fz = atom->fz;
+    double *box = atom->box;
     const double epsilon = 1.032e-2;
     const double sigma = 3.405;
     const double cutoff = 10.0;
@@ -258,8 +269,8 @@ void integrate(int N, double time_step, Atom *atom, int flag)
 
 void equilibration
 (
-    int Ne, int N, int MN, double *box,
-    double T_0, double time_step, Atom *atom
+    int Ne, int N, int MN, double T_0, 
+    double time_step, Atom *atom
 )
 {
     clock_t time_begin = clock();
@@ -267,7 +278,7 @@ void equilibration
     for (int step = 0; step < Ne; ++step)
     {
         integrate(N, time_step, atom, 1);
-        find_force(N, MN, box, atom, &potential);
+        find_force(N, MN, atom, &potential);
         integrate(N, time_step, atom, 2);
         scale_velocity(N, T_0, atom);
     } 
@@ -279,8 +290,8 @@ void equilibration
 
 void production
 (
-    int Np, int Ns, int N, int MN, double *box, 
-    double T_0, double time_step, Atom *atom
+    int Np, int Ns, int N, int MN, double T_0, 
+    double time_step, Atom *atom
 )
 {
     double *m = atom->m;
@@ -294,7 +305,7 @@ void production
     for (int step = 0; step < Np; ++step)
     {  
         integrate(N, time_step, atom, 1);
-        find_force(N, MN, box, atom, &potential);
+        find_force(N, MN, atom, &potential);
         integrate(N, time_step, atom, 2);
         if (0 == step % Ns)
         {
@@ -340,22 +351,15 @@ int main(void)
     int MN = 200;
     double T_0 = 60.0;
     double ax = 5.385;
-    double box[6];
-    box[0] = ax * nx;
-    box[1] = ax * nx;
-    box[2] = ax * nx;
-    box[3] = box[0] * 0.5;
-    box[4] = box[1] * 0.5;
-    box[5] = box[2] * 0.5;
     double time_step = 5.0 / TIME_UNIT_CONVERSION;
     Atom atom;
     allocate_memory(N, MN, &atom);
     for (int n = 0; n < N; ++n) { atom.m[n] = 40.0; }
     initialize_position(nx, ax, &atom);
     initialize_velocity(N, T_0, &atom);
-    find_neighbor(N, MN, box, &atom);
-    equilibration(Ne, N, MN, box, T_0, time_step, &atom);
-    production(Np, Ns, N, MN, box, T_0, time_step, &atom);
+    find_neighbor(N, MN, &atom);
+    equilibration(Ne, N, MN, T_0, time_step, &atom);
+    production(Np, Ns, N, MN, T_0, time_step, &atom);
     deallocate_memory(&atom);
     return 0;
 }
