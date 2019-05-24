@@ -2,7 +2,7 @@
 #include "mic.h"
 
 void find_force
-(int N, int MN, double *box, Atom *atom, double *potential)
+(int N, int MN, Atom *atom, double *potential)
 {
     int *NN = atom->NN;
     int *NL = atom->NL;
@@ -12,6 +12,7 @@ void find_force
     double *fx = atom->fx;
     double *fy = atom->fy;
     double *fz = atom->fz;
+    double *box = atom->box;
     const double epsilon = 1.032e-2;
     const double sigma = 3.405;
     const double cutoff = 10.0;

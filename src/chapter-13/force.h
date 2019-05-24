@@ -2,5 +2,5 @@
 #include "common.h"
 
 void find_force
-(int N, int MN, double *box, Atom *atom, double *potential);
+(int N, int MN, Atom *atom, double *potential);
 

@@ -63,8 +63,8 @@ static void integrate
 
 void equilibration
 (
-    int Ne, int N, int MN, double *box,
-    double T_0, double time_step, Atom *atom
+    int Ne, int N, int MN, double T_0, 
+    double time_step, Atom *atom
 )
 {
     clock_t time_begin = clock();
@@ -72,7 +72,7 @@ void equilibration
     for (int step = 0; step < Ne; ++step)
     { 
         integrate(N, time_step, atom, 1);
-        find_force(N, MN, box, atom, &potential);
+        find_force(N, MN, atom, &potential);
         integrate(N, time_step, atom, 2);
         scale_velocity(N, T_0, atom);
     } 
@@ -84,8 +84,8 @@ void equilibration
 
 void production
 (
-    int Np, int Ns, int N, int MN, double *box, 
-    double T_0, double time_step, Atom *atom
+    int Np, int Ns, int N, int MN, double T_0, 
+    double time_step, Atom *atom
 )
 {
     double *m = atom->m;
@@ -99,7 +99,7 @@ void production
     for (int step = 0; step < Np; ++step)
     {  
         integrate(N, time_step, atom, 1);
-        find_force(N, MN, box, atom, &potential);
+        find_force(N, MN, atom, &potential);
         integrate(N, time_step, atom, 2);
         if (0 == step % Ns)
         {

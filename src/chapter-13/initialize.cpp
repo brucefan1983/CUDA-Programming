@@ -26,6 +26,12 @@ static void scale_velocity(int N, double T_0, Atom *atom)
 
 void initialize_position(int nx, double ax, Atom *atom)
 {
+    atom->box[0] = ax * nx;
+    atom->box[1] = ax * nx;
+    atom->box[2] = ax * nx;
+    atom->box[3] = atom->box[0] * 0.5;
+    atom->box[4] = atom->box[1] * 0.5;
+    atom->box[5] = atom->box[2] * 0.5;
     double *x = atom->x;
     double *y = atom->y;
     double *z = atom->z;

@@ -15,6 +15,7 @@ void allocate_memory(int N, int MN, Atom *atom)
     atom->fx = (double*) malloc(N * sizeof(double));
     atom->fy = (double*) malloc(N * sizeof(double));
     atom->fz = (double*) malloc(N * sizeof(double));
+    atom->box = (double*) malloc(6 * sizeof(double));
 }
 
 void deallocate_memory(Atom *atom)
@@ -31,5 +32,6 @@ void deallocate_memory(Atom *atom)
     free(atom->fx);
     free(atom->fy);
     free(atom->fz);
+    free(atom->box);
 }
 

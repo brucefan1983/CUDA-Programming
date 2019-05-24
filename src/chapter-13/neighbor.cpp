@@ -3,13 +3,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void find_neighbor(int N, int MN, double *box, Atom *atom)
+void find_neighbor(int N, int MN, Atom *atom)
 {
     int *NN = atom->NN;
     int *NL = atom->NL;
     double *x = atom->x;
     double *y = atom->y;
     double *z = atom->z;
+    double *box = atom->box; 
     double cutoff = 11.0;
     double cutoff_square = cutoff * cutoff;
     for (int n = 0; n < N; n++) {NN[n] = 0;}
