@@ -1,31 +1,31 @@
 #!/bin/sh
 
-echo 'g++ hello.cpp'
+printf '\ng++ hello.cpp\n'
 g++ hello.cpp
 echo './a.out'
 ./a.out
 
-echo 'nvcc -arch=sm_35 hello1.cu'
+printf '\nnvcc -arch=sm_35 hello1.cu\n'
 nvcc -arch=sm_35 hello1.cu
 echo './a.out'
 ./a.out
 
-echo 'nvcc -arch=sm_35 hello2.cu'
+printf '\nnvcc -arch=sm_35 hello2.cu\n'
 nvcc -arch=sm_35 hello2.cu
 echo './a.out'
 ./a.out
 
-echo 'nvcc -arch=sm_35 hello3.cu'
+printf '\nnvcc -arch=sm_35 hello3.cu\n'
 nvcc -arch=sm_35 hello3.cu
 echo './a.out'
 ./a.out
 
-echo 'nvcc -arch=sm_35 hello4.cu'
+printf '\nnvcc -arch=sm_35 hello4.cu\n'
 nvcc -arch=sm_35 hello4.cu
 echo './a.out'
 ./a.out
 
-echo 'nvcc -arch=sm_35 hello5.cu'
+printf '\nnvcc -arch=sm_35 hello5.cu\n'
 nvcc -arch=sm_35 hello5.cu
 echo './a.out'
 ./a.out
