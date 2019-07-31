@@ -1,4 +1,4 @@
-# Chapter 8: Using shared memory properly
+# Chapter 7: Using shared memory properly
 
 ## Source files for this chapter
 
