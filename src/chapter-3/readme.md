@@ -13,4 +13,4 @@
 | sum5slow.cu |  nvcc -arch=sm_35 sum5slow.cu | ./a.out |
 | sum6.cu |  nvcc -arch=sm_35 sum6.cu | ./a.out |
 | sum7check.cu |  nvcc -arch=sm_35 sum7check.cu | ./a.out |
-| sum8memcheck.cu |  nvcc -arch=sm_35 sum8memcheck.cu | cuda-memcheck./a.out |
+| sum8memcheck.cu |  nvcc -arch=sm_35 sum8memcheck.cu | cuda-memcheck ./a.out |
