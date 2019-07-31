@@ -1,2 +1,2 @@
-# Chapter 9: CUDA streams 
+# Chapter 9: Multi-GPUs 
 
