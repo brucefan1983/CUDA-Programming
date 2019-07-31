@@ -1,3 +1,3 @@
-src/*/*.exe
-src/*/a.out
+src/*/*/*.exe
+src/*/*/a.out
 
