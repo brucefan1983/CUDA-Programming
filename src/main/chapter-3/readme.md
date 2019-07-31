@@ -7,10 +7,7 @@
 |----------|:-------------|------:|
 | sum.cpp |  g++ -O3 sum.cpp | ./a.out |
 | sum1.cu |  nvcc -arch=sm_35 sum1.cu | ./a.out |
-| sum2.cu |  nvcc -arch=sm_35 sum2.cu | ./a.out |
-| sum3wrong.cu |  nvcc -arch=sm_35 sum3wrong.cu | ./a.out |
-| sum4wrong.cu |  nvcc -arch=sm_35 sum4wrong.cu | ./a.out |
-| sum5slow.cu |  nvcc -arch=sm_35 sum5slow.cu | ./a.out |
-| sum6.cu |  nvcc -arch=sm_35 sum6.cu | ./a.out |
-| sum7check.cu |  nvcc -arch=sm_35 sum7check.cu | ./a.out |
-| sum8memcheck.cu |  nvcc -arch=sm_35 sum8memcheck.cu | cuda-memcheck ./a.out |
+| sum2wrong.cu |  nvcc -arch=sm_35 sum2wrong.cu | ./a.out |
+| sum3if.cu |  nvcc -arch=sm_35 sum3if.cu | ./a.out |
+| sum4check.cu |  nvcc -arch=sm_35 sum4check.cu | ./a.out |
+| sum5memcheck.cu |  nvcc -arch=sm_35 sum5memcheck.cu | cuda-memcheck ./a.out |
