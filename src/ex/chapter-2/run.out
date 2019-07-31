@@ -1,0 +1,21 @@
+
+nvcc -arch=sm_35 hello6.cu
+./a.out
+
+nvcc -arch=sm_35 hello7.cu
+./a.out
+Hello World from block 1 and thread 0!
+Hello World from block 1 and thread 2!
+Hello World from block 0 and thread 0!
+Hello World from block 0 and thread 2!
+
+nvcc -arch=sm_35 hello8.cu
+./a.out
+Hello World from block-0 and thread-0!
+Hello World from block-0 and thread-1!
+Hello World from block-0 and thread-2!
+Hello World from block-0 and thread-3!
+Hello World from block-0 and thread-4!
+Hello World from block-0 and thread-5!
+Hello World from block-0 and thread-6!
+Hello World from block-0 and thread-7!
