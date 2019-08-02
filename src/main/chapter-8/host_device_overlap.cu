@@ -2,32 +2,20 @@
 #include <stdio.h>
 #include "error.cuh"
 #define EPSILON 1.0e-14 // a small number
-void sum(double *x, double *y, double *z, int N);
+void cpu_sum(double *x, double *y, double *z, int N);
 void __global__ sum(double *x, double *y, double *z, int N);
-void check(double *z, int N, char* where);
 void run(bool with_cpu);
 
 int main(void)
 {
-    clock_t time_begin = clock();
+    printf("When the host function is excluded,\n");
     run(false);
-    clock_t time_finish = clock();
-    double time_used = (time_finish - time_begin)
-        / double(CLOCKS_PER_SEC);
-    printf("Time used without CPU function is = %f s.\n",
-        time_used);
-
-    time_begin = clock();
+    printf("When the host function is included,\n");
     run(true);
-    time_finish = clock();
-    time_used = (time_finish - time_begin)
-        / double(CLOCKS_PER_SEC);
-    printf("Time used with CPU function is = %f s.\n",
-        time_used);
     return 0;
 }
 
-void sum(double *x, double *y, double *z, int N)
+void cpu_sum(double *x, double *y, double *z, int N)
 {
     for (int n = 0; n < N; ++n)
     {
@@ -42,17 +30,6 @@ void __global__ sum(double *x, double *y, double *z, int N)
     {
         z[n] = x[n] + y[n];
     }
-}
-
-void check(double *z, int N, char* where)
-{
-    int has_error = 0;
-    for (int n = 0; n < N; ++n)
-    {
-        has_error += (fabs(z[n] - 3.0) > EPSILON);
-    }
-    printf("%s from %s\n", has_error ? 
-        "Has errors" : "No errors", where);
 }
 
 void run(bool with_cpu)
@@ -77,16 +54,23 @@ void run(bool with_cpu)
 
     int block_size = 128;
     int grid_size = (N - 1) / block_size + 1;
+
+    cudaDeviceSynchronize();
+    clock_t time_begin = clock();
     sum<<<grid_size, block_size>>>(g_x, g_y, g_z, N);
 
     if (with_cpu)
     {
-        sum(x, y, z, N);
-        check(z, N, "host");
+        cpu_sum(x, y, z, N/25);
     }
 
+    cudaDeviceSynchronize();
+    clock_t time_finish = clock();
+    double time_used = (time_finish - time_begin)
+        / double(CLOCKS_PER_SEC);
+    printf("time used is = %f s.\n", time_used);
+
     CHECK(cudaMemcpy(z, g_z, M, cudaMemcpyDeviceToHost))
-    check(z, N, "device");
     free(x);
     free(y);
     free(z);
