@@ -1,3 +1,9 @@
 # Chapter 5: Memory organization in CUDA
 
-## There is no source code for this chapter.
+## Source files for the chapter
+
+
+| file   |      compile      |  run |
+|----------|:-------------|------:|
+| global.cu |  nvcc -arch=sm_35 global.cu | ./a.out |
+
