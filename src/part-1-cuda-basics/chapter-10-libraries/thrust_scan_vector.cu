@@ -1,6 +1,6 @@
 #include <thrust/device_vector.h>
 #include <thrust/scan.h>
-#include <iostream>
+#include <stdio.h>
 
 int main(void)
 {
@@ -14,7 +14,7 @@ int main(void)
     thrust::inclusive_scan(x.begin(), x.end(), y.begin());
     for (int i = 0; i < y.size(); ++i)
     {
-        std::cout << y[i] << std::endl;
+        printf("%d ", (int) y[i]);
     }
     return 0;
 }

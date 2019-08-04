@@ -1,6 +1,6 @@
 #include <thrust/execution_policy.h>
 #include <thrust/scan.h>
-#include <iostream>
+#include <stdio.h>
 
 int main(void)
 {
@@ -21,7 +21,7 @@ int main(void)
     cudaMemcpy(h_y, y, sizeof(int) * N, cudaMemcpyDeviceToHost);
     for (int i = 0; i < N; ++i)
     {
-        std::cout << h_y[i] << std::endl;
+        printf("%d ", h_y[i]);
     }
 
     cudaFree(x);
