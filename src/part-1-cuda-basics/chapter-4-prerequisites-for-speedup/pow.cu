@@ -37,7 +37,10 @@ int main(void)
 void __global__ power(double *x, double *y, double *z, int N)
 {
     int n = blockDim.x * blockIdx.x + threadIdx.x;
-    if (n < N) { z[n] = pow(x[n], y[n]); }
+    if (n < N)
+    {
+        z[n] = pow(x[n], y[n]);
+    }
 }
 
 void check(double *z, int N)
@@ -45,9 +48,8 @@ void check(double *z, int N)
     int has_error = 0;
     for (int n = 0; n < N; ++n)
     {
-        if (fabs(z[n] - 1.0) > EPSILON) { has_error = 1; }
+        has_error += (fabs(z[n] - 1.0) > EPSILON);
     }
-    if (has_error) { printf("Has errors.\n"); }
-    else { printf("No errors.\n"); }
+    printf("%s\n", has_error ? "Has errors" : "No errors");
 }
 
