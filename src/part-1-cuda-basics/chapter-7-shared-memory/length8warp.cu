@@ -17,23 +17,47 @@ int main(void)
     return 0;
 }
 
+void __device__  warp_reduce(volatile double *s, int t)
+{
+    s[t] += s[t + 32]; s[t] += s[t + 16]; s[t] += s[t + 8];
+    s[t] += s[t + 4];  s[t] += s[t + 2];  s[t] += s[t + 1];
+}
+
+template <int unroll_size>
 void __global__ get_length_1
 (double *g_x, double *g_inner, int N)
 {
     int tid = threadIdx.x;
     int bid = blockIdx.x;
-    int n = bid * blockDim.x + tid;
-    __shared__ double s_inner[128];
+    int n = bid * blockDim.x * unroll_size + tid;
+    extern __shared__ double s_inner[];
     s_inner[tid] = 0.0;
 
-    if (n < N) 
+    double tmp_sum = 0.0;
+    if (n + (unroll_size - 1) * blockDim.x < N)
     {
-        double x_n = g_x[n];
-        s_inner[tid] += x_n * x_n;
+        double tmp = g_x[n];
+        tmp_sum = tmp * tmp;
+        if (unroll_size > 1) 
+        { 
+            tmp = g_x[n + blockDim.x]; 
+            tmp_sum += tmp * tmp;
+        }
+        if (unroll_size > 2) 
+        { 
+            tmp = g_x[n + 2 * blockDim.x]; 
+            tmp_sum += tmp * tmp;
+        }
+        if (unroll_size > 3) 
+        { 
+            tmp = g_x[n + 3 * blockDim.x]; 
+            tmp_sum += tmp * tmp;
+        }
     }
+    s_inner[tid] = tmp_sum;
     __syncthreads();
 
-    for (int offset = blockDim.x >> 1; offset > 0; offset >>= 1)
+    for (int offset = blockDim.x >> 1; offset > 32; offset >>= 1)
     {
         if (tid < offset)
         {
@@ -41,6 +65,7 @@ void __global__ get_length_1
         }
         __syncthreads();
     }
+    if (tid < 32) { warp_reduce(s_inner, tid); }
 
     if (tid == 0)
     {
@@ -52,12 +77,12 @@ void __global__ get_length_2
 (double *g_inner, double *g_length, int N, int number_of_patches)
 {
     int tid = threadIdx.x;
-    __shared__ double s_length[1024];
+    extern __shared__ double s_length[];
     s_length[tid] = 0.0;
-
+ 
     for (int patch = 0; patch < number_of_patches; ++patch)
     {
-        int n = tid + patch * 1024;
+        int n = tid + patch * blockDim.x;
         if (n < N)
         {
             s_length[tid] += g_inner[n];
@@ -65,7 +90,7 @@ void __global__ get_length_2
     }
     __syncthreads();
 
-    for (int offset = blockDim.x >> 1; offset > 0; offset >>= 1)
+    for (int offset = blockDim.x >> 1; offset > 32; offset >>= 1)
     {
         if (tid < offset)
         {
@@ -73,6 +98,7 @@ void __global__ get_length_2
         }
         __syncthreads();
     }
+    if (tid < 32) { warp_reduce(s_length, tid); }
 
     if (tid == 0)
     {
@@ -83,7 +109,9 @@ void __global__ get_length_2
 double get_length(double *x, int N)
 {
     int block_size = 128;
+    const int unroll_size = 4;
     int grid_size = (N - 1) / block_size + 1;
+    grid_size = (grid_size - 1) / unroll_size + 1;
     int number_of_patches = (grid_size - 1) / 1024 + 1;
     double *g_inner;
     cudaMalloc((void**)&g_inner, sizeof(double) * grid_size);
@@ -94,8 +122,11 @@ double get_length(double *x, int N)
     cudaMemcpy(g_x, x, sizeof(double) * N, 
         cudaMemcpyHostToDevice);
 
-    get_length_1<<<grid_size, block_size>>>(g_x, g_inner, N);
-    get_length_2<<<1, 1024>>>
+    get_length_1<unroll_size>
+    <<<grid_size, block_size, sizeof(double) * block_size>>>
+    (g_x, g_inner, N);
+
+    get_length_2<<<1, 1024, sizeof(double) * 1024>>>
     (g_inner, g_length, grid_size, number_of_patches);
 
     double *cpu_length = (double *) malloc(sizeof(double));
@@ -108,6 +139,4 @@ double get_length(double *x, int N)
     free(cpu_length);
     return length;
 }
-
-
 

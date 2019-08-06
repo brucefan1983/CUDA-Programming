@@ -22,15 +22,23 @@ void __global__ get_length_1
 {
     int tid = threadIdx.x;
     int bid = blockIdx.x;
-    int n = bid * blockDim.x + tid;
+    int n = bid * blockDim.x * 4 + tid;
     __shared__ double s_inner[128];
     s_inner[tid] = 0.0;
 
-    if (n < N) 
+    double tmp_sum = 0.0;
+    if (n + 3 * blockDim.x < N)
     {
-        double x_n = g_x[n];
-        s_inner[tid] += x_n * x_n;
+        double tmp = g_x[n];           
+        tmp_sum = tmp * tmp;
+        tmp = g_x[n + blockDim.x];     
+        tmp_sum += tmp * tmp;
+        tmp = g_x[n + 2 * blockDim.x]; 
+        tmp_sum += tmp * tmp;
+        tmp = g_x[n + 3 * blockDim.x]; 
+        tmp_sum += tmp * tmp;
     }
+    s_inner[tid] = tmp_sum;
     __syncthreads();
 
     for (int offset = blockDim.x >> 1; offset > 0; offset >>= 1)
@@ -84,6 +92,7 @@ double get_length(double *x, int N)
 {
     int block_size = 128;
     int grid_size = (N - 1) / block_size + 1;
+    grid_size = (grid_size - 1) / 4 + 1;
     int number_of_patches = (grid_size - 1) / 1024 + 1;
     double *g_inner;
     cudaMalloc((void**)&g_inner, sizeof(double) * grid_size);
@@ -108,6 +117,4 @@ double get_length(double *x, int N)
     free(cpu_length);
     return length;
 }
-
-
 

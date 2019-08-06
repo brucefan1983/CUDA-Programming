@@ -36,10 +36,7 @@ void __global__ get_length
     {
         if (tid < offset)
         {
-            if (tid + offset < N)
-            {
-                g_length[tid] += g_length[tid + offset];
-            }
+            g_length[tid] += g_length[tid + offset];
         }
     }
 }
