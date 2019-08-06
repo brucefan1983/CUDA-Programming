@@ -22,20 +22,23 @@ void __global__ get_length_1
 {
     int tid = threadIdx.x;
     int bid = blockIdx.x;
-    int n = bid * blockDim.x * 4 + tid; // unrolling
+    int n = bid * blockDim.x * 4 + tid;
     __shared__ double s_inner[128];
     s_inner[tid] = 0.0;
 
-    double tmp = 0.0;
-    if (n + 3 * blockDim.x < N) // unrolling
+    double tmp_sum = 0.0;
+    if (n + 3 * blockDim.x < N)
     {
-        double x0 = g_x[n];
-        double x1 = g_x[n + blockDim.x];
-        double x2 = g_x[n + 2 * blockDim.x];
-        double x3 = g_x[n + 3 * blockDim.x];
-        tmp = x0 * x0 + x1 * x1 + x2 * x2 + x3 * x3;
+        double tmp = g_x[n];           
+        tmp_sum = tmp * tmp;
+        tmp = g_x[n + blockDim.x];     
+        tmp_sum += tmp * tmp;
+        tmp = g_x[n + 2 * blockDim.x]; 
+        tmp_sum += tmp * tmp;
+        tmp = g_x[n + 3 * blockDim.x]; 
+        tmp_sum += tmp * tmp;
     }
-    s_inner[tid] = tmp;
+    s_inner[tid] = tmp_sum;
     __syncthreads();
 
     for (int offset = blockDim.x >> 1; offset > 0; offset >>= 1)
@@ -54,13 +57,12 @@ void __global__ get_length_1
 }
 
 void __global__ get_length_2
-(double *g_inner, double *g_length, int N)
+(double *g_inner, double *g_length, int N, int number_of_patches)
 {
     int tid = threadIdx.x;
     __shared__ double s_length[1024];
     s_length[tid] = 0.0;
 
-    int number_of_patches = (N - 1) / 1024 + 1; 
     for (int patch = 0; patch < number_of_patches; ++patch)
     {
         int n = tid + patch * 1024;
@@ -90,7 +92,8 @@ double get_length(double *x, int N)
 {
     int block_size = 128;
     int grid_size = (N - 1) / block_size + 1;
-    grid_size = (grid_size - 1) / 4 + 1; // unrolling
+    grid_size = (grid_size - 1) / 4 + 1;
+    int number_of_patches = (grid_size - 1) / 1024 + 1;
     double *g_inner;
     cudaMalloc((void**)&g_inner, sizeof(double) * grid_size);
     double *g_length;
@@ -101,7 +104,8 @@ double get_length(double *x, int N)
         cudaMemcpyHostToDevice);
 
     get_length_1<<<grid_size, block_size>>>(g_x, g_inner, N);
-    get_length_2<<<1, 1024>>>(g_inner, g_length, grid_size);
+    get_length_2<<<1, 1024>>>
+    (g_inner, g_length, grid_size, number_of_patches);
 
     double *cpu_length = (double *) malloc(sizeof(double));
     cudaMemcpy(cpu_length, g_length, sizeof(double), 
