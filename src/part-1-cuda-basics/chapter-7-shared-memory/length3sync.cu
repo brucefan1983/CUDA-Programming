@@ -31,6 +31,7 @@ void __global__ get_length
             g_length[tid] += x_n * x_n;
         }
     }
+    __syncthreads();
 
     for (int offset = blockDim.x >> 1; offset > 0; offset >>= 1)
     {
@@ -41,6 +42,7 @@ void __global__ get_length
                 g_length[tid] += g_length[tid + offset];
             }
         }
+        __syncthreads();
     }
 }
 
