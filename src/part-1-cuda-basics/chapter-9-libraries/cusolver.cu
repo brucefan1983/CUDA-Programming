@@ -8,9 +8,8 @@ int main(void)
     int N = 2;
     int N2 = N * N;
 
-    cuDoubleComplex *A, *A_cpu; 
-    MY_MALLOC(A_cpu, cuDoubleComplex, N2);
-    CHECK(cudaMalloc((void**)&A, sizeof(cuDoubleComplex) * N2));
+    cuDoubleComplex *A_cpu = (cuDoubleComplex *) 
+        malloc(sizeof(cuDoubleComplex) * N2);
     for (int n = 0; n < N2; ++n) 
     {
         A_cpu[0].x = 0;
@@ -22,10 +21,13 @@ int main(void)
         A_cpu[2].y = -1;
         A_cpu[3].y = 0;
     }
+    cuDoubleComplex *A;
+    CHECK(cudaMalloc((void**)&A, sizeof(cuDoubleComplex) * N2));
     CHECK(cudaMemcpy(A, A_cpu, sizeof(cuDoubleComplex) * N2, 
         cudaMemcpyHostToDevice));
 
-    double* W; 
+    double *W_cpu = (double*) malloc(sizeof(double) * N);
+    double *W; 
     CHECK(cudaMalloc((void**)&W, sizeof(double) * N));
 
     cusolverDnHandle_t handle = NULL;
@@ -54,7 +56,9 @@ int main(void)
     }
 
     cusolverDnDestroy(handle);
-    MY_FREE(A_cpu);
+
+    free(A_cpu);
+    free(W_cpu);
     CHECK(cudaFree(A));
     CHECK(cudaFree(W));
     CHECK(cudaFree(work));
@@ -62,5 +66,3 @@ int main(void)
 
     return 0;
 }
-
-
