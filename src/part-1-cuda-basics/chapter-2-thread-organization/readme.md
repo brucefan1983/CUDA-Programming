@@ -1,6 +1,6 @@
 # Chapter 2: Thread organization in CUDA
 
-## Source files for the chapter
+## Source files for this chapter
 
 
 | file   |      compile      |  run |
