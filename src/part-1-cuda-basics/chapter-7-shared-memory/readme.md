@@ -12,4 +12,5 @@
 | length6unroll.cu |  nvcc -arch=sm_35 length6unroll.cu | nvprof --unified-memory-profiling off ./a.out |
 | length7template.cu |  nvcc -arch=sm_35 length7template.cu | nvprof --unified-memory-profiling off ./a.out |
 | length8warp.cu |  nvcc -arch=sm_35 length8warp.cu | nvprof --unified-memory-profiling off ./a.out |
+| length9divergent.cu |  nvcc -arch=sm_35 length9divergent.cu | nvprof --unified-memory-profiling off ./a.out |
 
