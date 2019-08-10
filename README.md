@@ -10,4 +10,4 @@ Source codes for my CUDA programming book
   * The book has two parts:
     * part 1: Basics
     * part 2: an MD project
-  * The book will have about 230 pages, 130 pages for the first part and 100 pages for the second.
+  * The book will have about 250 pages, 150 pages for the first part and 100 pages for the second.
