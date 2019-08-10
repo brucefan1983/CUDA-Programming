@@ -1,9 +1,8 @@
 #include "error.cuh"
-#include <math.h> // fabs()
+#include <math.h>
 #include <stdio.h>
-#define EPSILON 1.0e-14 // a small number
+#define EPSILON 1.0e-14
 void __global__ sum(double *x, double *y, double *z, int N);
-void check(double *z, int N);
 void run(int N_streams);
 
 int main(void)
@@ -44,9 +43,10 @@ void run(int N_streams)
         CHECK(cudaStreamCreate(&(streams[i])));
     }
 
-    cudaEvent_t start;
+    cudaEvent_t start, stop;
     CHECK(cudaEventCreate(&start));
-    CHECK(cudaEventRecord(start, 0));
+    CHECK(cudaEventCreate(&stop));
+    CHECK(cudaEventRecord(start));
 
     for (int i = 0; i < N_streams; i++)
     {
@@ -57,14 +57,11 @@ void run(int N_streams)
         (g_x + offset, g_y + offset, g_z + offset, N1);
     }
 
-    cudaEvent_t stop;
-    CHECK(cudaEventCreate(&stop));
-    CHECK(cudaEventRecord(stop, 0));
+    CHECK(cudaEventRecord(stop));
     CHECK(cudaEventSynchronize(stop));
     float elapsed_time;
     CHECK(cudaEventElapsedTime(&elapsed_time, start, stop));
-    printf("Time with %d streams = %g ms\n", 
-        N_streams, elapsed_time);
+    printf("%d\t%g\n", N_streams, elapsed_time);
 
     for (int i = 0 ; i < N_streams; i++)
     {
@@ -75,7 +72,6 @@ void run(int N_streams)
     CHECK(cudaEventDestroy(stop));
 
     CHECK(cudaMemcpy(z, g_z, M_all, cudaMemcpyDeviceToHost))
-    check(z, N_all);
 
     free(x);
     free(y);
@@ -95,15 +91,5 @@ void __global__ sum(double *x, double *y, double *z, int N)
             z[n] = x[n] + y[n];
         }
     }
-}
-
-void check(double *z, int N)
-{
-    int has_error = 0;
-    for (int n = 0; n < N; ++n)
-    {
-        has_error += (fabs(z[n] - 3.0) > EPSILON);
-    }
-    printf("%s\n", has_error ? "Has errors" : "No errors");
 }
 
