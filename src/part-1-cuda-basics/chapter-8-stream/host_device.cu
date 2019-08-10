@@ -1,16 +1,18 @@
-#include <math.h> // fabs()
+#include <math.h>
 #include <stdio.h>
 #include "error.cuh"
-#define EPSILON 1.0e-14 // a small number
+
 void cpu_sum(double *x, double *y, double *z, int N);
 void __global__ sum(double *x, double *y, double *z, int N);
-void run(bool with_cpu);
+void run(bool overlap);
 
 int main(void)
 {
-    printf("When the host function is excluded,\n");
+    printf("Pre-computing on the GPU,\n");
     run(false);
-    printf("When the host function is included,\n");
+    printf("Without CPU-GPU overlap,\n");
+    run(false);
+    printf("With CPU-GPU overlap,\n");
     run(true);
     return 0;
 }
@@ -32,7 +34,7 @@ void __global__ sum(double *x, double *y, double *z, int N)
     }
 }
 
-void run(bool with_cpu)
+void run(bool overlap)
 {
     int N = 100000000;
     int M = sizeof(double) * N;
@@ -57,9 +59,13 @@ void run(bool with_cpu)
 
     cudaDeviceSynchronize();
     clock_t time_begin = clock();
-    sum<<<grid_size, block_size>>>(g_x, g_y, g_z, N);
 
-    if (with_cpu)
+    if (!overlap)
+    {
+        cpu_sum(x, y, z, N/25);
+    }
+    sum<<<grid_size, block_size>>>(g_x, g_y, g_z, N);
+    if (overlap)
     {
         cpu_sum(x, y, z, N/25);
     }
@@ -68,7 +74,7 @@ void run(bool with_cpu)
     clock_t time_finish = clock();
     double time_used = (time_finish - time_begin)
         / double(CLOCKS_PER_SEC);
-    printf("time used is = %f s.\n", time_used);
+    printf("time used is %f s.\n", time_used);
 
     CHECK(cudaMemcpy(z, g_z, M, cudaMemcpyDeviceToHost))
     free(x);
