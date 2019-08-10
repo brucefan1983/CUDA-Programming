@@ -1,2 +1,10 @@
 # Chapter 8: CUDA streams 
 
+## Source files for this chapter
+
+| file   |      compile      |  run |
+|----------|:-------------|------:|
+| host_kernel.cu |  nvcc -arch=sm_35 host_kernel.cu | ./a.out |
+| kernel_kernel.cu |  nvcc -arch=sm_35 kernel_kernel.cu | ./a.out |
+| plot_t.m |  not needed | type plot_t in the command window of Matlab |
+
