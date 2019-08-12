@@ -1,4 +1,4 @@
-# Chapter 14: CUDA version: accelerating the whole code
+# Chapter 14: CUDA version: many-body potential 
 
 ## How to compile and run?
   * type `make` to compile

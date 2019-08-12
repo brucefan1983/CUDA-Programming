@@ -1,4 +1,4 @@
-# Chapter 13: A multi-file C++ program for molecular dynamics simulation
+# Chapter 13: CUDA version: only accelerating force evaluation
 
 ## How to compile and run?
   * type `make` to compile
