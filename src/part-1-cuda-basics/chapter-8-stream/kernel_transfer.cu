@@ -1,7 +1,20 @@
 #include "error.cuh"
 #include <stdio.h>
+#include <math.h>
+#define EPSILON 1.0e-14
+
 void __global__ sum(double *x, double *y, double *z, int N);
 void run(int N_streams);
+
+void check(double *z, int N)
+{
+    int has_error = 0;
+    for (int n = 0; n < N; ++n)
+    {
+        has_error += (fabs(z[n] - 3.0) > EPSILON);
+    }
+    printf("%s\n", has_error ? "Has errors" : "No errors");
+}
 
 int main(void)
 {
@@ -59,7 +72,7 @@ void run(int N_streams)
         sum<<<grid_size, block_size, 0, streams[i]>>>
         (g_x + offset, g_y + offset, g_z + offset, N1);
 
-        CHECK(cudaMemcpyAsync(y + offset, g_y + offset, M1, 
+        CHECK(cudaMemcpyAsync(z + offset, g_z + offset, M1, 
             cudaMemcpyDeviceToHost, streams[i]));
     }
 
@@ -77,6 +90,9 @@ void run(int N_streams)
         CHECK(cudaStreamDestroy(streams[i]));
     }
     free(streams);
+
+    cudaDeviceSynchronize();
+    check(z, N_all);
 
     CHECK(cudaFreeHost(x))
     CHECK(cudaFreeHost(y))
@@ -97,4 +113,3 @@ void __global__ sum(double *x, double *y, double *z, int N)
         }
     }
 }
-
