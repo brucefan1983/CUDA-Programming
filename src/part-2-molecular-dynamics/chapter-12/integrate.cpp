@@ -112,13 +112,13 @@ void production
                 ek += (vx2 + vy2 + vz2) * m[n];
             }
             ek *= 0.5;
-            fprintf(fid_e, "%25.15e%25.15e\n", ek, potential);
+            fprintf(fid_e, "%20.10e%20.10e\n", ek, potential);
             for (int n = 0; n < N; ++n)
             {
                 double factor = 1.0e5 / TIME_UNIT_CONVERSION;
                 fprintf
                 (
-                    fid_v, "%25.15e%25.15e%25.15e\n", 
+                    fid_v, "%20.10e%20.10e%20.10e\n", 
                     vx[n] * factor,
                     vy[n] * factor,
                     vz[n] * factor

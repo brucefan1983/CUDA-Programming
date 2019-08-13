@@ -36,15 +36,16 @@ void find_force
             double y_ij = y[j] - y[i];
             double z_ij = z[j] - z[i];
             apply_mic(box, &x_ij, &y_ij, &z_ij);
-            double r_2 = x_ij*x_ij + y_ij*y_ij + z_ij*z_ij;
-            if (r_2 > cutoff_square) { continue; }
-            double r_4 = r_2 * r_2;
-            double r_6 = r_2 * r_4;
-            double r_8 = r_4 * r_4;
-            double r_12 = r_4 * r_8;
-            double r_14 = r_6 * r_8;
-            double f_ij = e24s6 / r_8 - e48s12 / r_14;
-            *potential += e4s12 / r_12 - e4s6 / r_6;
+            double r2 = x_ij*x_ij + y_ij*y_ij + z_ij*z_ij;
+            if (r2 > cutoff_square) { continue; }
+            double r2inv = 1.0 / r2;
+            double r4inv = r2inv * r2inv;
+            double r6inv = r2inv * r4inv;
+            double r8inv = r4inv * r4inv;
+            double r12inv = r4inv * r8inv;
+            double r14inv = r6inv * r8inv;
+            double f_ij = e24s6 * r8inv - e48s12 * r14inv;
+            *potential += e4s12 * r12inv - e4s6 * r6inv;
             fx[i] += f_ij * x_ij; fx[j] -= f_ij * x_ij;
             fy[i] += f_ij * y_ij; fy[j] -= f_ij * y_ij;
             fz[i] += f_ij * z_ij; fz[j] -= f_ij * z_ij;
