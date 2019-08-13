@@ -6,34 +6,28 @@
 
 static void find_ek(int N, double T_0, Atom *atom, double *ek)
 {
-    double *m = atom->m;
-    double *vx = atom->vx;
-    double *vy = atom->vy;
-    double *vz = atom->vz;
     *ek = 0.0;
     for (int n = 0; n < N; ++n) 
     {
-        double v2 = vx[n]*vx[n] + vy[n]*vy[n] + vz[n]*vz[n];     
-        *ek += m[n] * v2; 
+        double v2 = atom->vx[n]*atom->vx[n] 
+                  + atom->vy[n]*atom->vy[n] 
+                  + atom->vz[n]*atom->vz[n];     
+        *ek += atom->m[n] * v2; 
     }
     *ek *= 0.5;
 }
 
 static void scale_velocity(int N, double T_0, Atom *atom)
 {
-    double *m = atom->m;
-    double *vx = atom->vx;
-    double *vy = atom->vy;
-    double *vz = atom->vz;
     double ek = 0.0;
     find_ek(N, T_0, atom, &ek);
     double temperature = ek /= (1.5 * K_B * N);
     double scale_factor = sqrt(T_0 / temperature);
     for (int n = 0; n < N; ++n)
     { 
-        vx[n] *= scale_factor;
-        vy[n] *= scale_factor;
-        vz[n] *= scale_factor;
+        atom->vx[n] *= scale_factor;
+        atom->vy[n] *= scale_factor;
+        atom->vz[n] *= scale_factor;
     }
 }
 
@@ -96,10 +90,6 @@ void production
     double time_step, Atom *atom
 )
 {
-    double *m = atom->m;
-    double *vx = atom->vx;
-    double *vy = atom->vy;
-    double *vz = atom->vz;
     double time_begin = clock();
     FILE *fid_e = fopen("energy.txt", "w");
     FILE *fid_v = fopen("velocity.txt", "w");
@@ -120,9 +110,9 @@ void production
                 fprintf
                 (
                     fid_v, "%20.10e%20.10e%20.10e\n", 
-                    vx[n] * factor,
-                    vy[n] * factor,
-                    vz[n] * factor
+                    atom->vx[n] * factor,
+                    atom->vy[n] * factor,
+                    atom->vz[n] * factor
                 );
             }
         }
