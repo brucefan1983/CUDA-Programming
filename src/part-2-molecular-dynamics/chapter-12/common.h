@@ -17,5 +17,6 @@ struct Atom
     double *fx;
     double *fy;
     double *fz;
+    double *pe;
     double *box;
 };

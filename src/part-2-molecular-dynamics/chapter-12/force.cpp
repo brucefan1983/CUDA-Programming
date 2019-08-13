@@ -2,7 +2,7 @@
 #include "mic.h"
 
 void find_force
-(int N, int MN, Atom *atom, double *potential)
+(int N, int MN, Atom *atom)
 {
     int *NN = atom->NN;
     int *NL = atom->NL;
@@ -12,6 +12,7 @@ void find_force
     double *fx = atom->fx;
     double *fy = atom->fy;
     double *fz = atom->fz;
+    double *pe = atom->pe;
     double *box = atom->box;
     const double epsilon = 1.032e-2;
     const double sigma = 3.405;
@@ -24,8 +25,10 @@ void find_force
     const double e48s12 = 48.0 * epsilon * sigma_12;
     const double e4s6 = 4.0 * epsilon * sigma_6; 
     const double e4s12 = 4.0 * epsilon * sigma_12;
-    *potential = 0.0;
-    for (int n = 0; n < N; ++n) { fx[n]=fy[n]=fz[n]=0.0; }
+    for (int n = 0; n < N; ++n) 
+    { 
+        fx[n] = fy[n] = fz[n] = pe[n] = 0.0; 
+    }
     for (int i = 0; i < N; ++i)
     {
         for (int k = 0; k < NN[i]; k++)
@@ -45,7 +48,7 @@ void find_force
             double r12inv = r4inv * r8inv;
             double r14inv = r6inv * r8inv;
             double f_ij = e24s6 * r8inv - e48s12 * r14inv;
-            *potential += e4s12 * r12inv - e4s6 * r6inv;
+            pe[i] += e4s12 * r12inv - e4s6 * r6inv;
             fx[i] += f_ij * x_ij; fx[j] -= f_ij * x_ij;
             fy[i] += f_ij * y_ij; fy[j] -= f_ij * y_ij;
             fz[i] += f_ij * z_ij; fz[j] -= f_ij * z_ij;

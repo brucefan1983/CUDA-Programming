@@ -17,6 +17,15 @@ static void find_ek(int N, double T_0, Atom *atom, double *ek)
     *ek *= 0.5;
 }
 
+static void find_ep(int N, Atom *atom, double *ep)
+{
+    *ep = 0.0;
+    for (int n = 0; n < N; ++n) 
+    {
+        *ep += atom->pe[n]; 
+    }
+}
+
 static void scale_velocity(int N, double T_0, Atom *atom)
 {
     double ek = 0.0;
@@ -70,11 +79,10 @@ void equilibration
 )
 {
     clock_t time_begin = clock();
-    double potential;
     for (int step = 0; step < Ne; ++step)
     { 
         integrate(N, time_step, atom, 1);
-        find_force(N, MN, atom, &potential);
+        find_force(N, MN, atom);
         integrate(N, time_step, atom, 2);
         scale_velocity(N, T_0, atom);
     } 
@@ -93,17 +101,18 @@ void production
     double time_begin = clock();
     FILE *fid_e = fopen("energy.txt", "w");
     FILE *fid_v = fopen("velocity.txt", "w");
-    double potential;
     for (int step = 0; step < Np; ++step)
     {  
         integrate(N, time_step, atom, 1);
-        find_force(N, MN, atom, &potential);
+        find_force(N, MN, atom);
         integrate(N, time_step, atom, 2);
         if (0 == step % Ns)
         {
             double ek = 0.0;
             find_ek(N, T_0, atom, &ek);
-            fprintf(fid_e, "%20.10e%20.10e\n", ek, potential);
+            double ep = 0.0;
+            find_ep(N, atom, &ep);
+            fprintf(fid_e, "%20.10e%20.10e\n", ek, ep);
             for (int n = 0; n < N; ++n)
             {
                 double factor = 1.0e5 / TIME_UNIT_CONVERSION;
