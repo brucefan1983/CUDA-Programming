@@ -4,22 +4,30 @@
 #include <math.h>
 #include <time.h>
 
-static void scale_velocity
-(
-    int N, double T_0, Atom *atom
-)
+static void find_ek(int N, double T_0, Atom *atom, double *ek)
 {
     double *m = atom->m;
     double *vx = atom->vx;
     double *vy = atom->vy;
     double *vz = atom->vz;
-    double temperature = 0.0;
+    *ek = 0.0;
     for (int n = 0; n < N; ++n) 
     {
         double v2 = vx[n]*vx[n] + vy[n]*vy[n] + vz[n]*vz[n];     
-        temperature += m[n] * v2; 
+        *ek += m[n] * v2; 
     }
-    temperature /= 3.0 * K_B * N;
+    *ek *= 0.5;
+}
+
+static void scale_velocity(int N, double T_0, Atom *atom)
+{
+    double *m = atom->m;
+    double *vx = atom->vx;
+    double *vy = atom->vy;
+    double *vz = atom->vz;
+    double ek = 0.0;
+    find_ek(N, T_0, atom, &ek);
+    double temperature = ek /= (1.5 * K_B * N);
     double scale_factor = sqrt(T_0 / temperature);
     for (int n = 0; n < N; ++n)
     { 
@@ -79,7 +87,7 @@ void equilibration
     clock_t time_finish = clock();
     double time_used = (time_finish - time_begin) 
                      / (double) CLOCKS_PER_SEC;
-    printf("time use for equilibration = %g s\n", time_used);
+    printf("time used for equilibration = %g s\n", time_used);
 }
 
 void production
@@ -104,14 +112,7 @@ void production
         if (0 == step % Ns)
         {
             double ek = 0.0;
-            for (int n = 0; n < N; ++n)
-            {
-                double vx2 = vx[n]; vx2 *= vx2;
-                double vy2 = vy[n]; vy2 *= vy2;
-                double vz2 = vz[n]; vz2 *= vz2;
-                ek += (vx2 + vy2 + vz2) * m[n];
-            }
-            ek *= 0.5;
+            find_ek(N, T_0, atom, &ek);
             fprintf(fid_e, "%20.10e%20.10e\n", ek, potential);
             for (int n = 0; n < N; ++n)
             {
@@ -131,6 +132,6 @@ void production
     double time_finish = clock();
     double time_used = (time_finish - time_begin) 
                      / (double) CLOCKS_PER_SEC;
-    printf("time use for production = %g s\n", time_used);
+    printf("time used for production = %g s\n", time_used);
 }
 
