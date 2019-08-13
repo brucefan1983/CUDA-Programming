@@ -1,12 +1,12 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include <math.h>
-#include <time.h>
 #include "common.h"
 #include "memory.h"
 #include "initialize.h"
 #include "neighbor.h"
 #include "integrate.h"
+#include <stdlib.h>
+#include <stdio.h>
+#include <math.h>
+#include <time.h>
 
 int main(void)
 {
