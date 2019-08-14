@@ -12,7 +12,7 @@ int main(int argc, char **argv)
 {
     //srand(time(NULL));
 
-    int nx = 4;
+    int nx = 5;
     if (argc != 2) 
     { 
         printf("Error: ljmd requires one argument\n");
