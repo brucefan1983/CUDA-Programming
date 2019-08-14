@@ -8,13 +8,24 @@
 #include <math.h>
 #include <time.h>
 
-int main(void)
+int main(int argc, char **argv)
 {
     //srand(time(NULL));
+
     int nx = 4;
+    if (argc != 2) 
+    { 
+        printf("Error: ljmd requires one argument\n");
+        exit(1);
+    }
+    else
+    {
+        nx = atoi(argv[1]);
+    }
+
     int N = 4 * nx * nx * nx;
-    int Ne = 20000;
-    int Np = 20000;
+    int Ne = 2000;
+    int Np = 2000;
     int Ns = 100;
     int MN = 200;
     double T_0 = 60.0;
