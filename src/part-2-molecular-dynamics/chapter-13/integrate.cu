@@ -4,33 +4,20 @@
 #include <math.h>
 #include <time.h>
 
-static void find_ek(int N, double T_0, Atom *atom, double *ek)
+static void sum(int N, double *x)
 {
-    *ek = 0.0;
+    double s = 0.0;
     for (int n = 0; n < N; ++n) 
     {
-        double v2 = atom->vx[n]*atom->vx[n] 
-                  + atom->vy[n]*atom->vy[n] 
-                  + atom->vz[n]*atom->vz[n];     
-        *ek += atom->m[n] * v2; 
+        s += x[n];
     }
-    *ek *= 0.5;
-}
-
-static void find_ep(int N, Atom *atom, double *ep)
-{
-    *ep = 0.0;
-    for (int n = 0; n < N; ++n) 
-    {
-        *ep += atom->pe[n]; 
-    }
+    x[0] = s;
 }
 
 static void scale_velocity(int N, double T_0, Atom *atom)
 {
-    double ek = 0.0;
-    find_ek(N, T_0, atom, &ek);
-    double temperature = ek / (1.5 * K_B * N);
+    sum(N, atom->ke);
+    double temperature = atom->ke[0] / (1.5 * K_B * N);
     double scale_factor = sqrt(T_0 / temperature);
     for (int n = 0; n < N; ++n)
     { 
@@ -53,6 +40,7 @@ static void integrate
     double *fx = atom->fx;
     double *fy = atom->fy;
     double *fz = atom->fz;
+    double *ke = atom->ke;
     double time_step_half = time_step * 0.5;
     for (int n = 0; n < N; ++n)
     {
@@ -69,6 +57,11 @@ static void integrate
             y[n] += vy[n] * time_step; 
             z[n] += vz[n] * time_step; 
         }
+        else
+        {
+            double v2 = vx[n]*vx[n] + vy[n]*vy[n] + vz[n]*vz[n];
+            ke[n] = m[n] * v2 * 0.5;
+        }
     }
 }
 
@@ -78,7 +71,6 @@ void equilibration
     double time_step, Atom *atom
 )
 {
-    cudaDeviceSynchronize();
     clock_t time_begin = clock();
     for (int step = 0; step < Ne; ++step)
     { 
@@ -87,8 +79,6 @@ void equilibration
         integrate(N, time_step, atom, 2);
         scale_velocity(N, T_0, atom);
     } 
-
-    cudaDeviceSynchronize();
     clock_t time_finish = clock();
     double time_used = (time_finish - time_begin) 
                      / (double) CLOCKS_PER_SEC;
@@ -101,9 +91,7 @@ void production
     double time_step, Atom *atom
 )
 {
-    cudaDeviceSynchronize();
     double time_begin = clock();
-
     FILE *fid_e = fopen("energy.txt", "w");
     FILE *fid_v = fopen("velocity.txt", "w");
     for (int step = 0; step < Np; ++step)
@@ -113,11 +101,10 @@ void production
         integrate(N, time_step, atom, 2);
         if (0 == step % Ns)
         {
-            double ek = 0.0;
-            find_ek(N, T_0, atom, &ek);
-            double ep = 0.0;
-            find_ep(N, atom, &ep);
-            fprintf(fid_e, "%20.10e%20.10e\n", ek, ep);
+            sum(N, atom->ke);
+            sum(N, atom->pe);
+            fprintf(fid_e, "%20.10e%20.10e\n",
+                atom->ke[0], atom->pe[0]);
             for (int n = 0; n < N; ++n)
             {
                 double factor = 1.0e5 / TIME_UNIT_CONVERSION;
@@ -133,12 +120,8 @@ void production
     }
     fclose(fid_e);
     fclose(fid_v);
-
-    cudaDeviceSynchronize();
     double time_finish = clock();
     double time_used = (time_finish - time_begin) 
                      / (double) CLOCKS_PER_SEC;
     printf("time used for production = %g s\n", time_used);
 }
-
-

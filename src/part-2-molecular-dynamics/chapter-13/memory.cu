@@ -15,6 +15,7 @@ void allocate_memory(int N, int MN, Atom *atom)
     atom->fy = (double*) malloc(N * sizeof(double));
     atom->fz = (double*) malloc(N * sizeof(double));
     atom->pe = (double*) malloc(N * sizeof(double));
+    atom->ke = (double*) malloc(N * sizeof(double));
     atom->box = (double*) malloc(6 * sizeof(double));
 
     CHECK(cudaMalloc((void**)&atom->g_NN, sizeof(int) * N))
@@ -42,6 +43,7 @@ void deallocate_memory(Atom *atom)
     free(atom->fy);
     free(atom->fz);
     free(atom->pe);
+    free(atom->ke);
     free(atom->box);
 
     CHECK(cudaFree(atom->g_NN)) 
