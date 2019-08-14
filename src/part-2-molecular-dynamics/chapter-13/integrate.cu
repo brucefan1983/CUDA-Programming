@@ -30,7 +30,7 @@ static void scale_velocity(int N, double T_0, Atom *atom)
 {
     double ek = 0.0;
     find_ek(N, T_0, atom, &ek);
-    double temperature = ek /= (1.5 * K_B * N);
+    double temperature = ek / (1.5 * K_B * N);
     double scale_factor = sqrt(T_0 / temperature);
     for (int n = 0; n < N; ++n)
     { 
