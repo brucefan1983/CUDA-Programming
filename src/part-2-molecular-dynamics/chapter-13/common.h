@@ -5,8 +5,6 @@
 
 struct Atom
 {
-    int *NN;
-    int *NL;
     double *m;
     double *x;
     double *y;

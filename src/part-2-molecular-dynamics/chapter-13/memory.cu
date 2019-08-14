@@ -4,8 +4,6 @@
 
 void allocate_memory(int N, int MN, Atom *atom)
 {
-    atom->NN = (int*) malloc(N * sizeof(int));
-    atom->NL = (int*) malloc(N * MN * sizeof(int));
     atom->m  = (double*) malloc(N * sizeof(double));
     atom->x  = (double*) malloc(N * sizeof(double));
     atom->y  = (double*) malloc(N * sizeof(double));
@@ -33,8 +31,6 @@ void allocate_memory(int N, int MN, Atom *atom)
 
 void deallocate_memory(Atom *atom)
 {
-    free(atom->NN);
-    free(atom->NL);
     free(atom->m);
     free(atom->x);
     free(atom->y);
