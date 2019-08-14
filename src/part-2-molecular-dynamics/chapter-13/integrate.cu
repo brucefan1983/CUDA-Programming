@@ -71,6 +71,7 @@ void equilibration
     double time_step, Atom *atom
 )
 {
+    cudaDeviceSynchronize();
     clock_t time_begin = clock();
     for (int step = 0; step < Ne; ++step)
     { 
@@ -79,6 +80,7 @@ void equilibration
         integrate(N, time_step, atom, 2);
         scale_velocity(N, T_0, atom);
     } 
+    cudaDeviceSynchronize();
     clock_t time_finish = clock();
     double time_used = (time_finish - time_begin) 
                      / (double) CLOCKS_PER_SEC;
@@ -91,7 +93,8 @@ void production
     double time_step, Atom *atom
 )
 {
-    double time_begin = clock();
+    cudaDeviceSynchronize();
+    clock_t time_begin = clock();
     FILE *fid_e = fopen("energy.txt", "w");
     FILE *fid_v = fopen("velocity.txt", "w");
     for (int step = 0; step < Np; ++step)
@@ -120,7 +123,8 @@ void production
     }
     fclose(fid_e);
     fclose(fid_v);
-    double time_finish = clock();
+    cudaDeviceSynchronize();
+    clock_t time_finish = clock();
     double time_used = (time_finish - time_begin) 
                      / (double) CLOCKS_PER_SEC;
     printf("time used for production = %g s\n", time_used);
