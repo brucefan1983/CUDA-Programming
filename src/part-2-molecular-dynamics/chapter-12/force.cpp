@@ -1,8 +1,7 @@
 #include "force.h"
 #include "mic.h"
 
-void find_force
-(int N, int MN, Atom *atom)
+void find_force(int N, int MN, Atom *atom)
 {
     int *NN = atom->NN;
     int *NL = atom->NL;
