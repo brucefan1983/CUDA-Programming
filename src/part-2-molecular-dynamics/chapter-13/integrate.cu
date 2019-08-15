@@ -4,20 +4,19 @@
 #include <math.h>
 #include <time.h>
 
-static void sum(int N, double *x)
+static double sum(int N, double *x)
 {
     double s = 0.0;
     for (int n = 0; n < N; ++n) 
     {
         s += x[n];
     }
-    x[0] = s;
+    return s;
 }
 
 static void scale_velocity(int N, double T_0, Atom *atom)
 {
-    sum(N, atom->ke);
-    double temperature = atom->ke[0] / (1.5 * K_B * N);
+    double temperature = sum(N, atom->ke) / (1.5 * K_B * N);
     double scale_factor = sqrt(T_0 / temperature);
     for (int n = 0; n < N; ++n)
     { 
@@ -71,6 +70,7 @@ void equilibration
     double time_step, Atom *atom
 )
 {
+    find_force(N, MN, atom);
     cudaDeviceSynchronize();
     clock_t time_begin = clock();
     for (int step = 0; step < Ne; ++step)
@@ -104,10 +104,8 @@ void production
         integrate(N, time_step, atom, 2);
         if (0 == step % Ns)
         {
-            sum(N, atom->ke);
-            sum(N, atom->pe);
             fprintf(fid_e, "%20.10e%20.10e\n",
-                atom->ke[0], atom->pe[0]);
+                sum(N, atom->ke), sum(N, atom->pe));
             for (int n = 0; n < N; ++n)
             {
                 double factor = 1.0e5 / TIME_UNIT_CONVERSION;
