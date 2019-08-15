@@ -27,7 +27,7 @@ int main(int argc, char **argv)
     int Ne = 2000;
     int Np = 2000;
     int Ns = 100;
-    int MN = 200;
+    int MN = 128;
     double T_0 = 60.0;
     double ax = 5.385;
     double time_step = 5.0 / TIME_UNIT_CONVERSION;

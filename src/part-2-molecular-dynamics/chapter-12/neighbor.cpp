@@ -11,7 +11,7 @@ void find_neighbor(int N, int MN, Atom *atom)
     double *y = atom->y;
     double *z = atom->z;
     double *box = atom->box; 
-    double cutoff = 11.0;
+    double cutoff = 10.0;
     double cutoff_square = cutoff * cutoff;
     for (int n = 0; n < N; n++) {NN[n] = 0;}
     for (int n1 = 0; n1 < N - 1; n1++)

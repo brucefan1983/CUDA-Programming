@@ -34,7 +34,7 @@ static void __global__ gpu_find_neighbor
 
 void find_neighbor(int N, int MN, Atom *atom)
 {
-    double cutoff = 11.0;
+    double cutoff = 10.0;
     double cutoff2 = cutoff * cutoff;
 
     int block_size = 128;
