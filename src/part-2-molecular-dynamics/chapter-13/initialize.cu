@@ -1,4 +1,5 @@
 #include "initialize.h"
+#include "error.cuh"
 #include <stdlib.h>
 #include <math.h>
 
@@ -55,6 +56,17 @@ void initialize_position(int nx, double ax, Atom *atom)
             }
         }
     }
+
+    int m1 = sizeof(double) * 4 * nx * nx * nx;
+    int m2 = sizeof(double) * 6;
+    CHECK(cudaMemcpy(atom->g_x, atom->x, m1, 
+        cudaMemcpyHostToDevice))
+    CHECK(cudaMemcpy(atom->g_y, atom->y, m1, 
+        cudaMemcpyHostToDevice))
+    CHECK(cudaMemcpy(atom->g_z, atom->z, m1, 
+        cudaMemcpyHostToDevice))
+    CHECK(cudaMemcpy(atom->g_box, atom->box, m2, 
+        cudaMemcpyHostToDevice))
 }
   
 void initialize_velocity(int N, double T_0, Atom *atom)

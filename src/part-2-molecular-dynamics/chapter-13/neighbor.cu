@@ -1,4 +1,3 @@
-#include "error.cuh"
 #include "neighbor.h"
 #include "mic.h"
 #include <stdio.h>
@@ -37,17 +36,6 @@ void find_neighbor(int N, int MN, Atom *atom)
 {
     double cutoff = 11.0;
     double cutoff2 = cutoff * cutoff;
-
-    int m1 = sizeof(double) * N;
-    int m2 = sizeof(double) * 6;
-    CHECK(cudaMemcpy(atom->g_x, atom->x, m1, 
-        cudaMemcpyHostToDevice))
-    CHECK(cudaMemcpy(atom->g_y, atom->y, m1, 
-        cudaMemcpyHostToDevice))
-    CHECK(cudaMemcpy(atom->g_z, atom->z, m1, 
-        cudaMemcpyHostToDevice))
-    CHECK(cudaMemcpy(atom->g_box, atom->box, m2, 
-        cudaMemcpyHostToDevice))
 
     int block_size = 128;
     int grid_size = (N - 1) / block_size + 1;
