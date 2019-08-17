@@ -2,7 +2,7 @@
 
 void allocate_memory(int N)
 {
-    long long GB = (1 << 30); // 2^30 = 1024^3
+    long long GB = (1 << 30);
     long long M = GB * N;
     char *g_x;
     printf("Try to allocate %d GB global memory\n", N);
@@ -13,8 +13,8 @@ void allocate_memory(int N)
 
 int main(void)
 {
-    allocate_memory(10); // 10 GB
-    allocate_memory(12); // 12 GB
+    allocate_memory(10);
+    allocate_memory(12);
     return 0;
 }
 
