@@ -6,26 +6,26 @@ echo './a.out'
 ./a.out
 
 printf '\nnvcc -arch=sm_35 hello1.cu\n'
-nvcc -arch=sm_35 hello1.cu
+nvcc hello1.cu
 echo './a.out'
 ./a.out
 
 printf '\nnvcc -arch=sm_35 hello2.cu\n'
-nvcc -arch=sm_35 hello2.cu
+nvcc hello2.cu
 echo './a.out'
 ./a.out
 
 printf '\nnvcc -arch=sm_35 hello3.cu\n'
-nvcc -arch=sm_35 hello3.cu
+nvcc hello3.cu
 echo './a.out'
 ./a.out
 
 printf '\nnvcc -arch=sm_35 hello4.cu\n'
-nvcc -arch=sm_35 hello4.cu
+nvcc hello4.cu
 echo './a.out'
 ./a.out
 
 printf '\nnvcc -arch=sm_35 hello5.cu\n'
-nvcc -arch=sm_35 hello5.cu
+nvcc hello5.cu
 echo './a.out'
 ./a.out
