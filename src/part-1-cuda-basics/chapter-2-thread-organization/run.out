@@ -3,15 +3,15 @@ g++ hello.cpp
 ./a.out
 Hello World!
 
-nvcc -arch=sm_35 hello1.cu
+nvcc hello1.cu
 ./a.out
 Hello World!
 
-nvcc -arch=sm_35 hello2.cu
+nvcc hello2.cu
 ./a.out
 Hello World from the GPU!
 
-nvcc -arch=sm_35 hello3.cu
+nvcc hello3.cu
 ./a.out
 Hello World from the GPU!
 Hello World from the GPU!
@@ -22,7 +22,7 @@ Hello World from the GPU!
 Hello World from the GPU!
 Hello World from the GPU!
 
-nvcc -arch=sm_35 hello4.cu
+nvcc hello4.cu
 ./a.out
 Hello World from block 1 and thread 0!
 Hello World from block 1 and thread 1!
@@ -33,7 +33,7 @@ Hello World from block 0 and thread 1!
 Hello World from block 0 and thread 2!
 Hello World from block 0 and thread 3!
 
-nvcc -arch=sm_35 hello5.cu
+nvcc hello5.cu
 ./a.out
 Hello World from block-0 and thread-(0, 0)!
 Hello World from block-0 and thread-(1, 0)!
