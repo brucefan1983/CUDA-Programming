@@ -1,46 +1,36 @@
-#include <math.h> // fabs()
+#include <math.h>
 #include <stdio.h>
 #include "error.cuh"
-#define EPSILON 1.0e-14 // a small number
+#define EPSILON 1.0e-14
 void __global__ sum(double *x, double *y, double *z, int N);
 void check(double *z, int N);
 
 int main(void)
 {
-    int N = 100000001;
+    int N = 1024 * 100000;
     int M = sizeof(double) * N;
-    // allocate host memory
     double *x = (double*) malloc(M);
     double *y = (double*) malloc(M);
     double *z = (double*) malloc(M);
-    // initialize host data
     for (int n = 0; n < N; ++n)
     {
-        x[n] = 1.0;
-        y[n] = 2.0;
-        z[n] = 0.0;
+        x[n] = 1.0; y[n] = 2.0; z[n] = 0.0;
     }
-    // allocate device memory
+
     double *g_x, *g_y, *g_z;
     CHECK(cudaMalloc((void **)&g_x, M))
     CHECK(cudaMalloc((void **)&g_y, M))
     CHECK(cudaMalloc((void **)&g_z, M))
-    // copy data from host to device
-    CHECK(cudaMemcpy(g_x, x, M, cudaMemcpyHostToDevice))
-    CHECK(cudaMemcpy(g_y, y, M, cudaMemcpyHostToDevice))
-    // call the kernel function
+    CHECK(cudaMemcpy(g_x, x, M, cudaMemcpyDeviceToHost))
+    CHECK(cudaMemcpy(g_y, y, M, cudaMemcpyDeviceToHost))
     int block_size = 128;
-    int grid_size = (N - 1) / block_size + 1;
+    int grid_size = N / block_size;
     sum<<<grid_size, block_size>>>(g_x, g_y, g_z, N);
-    // copy data from device to host
+
     CHECK(cudaMemcpy(z, g_z, M, cudaMemcpyDeviceToHost))
-    // check the results
     check(z, N);
-    // free host memory
-    free(x);
-    free(y);
-    free(z);
-    // free device memory
+
+    free(x); free(y); free(z);
     CHECK(cudaFree(g_x))
     CHECK(cudaFree(g_y))
     CHECK(cudaFree(g_z))

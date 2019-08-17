@@ -20,15 +20,16 @@ nvcc -arch=sm_35 sum3if.cu
 echo './a.out'
 ./a.out
 
-printf '\nnvcc -arch=sm_35 sum4check.cu\n'
-nvcc -arch=sm_35 sum4check.cu
+printf '\nnvcc -arch=sm_35 sum4check_api.cu\n'
+nvcc -arch=sm_35 sum4check_api.cu
 echo './a.out'
 ./a.out
 
-printf '\nnvcc -arch=sm_35 sum5memcheck.cu\n'
-nvcc -arch=sm_35 sum5memcheck.cu
-echo 'cuda-memcheck ./a.out'
-cuda-memcheck ./a.out
+printf '\nnvcc -arch=sm_35 sum5check_kernel.cu\n'
+nvcc -arch=sm_35 sum5check_kernel.cu
+echo './a.out'
+./a.out
+
 
 
 
