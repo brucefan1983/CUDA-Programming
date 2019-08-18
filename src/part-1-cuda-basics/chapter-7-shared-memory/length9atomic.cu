@@ -79,8 +79,13 @@ real get_length(real *x, int N)
     int grid_size = (N - 1) / block_size + 1;
     grid_size = (grid_size - 1) / unroll_size + 1;
 
+    real *cpu_length = (real *) malloc(sizeof(real));
     real *g_length;
     cudaMalloc((void**)&g_length, sizeof(real));
+    cpu_length[0] = 0.0;
+    cudaMemcpy(g_length, cpu_length, sizeof(real), 
+        cudaMemcpyHostToDevice);
+
     real *g_x;
     cudaMalloc((void**)&g_x, sizeof(real) * N);
     cudaMemcpy(g_x, x, sizeof(real) * N, 
@@ -90,7 +95,6 @@ real get_length(real *x, int N)
     <<<grid_size, block_size, sizeof(real) * block_size>>>
     (g_x, g_length, N);
 
-    real *cpu_length = (real *) malloc(sizeof(real));
     cudaMemcpy(cpu_length, g_length, sizeof(real), 
         cudaMemcpyDeviceToHost);
 
