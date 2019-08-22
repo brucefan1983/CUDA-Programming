@@ -31,7 +31,6 @@ void __global__ get_length_1
     int n = bid * blockDim.x * unroll_size + tid;
     extern __shared__ real s_inner[];
     s_inner[tid] = 0.0;
-    if (bid == 0 && tid == 0) g_inner[0] = 0.0; 
 
     real tmp_sum = 0.0;
     if (n + (unroll_size - 1) * blockDim.x < N)
