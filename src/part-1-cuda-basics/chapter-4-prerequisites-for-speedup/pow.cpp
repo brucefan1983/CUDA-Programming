@@ -1,8 +1,8 @@
-#include <math.h> // fabs()
-#include <stdlib.h> // malloc() and free() 
-#include <stdio.h> // printf()
-#include <time.h> // clock(), clock_t, and CLOCKS_PER_SEC
-#define EPSILON 1.0e-14 // a small number
+#include <math.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <time.h>
+#define EPSILON 1.0e-14
 void power(double *x, double *y, double *z, int N);
 void check(double *z, int N);
 
@@ -15,9 +15,7 @@ int main(void)
     double *z = (double*) malloc(M);
     for (int n = 0; n < N; ++n)
     {
-        x[n] = 1.0;
-        y[n] = 2.0;
-        z[n] = 0.0;
+        x[n] = 1.0; y[n] = 2.0; z[n] = 0.0;
     }
 
     clock_t time_begin = clock();
@@ -28,9 +26,7 @@ int main(void)
     printf("Time used for host function = %f s.\n", time_used);
 
     check(z, N);
-    free(x);
-    free(y);
-    free(z);
+    free(x); free(y); free(z);
     return 0;
 }
 

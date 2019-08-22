@@ -1,12 +1,14 @@
-#include <math.h> // fabs()
+#include <math.h>
 #include <stdio.h>
 #include "error.cuh"
-#define EPSILON 1.0e-14 // a small number
+#define EPSILON 1.0e-14
 void __global__ sum(double *x, double *y, double *z, int N);
 void check(double *z, int N);
 
-int main(void)
+int main(int argc, char **argv)
 {
+    int num_of_repeats = atoi(argv[1]);
+
     int N = 100000000;
     int M = sizeof(double) * N;
     double *x = (double*) malloc(M);
@@ -14,9 +16,7 @@ int main(void)
     double *z = (double*) malloc(M);
     for (int n = 0; n < N; ++n)
     {
-        x[n] = 1.0;
-        y[n] = 2.0;
-        z[n] = 0.0;
+        x[n] = 1.0; y[n] = 2.0; z[n] = 0.0;
     }
     double *g_x, *g_y, *g_z;
     CHECK(cudaMalloc((void **)&g_x, M))
@@ -27,25 +27,15 @@ int main(void)
 
     int block_size = 128;
     int grid_size = (N - 1) / block_size + 1;
-   
-    cudaDeviceSynchronize();
-    clock_t time_begin = clock();
-
-    sum<<<grid_size, block_size>>>(g_x, g_y, g_z, N);
-
-    cudaDeviceSynchronize();
-    clock_t time_finish = clock();
-
-    double time_used = (time_finish - time_begin)
-        / double(CLOCKS_PER_SEC);
-    printf("Time used for device function = %f s.\n",
-        time_used);
+    for (int n = 0; n < num_of_repeats; ++n)
+    {
+        sum<<<grid_size, block_size>>>(g_x, g_y, g_z, N);
+    }
 
     CHECK(cudaMemcpy(z, g_z, M, cudaMemcpyDeviceToHost))
     check(z, N);
-    free(x);
-    free(y);
-    free(z);
+
+    free(x); free(y); free(z);
     CHECK(cudaFree(g_x))
     CHECK(cudaFree(g_y))
     CHECK(cudaFree(g_z))
@@ -55,10 +45,7 @@ int main(void)
 void __global__ sum(double *x, double *y, double *z, int N)
 {
     int n = blockDim.x * blockIdx.x + threadIdx.x;
-    if (n < N)
-    {
-        z[n] = x[n] + y[n];
-    }
+    if (n < N) { z[n] = x[n] + y[n]; }
 }
 
 void check(double *z, int N)

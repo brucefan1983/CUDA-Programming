@@ -1,19 +1,23 @@
 #include "error.cuh"
-#include <math.h> // fabs()
+#include <math.h>
 #include <stdio.h>
-#include <time.h> // clock(), clock_t, and CLOCKS_PER_SEC
-#define EPSILON 1.0e-14 // a small number
+#include <time.h>
+#define EPSILON 1.0e-14
 void __global__ power(double *x, double *y, double *z, int N);
 void check(double *z, int N);
 
-int main(void)
+int main(int argc, char **argv)
 {
-    int N = 100000000;
+    int N = atoi(argv[1]);
+    int block_size = atoi(argv[2]);
     int M = sizeof(double) * N;
     double *x = (double*) malloc(M);
     double *y = (double*) malloc(M);
     double *z = (double*) malloc(M);
-    for (int n = 0; n < N; ++n) { x[n] = 1.0; y[n] = 2.0; }
+    for (int n = 0; n < N; ++n)
+    {
+        x[n] = 1.0; y[n] = 2.0; z[n] = 0.0;
+    }
     double *g_x, *g_y, *g_z;
     CHECK(cudaMalloc((void **)&g_x, M))
     CHECK(cudaMalloc((void **)&g_y, M))
@@ -21,15 +25,13 @@ int main(void)
     CHECK(cudaMemcpy(g_x, x, M, cudaMemcpyHostToDevice))
     CHECK(cudaMemcpy(g_y, y, M, cudaMemcpyHostToDevice))
 
-    int block_size = 128;
     int grid_size = (N - 1) / block_size + 1;
     power<<<grid_size, block_size>>>(g_x, g_y, g_z, N);
    
     cudaMemcpy(z, g_z, M, cudaMemcpyDeviceToHost);
     check(z, N);
-    free(x);
-    free(y);
-    free(z);
+
+    free(x); free(y); free(z);
     CHECK(cudaFree(g_x))
     CHECK(cudaFree(g_y))
     CHECK(cudaFree(g_z))
@@ -39,10 +41,7 @@ int main(void)
 void __global__ power(double *x, double *y, double *z, int N)
 {
     int n = blockDim.x * blockIdx.x + threadIdx.x;
-    if (n < N)
-    {
-        z[n] = pow(x[n], y[n]);
-    }
+    if (n < N) { z[n] = pow(x[n], y[n]); }
 }
 
 void check(double *z, int N)
