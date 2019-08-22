@@ -1,4 +1,4 @@
-# Chapter 14: CUDA version: accelerate the whole code
+# Chapter 16: CUDA version: Increasing parallelism 
 
 ## How to compile and run?
   * type `make` to compile

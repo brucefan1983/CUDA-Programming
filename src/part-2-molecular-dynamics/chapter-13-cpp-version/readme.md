@@ -1,7 +1,6 @@
-# Chapter 13: CUDA version: only accelerate the force-evaluation part
+# Chapter 13: A multi-file C++ program for molecular dynamics simulation
 
 ## How to compile and run?
   * type `make` to compile
   * type `./ljmd 5` to run
   * type `plot_results` in Matlab command window to check the results
-

@@ -1,4 +1,4 @@
-# Chapter 16: CUDA version: various optimizations
+# Chapter 18: CUDA version: Unified memory
 
 ## How to compile and run?
   * type `make` to compile
