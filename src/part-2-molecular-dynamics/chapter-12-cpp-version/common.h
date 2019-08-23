@@ -1,5 +1,11 @@
 #pragma once
 
+#ifdef DOUBLE_PRECISION
+    typedef double real;
+#else
+    typedef float real;
+#endif
+
 #define K_B                   8.617343e-5
 #define TIME_UNIT_CONVERSION  1.018051e+1
 
@@ -7,17 +13,17 @@ struct Atom
 {
     int *NN;
     int *NL;
-    double *m;
-    double *x;
-    double *y;
-    double *z;
-    double *vx;
-    double *vy;
-    double *vz;
-    double *fx;
-    double *fy;
-    double *fz;
-    double *pe;
-    double *ke;
-    double *box;
+    real *m;
+    real *x;
+    real *y;
+    real *z;
+    real *vx;
+    real *vy;
+    real *vz;
+    real *fx;
+    real *fy;
+    real *fz;
+    real *pe;
+    real *ke;
+    real *box;
 };
