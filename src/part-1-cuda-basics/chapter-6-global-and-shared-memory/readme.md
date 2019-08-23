@@ -1,4 +1,4 @@
-# Chapter 7: Using shared memory properly
+# Chapter 6: Using global and shared memory properly
 
 ## Source files for this chapter
 

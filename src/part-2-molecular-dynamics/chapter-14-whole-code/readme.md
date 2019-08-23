@@ -1,4 +1,4 @@
-# Chapter 14: CUDA version: only accelerate the force-evaluation part
+# Chapter 14: CUDA version: accelerate the whole code
 
 ## How to compile and run?
   * type `make` to compile

@@ -9,7 +9,7 @@ t_equilibration=[7.66749,8.27827,21.0492,164.19];
 t_production=[7.82091,9.41774,26.8761,203.473];
 
 figure
-loglog(N,t_force,'d-');
+plot(N,t_force,'d-');
 hold on;
 plot(N,t_D2H+t_H2D,'s-');
 plot(N,t_force+t_D2H+t_H2D,'o-');
