@@ -55,10 +55,10 @@ void __global__ gpu_find_neighbor
             double distance_square = x12 * x12 + y12 * y12;
             if (distance_square < cutoff2)
             {
-                g_NL[n1 * MN + g_NN[n1]] = n2;
-                atomicAdd(&g_NN[n1], 1);
-                g_NL[n2 * MN + g_NN[n2]] = n1;
-                atomicAdd(&g_NN[n2], 1);
+                int tmp = atomicAdd(&g_NN[n1], 1);
+                g_NL[n1 * MN + tmp] = n2;
+                tmp = atomicAdd(&g_NN[n2], 1);
+                g_NL[n2 * MN + tmp] = n1;
             }
         }
     }
