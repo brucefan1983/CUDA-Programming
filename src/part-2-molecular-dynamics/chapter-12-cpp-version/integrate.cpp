@@ -4,9 +4,9 @@
 #include <math.h>
 #include <time.h>
 
-static double sum(int N, double *x)
+static real sum(int N, real *x)
 {
-    double s = 0.0;
+    real s = 0.0;
     for (int n = 0; n < N; ++n) 
     {
         s += x[n];
@@ -14,10 +14,10 @@ static double sum(int N, double *x)
     return s;
 }
 
-static void scale_velocity(int N, double T_0, Atom *atom)
+static void scale_velocity(int N, real T_0, Atom *atom)
 {
-    double temperature = sum(N, atom->ke) / (1.5 * K_B * N);
-    double scale_factor = sqrt(T_0 / temperature);
+    real temperature = sum(N, atom->ke) / (1.5 * K_B * N);
+    real scale_factor = sqrt(T_0 / temperature);
     for (int n = 0; n < N; ++n)
     { 
         atom->vx[n] *= scale_factor;
@@ -27,26 +27,26 @@ static void scale_velocity(int N, double T_0, Atom *atom)
 }
 
 static void integrate
-(int N, double time_step, Atom *atom, int flag)
+(int N, real time_step, Atom *atom, int flag)
 {
-    double *m = atom->m;
-    double *x = atom->x;
-    double *y = atom->y;
-    double *z = atom->z;
-    double *vx = atom->vx;
-    double *vy = atom->vy;
-    double *vz = atom->vz;
-    double *fx = atom->fx;
-    double *fy = atom->fy;
-    double *fz = atom->fz;
-    double *ke = atom->ke;
-    double time_step_half = time_step * 0.5;
+    real *m = atom->m;
+    real *x = atom->x;
+    real *y = atom->y;
+    real *z = atom->z;
+    real *vx = atom->vx;
+    real *vy = atom->vy;
+    real *vz = atom->vz;
+    real *fx = atom->fx;
+    real *fy = atom->fy;
+    real *fz = atom->fz;
+    real *ke = atom->ke;
+    real time_step_half = time_step * 0.5;
     for (int n = 0; n < N; ++n)
     {
-        double mass_inv = 1.0 / m[n];
-        double ax = fx[n] * mass_inv;
-        double ay = fy[n] * mass_inv;
-        double az = fz[n] * mass_inv;
+        real mass_inv = 1.0 / m[n];
+        real ax = fx[n] * mass_inv;
+        real ay = fy[n] * mass_inv;
+        real az = fz[n] * mass_inv;
         vx[n] += ax * time_step_half;
         vy[n] += ay * time_step_half;
         vz[n] += az * time_step_half;
@@ -58,7 +58,7 @@ static void integrate
         }
         else
         {
-            double v2 = vx[n]*vx[n] + vy[n]*vy[n] + vz[n]*vz[n];
+            real v2 = vx[n]*vx[n] + vy[n]*vy[n] + vz[n]*vz[n];
             ke[n] = m[n] * v2 * 0.5;
         }
     }
@@ -66,8 +66,8 @@ static void integrate
 
 void equilibration
 (
-    int Ne, int N, int MN, double T_0, 
-    double time_step, Atom *atom
+    int Ne, int N, int MN, real T_0, 
+    real time_step, Atom *atom
 )
 {
     find_force(N, MN, atom);
@@ -80,15 +80,15 @@ void equilibration
         scale_velocity(N, T_0, atom);
     } 
     clock_t time_finish = clock();
-    double time_used = (time_finish - time_begin) 
-                     / (double) CLOCKS_PER_SEC;
+    real time_used = (time_finish - time_begin) 
+                     / (real) CLOCKS_PER_SEC;
     printf("time used for equilibration = %g s\n", time_used);
 }
 
 void production
 (
-    int Np, int Ns, int N, int MN, double T_0, 
-    double time_step, Atom *atom
+    int Np, int Ns, int N, int MN, real T_0, 
+    real time_step, Atom *atom
 )
 {
     clock_t time_begin = clock();
@@ -101,14 +101,14 @@ void production
         integrate(N, time_step, atom, 2);
         if (0 == step % Ns)
         {
-            fprintf(fid_e, "%20.10e%20.10e\n",
+            fprintf(fid_e, "%g %g\n",
                 sum(N, atom->ke), sum(N, atom->pe));
             for (int n = 0; n < N; ++n)
             {
-                double factor = 1.0e5 / TIME_UNIT_CONVERSION;
+                real factor = 1.0e5 / TIME_UNIT_CONVERSION;
                 fprintf
                 (
-                    fid_v, "%20.10e%20.10e%20.10e\n", 
+                    fid_v, "%g %g %g\n", 
                     atom->vx[n] * factor,
                     atom->vy[n] * factor,
                     atom->vz[n] * factor
@@ -119,8 +119,8 @@ void production
     fclose(fid_e);
     fclose(fid_v);
     clock_t time_finish = clock();
-    double time_used = (time_finish - time_begin) 
-                     / (double) CLOCKS_PER_SEC;
+    real time_used = (time_finish - time_begin) 
+                     / (real) CLOCKS_PER_SEC;
     printf("time used for production = %g s\n", time_used);
 }
 

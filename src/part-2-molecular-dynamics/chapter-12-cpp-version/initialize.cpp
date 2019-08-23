@@ -2,20 +2,20 @@
 #include <stdlib.h>
 #include <math.h>
 
-static void scale_velocity(int N, double T_0, Atom *atom)
+static void scale_velocity(int N, real T_0, Atom *atom)
 {
-    double *m = atom->m;
-    double *vx = atom->vx;
-    double *vy = atom->vy;
-    double *vz = atom->vz;
-    double temperature = 0.0;
+    real *m = atom->m;
+    real *vx = atom->vx;
+    real *vy = atom->vy;
+    real *vz = atom->vz;
+    real temperature = 0.0;
     for (int n = 0; n < N; ++n) 
     {
-        double v2 = vx[n]*vx[n] + vy[n]*vy[n] + vz[n]*vz[n];     
+        real v2 = vx[n]*vx[n] + vy[n]*vy[n] + vz[n]*vz[n];     
         temperature += m[n] * v2; 
     }
     temperature /= 3.0 * K_B * N;
-    double scale_factor = sqrt(T_0 / temperature);
+    real scale_factor = sqrt(T_0 / temperature);
     for (int n = 0; n < N; ++n)
     { 
         vx[n] *= scale_factor;
@@ -24,7 +24,7 @@ static void scale_velocity(int N, double T_0, Atom *atom)
     }
 }
 
-void initialize_position(int nx, double ax, Atom *atom)
+void initialize_position(int nx, real ax, Atom *atom)
 {
     atom->box[0] = ax * nx;
     atom->box[1] = ax * nx;
@@ -32,12 +32,12 @@ void initialize_position(int nx, double ax, Atom *atom)
     atom->box[3] = atom->box[0] * 0.5;
     atom->box[4] = atom->box[1] * 0.5;
     atom->box[5] = atom->box[2] * 0.5;
-    double *x = atom->x;
-    double *y = atom->y;
-    double *z = atom->z;
-    double x0[4] = {0.0, 0.0, 0.5, 0.5};
-    double y0[4] = {0.0, 0.5, 0.0, 0.5}; 
-    double z0[4] = {0.0, 0.5, 0.5, 0.0};
+    real *x = atom->x;
+    real *y = atom->y;
+    real *z = atom->z;
+    real x0[4] = {0.0, 0.0, 0.5, 0.5};
+    real y0[4] = {0.0, 0.5, 0.0, 0.5}; 
+    real z0[4] = {0.0, 0.5, 0.5, 0.0};
     int n = 0;
     for (int ix = 0; ix < nx; ++ix)
     {
@@ -57,13 +57,13 @@ void initialize_position(int nx, double ax, Atom *atom)
     }
 }
   
-void initialize_velocity(int N, double T_0, Atom *atom)
+void initialize_velocity(int N, real T_0, Atom *atom)
 {
-    double *m = atom->m;
-    double *vx = atom->vx;
-    double *vy = atom->vy;
-    double *vz = atom->vz;
-    double momentum_average[3] = {0.0, 0.0, 0.0};
+    real *m = atom->m;
+    real *vx = atom->vx;
+    real *vy = atom->vy;
+    real *vz = atom->vz;
+    real momentum_average[3] = {0.0, 0.0, 0.0};
     for (int n = 0; n < N; ++n)
     { 
         vx[n] = -1.0 + (rand() * 2.0) / RAND_MAX; 
