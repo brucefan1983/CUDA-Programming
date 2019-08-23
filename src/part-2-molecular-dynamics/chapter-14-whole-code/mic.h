@@ -2,7 +2,7 @@
 
 static void __device__ apply_mic
 (
-    double *box, double *x12, double *y12, double *z12
+    real *box, real *x12, real *y12, real *z12
 )
 {
     if      (*x12 < - box[3]) { *x12 += box[0]; } 
