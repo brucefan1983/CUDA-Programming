@@ -4,30 +4,30 @@
 
 void allocate_memory(int N, int MN, Atom *atom)
 {
-    atom->m  = (double*) malloc(N * sizeof(double));
-    atom->x  = (double*) malloc(N * sizeof(double));
-    atom->y  = (double*) malloc(N * sizeof(double));
-    atom->z  = (double*) malloc(N * sizeof(double));
-    atom->vx = (double*) malloc(N * sizeof(double));
-    atom->vy = (double*) malloc(N * sizeof(double));
-    atom->vz = (double*) malloc(N * sizeof(double));
-    atom->fx = (double*) malloc(N * sizeof(double));
-    atom->fy = (double*) malloc(N * sizeof(double));
-    atom->fz = (double*) malloc(N * sizeof(double));
-    atom->pe = (double*) malloc(N * sizeof(double));
-    atom->ke = (double*) malloc(N * sizeof(double));
-    atom->box = (double*) malloc(6 * sizeof(double));
+    atom->m  = (real*) malloc(N * sizeof(real));
+    atom->x  = (real*) malloc(N * sizeof(real));
+    atom->y  = (real*) malloc(N * sizeof(real));
+    atom->z  = (real*) malloc(N * sizeof(real));
+    atom->vx = (real*) malloc(N * sizeof(real));
+    atom->vy = (real*) malloc(N * sizeof(real));
+    atom->vz = (real*) malloc(N * sizeof(real));
+    atom->fx = (real*) malloc(N * sizeof(real));
+    atom->fy = (real*) malloc(N * sizeof(real));
+    atom->fz = (real*) malloc(N * sizeof(real));
+    atom->pe = (real*) malloc(N * sizeof(real));
+    atom->ke = (real*) malloc(N * sizeof(real));
+    atom->box = (real*) malloc(6 * sizeof(real));
 
     CHECK(cudaMalloc((void**)&atom->g_NN, sizeof(int) * N))
     CHECK(cudaMalloc((void**)&atom->g_NL, sizeof(int) * N * MN))
-    CHECK(cudaMalloc((void**)&atom->g_x, sizeof(double) * N))
-    CHECK(cudaMalloc((void**)&atom->g_y, sizeof(double) * N))
-    CHECK(cudaMalloc((void**)&atom->g_z, sizeof(double) * N))
-    CHECK(cudaMalloc((void**)&atom->g_fx, sizeof(double) * N))
-    CHECK(cudaMalloc((void**)&atom->g_fy, sizeof(double) * N))
-    CHECK(cudaMalloc((void**)&atom->g_fz, sizeof(double) * N))
-    CHECK(cudaMalloc((void**)&atom->g_pe, sizeof(double) * N))
-    CHECK(cudaMalloc((void**)&atom->g_box, sizeof(double) * 6))
+    CHECK(cudaMalloc((void**)&atom->g_x, sizeof(real) * N))
+    CHECK(cudaMalloc((void**)&atom->g_y, sizeof(real) * N))
+    CHECK(cudaMalloc((void**)&atom->g_z, sizeof(real) * N))
+    CHECK(cudaMalloc((void**)&atom->g_fx, sizeof(real) * N))
+    CHECK(cudaMalloc((void**)&atom->g_fy, sizeof(real) * N))
+    CHECK(cudaMalloc((void**)&atom->g_fz, sizeof(real) * N))
+    CHECK(cudaMalloc((void**)&atom->g_pe, sizeof(real) * N))
+    CHECK(cudaMalloc((void**)&atom->g_box, sizeof(real) * 6))
 }
 
 void deallocate_memory(Atom *atom)

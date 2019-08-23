@@ -5,15 +5,14 @@
 #include "integrate.h"
 #include <stdlib.h>
 #include <stdio.h>
-#include <math.h>
-#include <time.h>
 
 int main(int argc, char **argv)
 {
-    //srand(time(NULL));
+    int nx = 5;
+    int Ne = 2000;
+    int Np = 2000;
 
-    int nx = 4;
-    if (argc != 2) 
+    if (argc != 3) 
     { 
         printf("Error: ljmd requires one argument\n");
         exit(1);
@@ -21,16 +20,16 @@ int main(int argc, char **argv)
     else
     {
         nx = atoi(argv[1]);
+        Ne = atoi(argv[2]);
+        Np = Ne;
     }
 
     int N = 4 * nx * nx * nx;
-    int Ne = 2000;
-    int Np = 2000;
     int Ns = 100;
-    int MN = 128;
-    double T_0 = 60.0;
-    double ax = 5.385;
-    double time_step = 5.0 / TIME_UNIT_CONVERSION;
+    int MN = 200;
+    real T_0 = 60.0;
+    real ax = 5.385;
+    real time_step = 5.0 / TIME_UNIT_CONVERSION;
     Atom atom;
     allocate_memory(N, MN, &atom);
     for (int n = 0; n < N; ++n) { atom.m[n] = 40.0; }
