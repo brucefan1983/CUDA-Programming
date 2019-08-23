@@ -1,19 +1,30 @@
 clear; close all; font_size=12;
 
-nx=[4,8,16,32];
-N=nx.^3*4;
-t_force=[12.3355,12.5941,20.0845,159.348];
-t_D2H=[0.28905,0.56733,2.31592,16.3199];
-t_H2D=[0.19893,0.42692,1.74099,12.2404];
-t_equilibration=[7.66749,8.27827,21.0492,164.19];
-t_production=[7.82091,9.41774,26.8761,203.473];
+t_total=[5.18,4.98,4.31,2.74];
+t_force=[4.80,4.60,3.93,2.37];
+speed=25.6./t_total;
 
 figure
-loglog(N,t_force,'d-');
-hold on;
-plot(N,t_D2H+t_H2D,'s-');
-plot(N,t_force+t_D2H+t_H2D,'o-');
-plot(N,t_equilibration+t_production,'v-');
-legend('Force kernel','Memory transfer','GPU part','Whole program');
 
+subplot(1,2,1);
+bar(t_force);
+hold
+ylabel('time for force per step (ms)');
+set(gca,'xtick',[],'fontsize',12)
+text(0.7,-0.2,'A');
+text(1.7,-0.2,'B');
+text(2.7,-0.2,'C');
+text(3.7,-0.2,'D');
+title('(a)');
+
+subplot(1,2,2);
+bar(speed);
+hold
+ylabel('speed (10^7 atom * step / second)');
+set(gca,'xtick',[],'fontsize',12)
+text(0.7,-0.4,'A');
+text(1.7,-0.4,'B');
+text(2.7,-0.4,'C');
+text(3.7,-0.4,'D');
+title('(b)');
 

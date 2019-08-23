@@ -1,7 +1,7 @@
 all: ljmd
 
 CC = nvcc
-CFLAGS = -O3 -arch=sm_35 -DUSE_BLOCK_SCHEME -DUSE_LDG
+CFLAGS = -O3 -arch=sm_35 -DUSE_LDG --use_fast_math
 
 ljmd: initialize.o integrate.o neighbor.o \
 	force.o memory.o main.o

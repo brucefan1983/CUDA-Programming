@@ -5,12 +5,12 @@
 #include <math.h>
 #include <time.h>
 
-static void __global__ gpu_sum_1(int N, double *g_x, double *g_tmp)
+static void __global__ gpu_sum_1(int N, real *g_x, real *g_tmp)
 {
     int tid = threadIdx.x;
     int bid = blockIdx.x;
     int n = bid * blockDim.x + tid;
-    extern __shared__ double s_tmp[];
+    extern __shared__ real s_tmp[];
     s_tmp[tid] = 0.0;
 
     if (n < N)
@@ -35,10 +35,10 @@ static void __global__ gpu_sum_1(int N, double *g_x, double *g_tmp)
 }
 
 static void __global__ gpu_sum_2
-(int N, int number_of_patches, double *g_tmp, double *g_sum)
+(int N, int number_of_patches, real *g_tmp, real *g_sum)
 {
     int tid = threadIdx.x;
-    extern __shared__ double s_sum[];
+    extern __shared__ real s_sum[];
     s_sum[tid] = 0.0;
  
     for (int patch = 0; patch < number_of_patches; ++patch)
@@ -66,29 +66,29 @@ static void __global__ gpu_sum_2
     }
 }
 
-static double sum(int N, double *g_x)
+static real sum(int N, real *g_x)
 {
     const int block_size = 128;
     int grid_size = (N - 1) / block_size + 1;
     int number_of_patches = (grid_size - 1) / 1024 + 1;
 
-    double *g_tmp;
+    real *g_tmp;
     CHECK(cudaMalloc((void**)&g_tmp, 
-        sizeof(double) * grid_size))
-    double *g_sum;
-    CHECK(cudaMalloc((void**)&g_sum, sizeof(double)))
+        sizeof(real) * grid_size))
+    real *g_sum;
+    CHECK(cudaMalloc((void**)&g_sum, sizeof(real)))
 
     gpu_sum_1
-    <<<grid_size, block_size, sizeof(double) * block_size>>>
+    <<<grid_size, block_size, sizeof(real) * block_size>>>
     (N, g_x, g_tmp);
 
-    gpu_sum_2<<<1, 1024, sizeof(double) * 1024>>>
+    gpu_sum_2<<<1, 1024, sizeof(real) * 1024>>>
     (grid_size, number_of_patches, g_tmp, g_sum);
 
-    double *h_sum = (double*) malloc(sizeof(double));
-    CHECK(cudaMemcpy(h_sum, g_sum, sizeof(double), 
+    real *h_sum = (real*) malloc(sizeof(real));
+    CHECK(cudaMemcpy(h_sum, g_sum, sizeof(real), 
         cudaMemcpyDeviceToHost))
-    double result = h_sum[0];
+    real result = h_sum[0];
 
     CHECK(cudaFree(g_tmp))
     CHECK(cudaFree(g_sum))
@@ -99,8 +99,8 @@ static double sum(int N, double *g_x)
 
 static void __global__ gpu_scale_velocity
 (
-    int N, double scale_factor, 
-    double *g_vx, double *g_vy, double *g_vz
+    int N, real scale_factor, 
+    real *g_vx, real *g_vy, real *g_vz
 )
 {
     int n = blockDim.x * blockIdx.x + threadIdx.x;
@@ -112,10 +112,10 @@ static void __global__ gpu_scale_velocity
     }
 }
 
-static void scale_velocity(int N, double T_0, Atom *atom)
+static void scale_velocity(int N, real T_0, Atom *atom)
 {
-    double temperature = sum(N, atom->g_ke) / (1.5 * K_B * N);
-    double scale_factor = sqrt(T_0 / temperature);
+    real temperature = sum(N, atom->g_ke) / (1.5 * K_B * N);
+    real scale_factor = sqrt(T_0 / temperature);
 
     int block_size = 128;
     int grid_size = (N - 1) / block_size + 1;
@@ -125,24 +125,24 @@ static void scale_velocity(int N, double T_0, Atom *atom)
 
 static void __global__ gpu_integrate
 (
-    int N, double time_step, double time_step_half,
-    double *g_m, double *g_x, double *g_y, double *g_z,
-    double *g_vx, double *g_vy, double *g_vz,
-    double *g_fx, double *g_fy, double *g_fz, 
-    double *g_ke, int flag
+    int N, real time_step, real time_step_half,
+    real *g_m, real *g_x, real *g_y, real *g_z,
+    real *g_vx, real *g_vy, real *g_vz,
+    real *g_fx, real *g_fy, real *g_fz, 
+    real *g_ke, int flag
 )
 {
     int n = blockDim.x * blockIdx.x + threadIdx.x;
     if (n < N)
     {
-        double mass = g_m[n];
-        double mass_inv = 1.0 / mass;
-        double ax = g_fx[n] * mass_inv;
-        double ay = g_fy[n] * mass_inv;
-        double az = g_fz[n] * mass_inv;
-        double vx = g_vx[n];
-        double vy = g_vy[n];
-        double vz = g_vz[n];
+        real mass = g_m[n];
+        real mass_inv = 1.0 / mass;
+        real ax = g_fx[n] * mass_inv;
+        real ay = g_fy[n] * mass_inv;
+        real az = g_fz[n] * mass_inv;
+        real vx = g_vx[n];
+        real vy = g_vy[n];
+        real vz = g_vz[n];
 
         vx += ax * time_step_half;
         vy += ay * time_step_half;
@@ -165,9 +165,9 @@ static void __global__ gpu_integrate
 }
 
 static void integrate
-(int N, double time_step, Atom *atom, int flag)
+(int N, real time_step, Atom *atom, int flag)
 {
-    double time_step_half = time_step * 0.5;
+    real time_step_half = time_step * 0.5;
 
     int block_size = 128;
     int grid_size = (N - 1) / block_size + 1;
@@ -183,8 +183,8 @@ static void integrate
 
 void equilibration
 (
-    int Ne, int N, int MN, double T_0, 
-    double time_step, Atom *atom
+    int Ne, int N, int MN, real T_0, 
+    real time_step, Atom *atom
 )
 {
     find_force(N, MN, atom);
@@ -199,15 +199,15 @@ void equilibration
     } 
     cudaDeviceSynchronize();
     clock_t time_finish = clock();
-    double time_used = (time_finish - time_begin) 
-                     / (double) CLOCKS_PER_SEC;
+    real time_used = (time_finish - time_begin) 
+                     / (real) CLOCKS_PER_SEC;
     printf("time used for equilibration = %g s\n", time_used);
 }
 
 void production
 (
-    int Np, int Ns, int N, int MN, double T_0, 
-    double time_step, Atom *atom
+    int Np, int Ns, int N, int MN, real T_0, 
+    real time_step, Atom *atom
 )
 {
     cudaDeviceSynchronize();
@@ -223,23 +223,23 @@ void production
         {
             fprintf
             (
-                fid_e, "%20.10e%20.10e\n",
+                fid_e, "%g %g\n",
                 sum(N, atom->g_ke), sum(N, atom->g_pe)
             );
 
             CHECK(cudaMemcpy(atom->vx, atom->g_vx, 
-                sizeof(double) * N, cudaMemcpyDeviceToHost))
+                sizeof(real) * N, cudaMemcpyDeviceToHost))
             CHECK(cudaMemcpy(atom->vy, atom->g_vy, 
-                sizeof(double) * N, cudaMemcpyDeviceToHost))
+                sizeof(real) * N, cudaMemcpyDeviceToHost))
             CHECK(cudaMemcpy(atom->vz, atom->g_vz, 
-                sizeof(double) * N, cudaMemcpyDeviceToHost))
+                sizeof(real) * N, cudaMemcpyDeviceToHost))
 
             for (int n = 0; n < N; ++n)
             {
-                double factor = 1.0e5 / TIME_UNIT_CONVERSION;
+                real factor = 1.0e5 / TIME_UNIT_CONVERSION;
                 fprintf
                 (
-                    fid_v, "%20.10e%20.10e%20.10e\n", 
+                    fid_v, "%g %g %g\n", 
                     atom->vx[n] * factor,
                     atom->vy[n] * factor,
                     atom->vz[n] * factor
@@ -251,7 +251,7 @@ void production
     fclose(fid_v);
     cudaDeviceSynchronize();
     clock_t time_finish = clock();
-    double time_used = (time_finish - time_begin) 
-                     / (double) CLOCKS_PER_SEC;
+    real time_used = (time_finish - time_begin) 
+                     / (real) CLOCKS_PER_SEC;
     printf("time used for production = %g s\n", time_used);
 }
