@@ -1,4 +1,4 @@
-# Chapter 8: Unified memory programming 
+# Chapter 7: Unified memory programming 
 
 ## Source files for this chapter.
 
