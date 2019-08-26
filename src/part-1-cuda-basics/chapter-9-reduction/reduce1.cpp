@@ -1,8 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include <math.h>
 #include <time.h>
-double get_length(double *x, int N);
+double reduce(double *x, int N);
 
 int main(void)
 {
@@ -14,24 +13,20 @@ int main(void)
         x[n] = 1.0;
     }
     clock_t time_begin = clock();
-    double length = get_length(x, N);
+    double sum = reduce(x, N);
     clock_t time_finish = clock();
     double time_used = (time_finish - time_begin) 
         / double(CLOCKS_PER_SEC);
     printf("Time used = %f s.\n", time_used);
-    printf("length = %g.\n", length);
+    printf("sum = %g.\n", sum);
     free(x);
     return 0;
 }
 
-double get_length(double *x, int N)
+double reduce(double *x, int N)
 {
-    double length = 0.0;
-    for (int n = 0; n < N; ++n)
-    {
-        length += x[n] * x[n];
-    }
-    length = sqrt(length);
-    return length;
+    double sum = 0.0;
+    for (int n = 0; n < N; ++n) { sum += x[n]; }
+    return sum;
 }
 
