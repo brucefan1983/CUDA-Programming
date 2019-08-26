@@ -1,4 +1,4 @@
-# Chapter 7: CUDA streams 
+# Chapter 12: CUDA streams 
 
 ## Source files for this chapter
 
