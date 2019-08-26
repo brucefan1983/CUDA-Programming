@@ -1,4 +1,4 @@
-# Chapter 5: Memory organization in CUDA
+# Chapter 6: Memory organization in CUDA
 
 ## Source files for the chapter
 
