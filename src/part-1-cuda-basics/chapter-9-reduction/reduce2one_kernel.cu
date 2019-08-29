@@ -1,3 +1,4 @@
+#include "error.cuh"
 #include <stdio.h>
 double reduce(double *x, int N);
 
@@ -6,12 +7,12 @@ int main(void)
     int N = 100000000;
     int M = sizeof(double) * N;
     double *x;
-    cudaMallocManaged(&x, M);
+    CHECK(cudaMallocManaged(&x, M))
     for (int n = 0; n < N; ++n) { x[n] = 1.0; }
 
     double sum = reduce(x, N);
     printf("sum = %g.\n", sum);
-    cudaFree(x);
+    CHECK(cudaFree(x))
     return 0;
 }
 
@@ -44,14 +45,14 @@ void __global__ reduce
 double reduce(double *x, int N)
 {
     double *sum;
-    cudaMallocManaged(&sum, sizeof(double));
+    CHECK(cudaMallocManaged(&sum, sizeof(double)))
     
     int number_of_rounds = (N - 1) / 1024 + 1;
     reduce<<<1, 1024>>>(x, sum, N, number_of_rounds);
 
-    cudaDeviceSynchronize();
+    CHECK(cudaDeviceSynchronize())
     double result = sum[0];
-    cudaFree(sum);
+    CHECK(cudaFree(sum))
     return result;
 }
 
