@@ -23,9 +23,10 @@ void __global__ reduce_1
     __shared__ double s_y[128];
 
     double y = 0.0;
+    int offset = tid + bid * blockDim.x * number_of_rounds;
     for (int round = 0; round < number_of_rounds; ++round)
     {
-        int n = tid + round * blockDim.x;
+        int n = round * blockDim.x + offset;
         if (n < N) { y += g_x[n]; }
     }
     s_y[tid] = y;
@@ -69,8 +70,7 @@ void __global__ reduce_2
 double reduce(double *x, int N, int M)
 {
     int block_size = 128;
-    int grid_size = (N - 1) / block_size + 1;
-    grid_size = (grid_size - 1) / M + 1;
+    int grid_size = (N - 1) / (block_size * M) + 1;
     int number_of_rounds = (grid_size - 1) / 1024 + 1;
 
     double *y, *sum;
