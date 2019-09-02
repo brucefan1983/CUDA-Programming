@@ -13,3 +13,7 @@ Source codes for my CUDA programming book
     * part 1: Basics (14 chapters)
     * part 2: an MD project (6 or 7 chapters)
   * The book will have about 300 pages, 200 pages for the first part and 100 pages for the second.
+  * I assume that the reders
+    * have mastered C and knows some C++ (for the whole book)
+    * have studied mathematics at the undergraduate level (for some chapters)
+    * have studied physics at the undergraduate level (for the second part of the book only)
