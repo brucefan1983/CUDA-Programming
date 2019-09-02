@@ -39,11 +39,13 @@ void __global__ reduce_1
     s_y[tid] = y;
     __syncthreads();
 
+    #pragma unroll
     for (int offset = blockDim.x >> 1; offset > 32; offset >>= 1)
     {
         if (tid < offset) { s_y[tid] += s_y[tid + offset]; }
         __syncthreads();
     }
+    #pragma unroll
     for (int offset = 32; offset > 0; offset >>= 1)
     {
         if (tid < offset) { s_y[tid] += s_y[tid + offset]; }
