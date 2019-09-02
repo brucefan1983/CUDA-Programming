@@ -37,9 +37,9 @@ void __global__ reduce_1
     }
 
     #define FULL_MASK 0xffffffff
-    for (int offset = 16; offset > 0; offset >>= 1)
+    #pragma unroll
+    for (int offset = warpSize >> 1; offset > 0; offset >>= 1)
     y += __shfl_down_sync(FULL_MASK, y, offset);
-    __syncthreads();
 
     int lane_id = tid % warpSize;
     if (lane_id == 0) { atomicAdd(g_y, y); }
