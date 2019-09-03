@@ -1,5 +1,7 @@
 #include "error.cuh"
 #include <stdio.h>
+#include <cooperative_groups.h>
+using namespace cooperative_groups;
 #ifdef USE_DP
     typedef double real;
 #else
@@ -27,7 +29,6 @@ void __global__ reduce_1
 {
     int tid = threadIdx.x;
     int bid = blockIdx.x;
-    __shared__ real s_y[128];
 
     real y = 0.0;
     int offset = tid + bid * blockDim.x * number_of_rounds;
@@ -36,17 +37,14 @@ void __global__ reduce_1
         int n = round * blockDim.x + offset;
         if (n < N) { y += g_x[n]; }
     }
-    s_y[tid] = y;
-    __syncthreads();
-    
-    #pragma unroll
-    for (int offset = blockDim.x >> 1; offset > 0; offset >>= 1)
-    {
-        if (tid < offset) { s_y[tid] += s_y[tid + offset]; }
-        __syncthreads();
-    }
 
-    if (tid == 0) { atomicAdd(g_y, s_y[0]); }
+    thread_block_tile<32> g = tiled_partition<32>(this_thread_block());
+    #pragma unroll
+    for (int i = g.size() >> 1; i > 0; i >>= 1)
+    {
+        y += g.shfl_down(y, i);
+    }
+    if (g.thread_rank() == 0) { atomicAdd(g_y, y); }
 }
 
 real reduce(real *x, int N, int M)

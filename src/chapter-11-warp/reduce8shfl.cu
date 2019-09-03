@@ -27,7 +27,6 @@ void __global__ reduce_1
 {
     int tid = threadIdx.x;
     int bid = blockIdx.x;
-    __shared__ real s_y[128];
 
     real y = 0.0;
     int offset = tid + bid * blockDim.x * number_of_rounds;
@@ -36,17 +35,14 @@ void __global__ reduce_1
         int n = round * blockDim.x + offset;
         if (n < N) { y += g_x[n]; }
     }
-    s_y[tid] = y;
-    __syncthreads();
-    
-    #pragma unroll
-    for (int offset = blockDim.x >> 1; offset > 0; offset >>= 1)
-    {
-        if (tid < offset) { s_y[tid] += s_y[tid + offset]; }
-        __syncthreads();
-    }
 
-    if (tid == 0) { atomicAdd(g_y, s_y[0]); }
+    #define FULL_MASK 0xffffffff
+    #pragma unroll
+    for (int offset = warpSize >> 1; offset > 0; offset >>= 1)
+    y += __shfl_down_sync(FULL_MASK, y, offset);
+
+    int lane_id = tid % warpSize;
+    if (lane_id == 0) { atomicAdd(g_y, y); }
 }
 
 real reduce(real *x, int N, int M)
