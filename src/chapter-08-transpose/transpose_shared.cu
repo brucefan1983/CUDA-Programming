@@ -22,8 +22,8 @@ int main(int argc, char **argv)
     dim3 grid_size(grid_size_x, grid_size_y);
 
     real *A, *B;
-    CHECK(cudaMalloc(&A, sizeof(real) * N))
-    CHECK(cudaMalloc(&B, sizeof(real) * N))
+    CHECK(cudaMallocManaged(&A, sizeof(real) * N))
+    CHECK(cudaMallocManaged(&B, sizeof(real) * N))
     for (int n = 0; n < N; ++n) { A[n] = n; }
 
     transpose<<<grid_size, block_size>>>(A, B, Nx, Ny);
