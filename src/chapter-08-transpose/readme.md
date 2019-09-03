@@ -6,5 +6,5 @@
 
 | file   |      compile      |  run | what to learn |
 |----------|:-------------|:-----------|:-----------|
-| copy.cu |  nvcc -arch=sm_35 copy.cu | nvprof --unified-memory-profiling off ./a.out | get the effective bandwidth for matrix copying |
+| copy.cu |  nvcc -arch=sm_35 copy.cu | nvprof --unified-memory-profiling off ./a.out 10000 10000 16 16 | get the effective bandwidth for matrix copying |
 
