@@ -8,4 +8,5 @@
 |----------|:-------------|:-----------|:-----------|
 | copy.cu |  nvcc -arch=sm_35 copy.cu | nvprof --unified-memory-profiling off ./a.out 10000 10000 16 16 | get the effective bandwidth for matrix copying |
 | transpose_global.cu |  nvcc -arch=sm_35 transpose_global.cu | nvprof --unified-memory-profiling off ./a.out 10000 10000 16 16 | what is the performance when using global memory only? |
+| transpose_shared.cu |  nvcc -arch=sm_35 transpose_shared.cu | nvprof --unified-memory-profiling off ./a.out 10000 10000 16 16 | what is the performance when using shared memory too? |
 
