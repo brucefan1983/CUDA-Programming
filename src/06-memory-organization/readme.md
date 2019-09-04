@@ -1,9 +1,5 @@
 # Chapter 6: Memory organization in CUDA
 
-## Source files for the chapter
+## There is no source code for this chapter.
 
-
-| file   |      compile      |  run | what to learn |
-|----------|:-------------|:-----------|:-----------|
-| global.cu |  nvcc -arch=sm_35 global.cu | ./a.out | limit of device memory |
 
