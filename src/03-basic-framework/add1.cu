@@ -1,7 +1,7 @@
 #include <math.h>
 #include <stdio.h>
 #define EPSILON 1.0e-14
-void __global__ sum(double *x, double *y, double *z, int N);
+void __global__ add(double *x, double *y, double *z, int N);
 void check(double *z, int N);
 
 int main(void)
@@ -25,7 +25,7 @@ int main(void)
 
     int block_size = 128;
     int grid_size = N / block_size;
-    sum<<<grid_size, block_size>>>(g_x, g_y, g_z, N);
+    add<<<grid_size, block_size>>>(g_x, g_y, g_z, N);
 
     cudaMemcpy(z, g_z, M, cudaMemcpyDeviceToHost);
     check(z, N);
@@ -35,7 +35,7 @@ int main(void)
     return 0;
 }
 
-void __global__ sum(double *x, double *y, double *z, int N)
+void __global__ add(double *x, double *y, double *z, int N)
 {
     int n = blockDim.x * blockIdx.x + threadIdx.x;
     z[n] = x[n] + y[n];

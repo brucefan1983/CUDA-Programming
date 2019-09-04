@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <time.h>
 #define EPSILON 1.0e-14
-void sum(double *x, double *y, double *z, int N);
+void add(double *x, double *y, double *z, int N);
 void check(double *z, int N);
 
 int main(void)
@@ -20,7 +20,7 @@ int main(void)
         z[n] = 0.0;
     }
     clock_t time_begin = clock();
-    sum(x, y, z, N);
+    add(x, y, z, N);
     clock_t time_finish = clock();
     double time_used = (time_finish - time_begin)
                      / double(CLOCKS_PER_SEC);
@@ -32,7 +32,7 @@ int main(void)
     return 0;
 }
 
-void sum(double *x, double *y, double *z, int N)
+void add(double *x, double *y, double *z, int N)
 {
     for (int n = 0; n < N; ++n)
     {

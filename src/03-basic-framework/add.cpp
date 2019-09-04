@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #define EPSILON 1.0e-14
-void sum(double *x, double *y, double *z, int N);
+void add(double *x, double *y, double *z, int N);
 void check(double *z, int N);
 
 int main(void)
@@ -17,14 +17,14 @@ int main(void)
         x[n] = 1.0; y[n] = 2.0; z[n] = 0.0;
     }
 
-    sum(x, y, z, N);
+    add(x, y, z, N);
     check(z, N);
 
     free(x); free(y); free(z);
     return 0;
 }
 
-void sum(double *x, double *y, double *z, int N)
+void add(double *x, double *y, double *z, int N)
 {
     for (int n = 0; n < N; ++n) { z[n] = x[n] + y[n]; }
 }

@@ -9,7 +9,7 @@
     typedef float real;
     #define EPSILON 1.0e-6
 #endif
-void __global__ sum(real *x, real *y, real *z, int N);
+void __global__ add(real *x, real *y, real *z, int N);
 void check(real *z, int N);
 
 int main(int argc, char **argv)
@@ -38,7 +38,7 @@ int main(int argc, char **argv)
     int grid_size = (N - 1) / block_size + 1;
     for (int n = 0; n < num_of_repeats; ++n)
     {
-        sum<<<grid_size, block_size>>>(g_x, g_y, g_z, N);
+        add<<<grid_size, block_size>>>(g_x, g_y, g_z, N);
     }
 
     CHECK(cudaMemcpy(z, g_z, M, cudaMemcpyDeviceToHost))
@@ -51,7 +51,7 @@ int main(int argc, char **argv)
     return 0;
 }
 
-void __global__ sum(real *x, real *y, real *z, int N)
+void __global__ add(real *x, real *y, real *z, int N)
 {
     int n = blockDim.x * blockIdx.x + threadIdx.x;
     if (n < N) { z[n] = x[n] + y[n]; }
