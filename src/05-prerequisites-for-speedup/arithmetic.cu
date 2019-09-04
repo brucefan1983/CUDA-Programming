@@ -2,7 +2,6 @@
 #include <math.h>
 #include <stdio.h>
 #include <time.h>
-#define EPSILON 1.0e-14
 
 #ifdef USE_DP
     typedef double real;
@@ -40,13 +39,12 @@ void __global__ arithmetic(real *g_x, int N)
     int n = blockDim.x * blockIdx.x + threadIdx.x;
     if (n < N) 
     {
-        real t = pow(2.0, 30.0);
-        real sin_t = sin(t);
-        real cos_t = cos(t);
-        t = sqrt(sin_t * sin_t + cos_t * cos_t);
-        t = exp(t);
-        t = log(t);
-        g_x[n] = t;
+        double a = 0;
+        for (int m = 0; m < 1000; ++m)
+        {
+            a++;
+        }
+        g_x[n] = a;
     }
 }
 
@@ -55,7 +53,7 @@ void check(real *x, int N)
     int has_error = 0;
     for (int n = 0; n < N; ++n)
     {
-        has_error += (fabs(x[n] - 1.0) > EPSILON);
+        has_error += (fabs(x[n] - 1000.0) > EPSILON);
     }
     printf("%s\n", has_error ? "Has errors" : "No errors");
 }

@@ -28,13 +28,12 @@ void arithmetic(double *x, int N)
 {
     for (int n = 0; n < N; ++n)
     {
-        double t = pow(2.0, 30.0);
-        double sin_t = sin(t);
-        double cos_t = cos(t);
-        t = sqrt(sin_t * sin_t + cos_t * cos_t);
-        t = exp(t);
-        t = log(t);
-        x[n] = t;
+        double a = 0;
+        for (int m = 0; m < 1000; ++m)
+        {
+            a++;
+        }
+        x[n] = a;
     }
 }
 
@@ -43,7 +42,7 @@ void check(double *y, int N)
     int has_error = 0;
     for (int n = 0; n < N; ++n)
     {
-        has_error += (fabs(y[n] - 1.0) > EPSILON);
+        has_error += (fabs(y[n] - 1000.0) > EPSILON);
     }
     printf("%s\n", has_error ? "Has errors" : "No errors");
 }
