@@ -14,7 +14,7 @@ void check(real *z, int N);
 
 int main(int argc, char **argv)
 {
-    if (argc != 1) 
+    if (argc != 2) 
     { printf("requires 1 argument\n"); exit(1); }
     int num_of_repeats = atoi(argv[1]);
 
