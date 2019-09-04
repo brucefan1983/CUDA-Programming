@@ -23,7 +23,7 @@ int main(void)
     clock_t time_finish = clock();
     double time_used = (time_finish - time_begin)
         / double(CLOCKS_PER_SEC);
-    printf("Time used for host function = %f s.\n", time_used);
+    printf("Time used for host function = %g s.\n", time_used);
 
     check(z, N);
     free(x); free(y); free(z);
