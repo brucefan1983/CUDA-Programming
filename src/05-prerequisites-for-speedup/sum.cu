@@ -9,8 +9,8 @@
     typedef float real;
     #define EPSILON 1.0e-6
 #endif
-void __global__ sum(double *x, double *y, double *z, int N);
-void check(double *z, int N);
+void __global__ sum(real *x, real *y, real *z, int N);
+void check(real *z, int N);
 
 int main(int argc, char **argv)
 {
