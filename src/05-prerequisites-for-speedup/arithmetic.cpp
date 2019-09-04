@@ -3,42 +3,38 @@
 #include <stdio.h>
 #include <time.h>
 #define EPSILON 1.0e-14
-void arithmetic(double *x, double *y, int N);
-void check(double *y, int N);
+void arithmetic(double *x, int N);
+void check(double *x, int N);
 
 int main(void)
 {
     int N = 100000000;
     int M = sizeof(double) * N;
     double *x = (double*) malloc(M);
-    double *y = (double*) malloc(M);
-    for (int n = 0; n < N; ++n)
-    {
-        x[n] = 100.0;
-        y[n] = 0.0;
-    }
+
     clock_t time_begin = clock();
-    arithmetic(x, y, N);
+    arithmetic(x, N);
     clock_t time_finish = clock();
     double time_used = (time_finish - time_begin)
                      / double(CLOCKS_PER_SEC);
     printf("Time used for host function = %g s.\n", time_used);
 
-    check(y, N);
-
-    free(x); free(y);
+    check(x, N);
+    free(x);
     return 0;
 }
 
-void arithmetic(double *x, double *y, int N)
+void arithmetic(double *x, int N)
 {
     for (int n = 0; n < N; ++n)
     {
-        double x1 = x[n];
-        double x30 = pow(x1, 30.0);
-        double sin_x = sin(x30);
-        double cos_x = cos(x30);
-        y[n] = sin_x * sin_x + cos_x * cos_x;
+        double t = pow(2.0, 30.0);
+        double sin_t = sin(t);
+        double cos_t = cos(t);
+        t = sqrt(sin_t * sin_t + cos_t * cos_t);
+        t = exp(t);
+        t = log(t);
+        x[n] = t;
     }
 }
 
