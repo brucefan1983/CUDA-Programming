@@ -2,12 +2,12 @@
 #include <math.h>
 #include <stdio.h>
 #define EPSILON 1.0e-14
-void __global__ sum(double *x, double *y, double *z, int N);
+void __global__ add(double *x, double *y, double *z, int N);
 void check(double *z, int N);
 
 int main(void)
 {
-    int N = 100000001;
+    int N = 100000000;
     int M = sizeof(double) * N;
     double *x, *y, *z;
     CHECK(cudaMallocManaged((void**)&x, M))
@@ -20,7 +20,7 @@ int main(void)
 
     int block_size = 128;
     int grid_size = (N - 1) / block_size + 1;
-    sum<<<grid_size, block_size>>>(x, y, z, N);
+    add<<<grid_size, block_size>>>(x, y, z, N);
     
     CHECK(cudaDeviceSynchronize())
     
@@ -32,7 +32,7 @@ int main(void)
     return 0;
 }
 
-void __global__ sum(double *x, double *y, double *z, int N)
+void __global__ add(double *x, double *y, double *z, int N)
 {
     int n = blockDim.x * blockIdx.x + threadIdx.x;
     if (n < N) { z[n] = x[n] + y[n]; }

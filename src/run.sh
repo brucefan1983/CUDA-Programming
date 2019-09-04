@@ -127,7 +127,15 @@ nvprof --unified-memory-profiling off ./a.out 100000000 512
 printf '\nnvprof --unified-memory-profiling off ./a.out 100000000 1024\n'
 nvprof --unified-memory-profiling off ./a.out 100000000 1024
 
+printf '\n===================================================\n'
+printf 'cd ../07*'
+printf '\n===================================================\n'
+cd ../07*
 
+printf '\nnvcc -arch=sm_35 add_unified.cu\n'
+nvcc -arch=sm_35 add_unified.cu
+printf '\nnvprof --unified-memory-profiling off ./a.out\n'
+nvprof --unified-memory-profiling off ./a.out
 
 
 
