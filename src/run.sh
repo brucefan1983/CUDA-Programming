@@ -127,11 +127,6 @@ nvprof --unified-memory-profiling off ./a.out 100000000 512
 printf '\nnvprof --unified-memory-profiling off ./a.out 100000000 1024\n'
 nvprof --unified-memory-profiling off ./a.out 100000000 1024
 
-printf '\nnvcc -arch=sm_35 add_device_function.cu\n'
-nvcc -arch=sm_35 add_device_function.cu
-printf '\n./a.out\n'
-./a.out
-
 
 
 
