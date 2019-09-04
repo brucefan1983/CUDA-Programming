@@ -39,7 +39,7 @@ void __global__ arithmetic(real *g_x, int N)
     int n = blockDim.x * blockIdx.x + threadIdx.x;
     if (n < N) 
     {
-        double a = 0;
+        real a = 0;
         for (int m = 0; m < 1000; ++m)
         {
             a++;
