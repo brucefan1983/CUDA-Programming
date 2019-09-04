@@ -1,24 +1,33 @@
 #include <math.h>
 #include <stdio.h>
 #include "error.cuh"
-#define EPSILON 1.0e-14
+
+#ifdef USE_DP
+    typedef double real;
+    #define EPSILON 1.0e-14
+#else
+    typedef float real;
+    #define EPSILON 1.0e-6
+#endif
 void __global__ sum(double *x, double *y, double *z, int N);
 void check(double *z, int N);
 
 int main(int argc, char **argv)
 {
+    if (argc != 1) 
+    { printf("requires 1 argument\n"); exit(1); }
     int num_of_repeats = atoi(argv[1]);
 
     int N = 100000000;
-    int M = sizeof(double) * N;
-    double *x = (double*) malloc(M);
-    double *y = (double*) malloc(M);
-    double *z = (double*) malloc(M);
+    int M = sizeof(real) * N;
+    real *x = (real*) malloc(M);
+    real *y = (real*) malloc(M);
+    real *z = (real*) malloc(M);
     for (int n = 0; n < N; ++n)
     {
         x[n] = 1.0; y[n] = 2.0; z[n] = 0.0;
     }
-    double *g_x, *g_y, *g_z;
+    real *g_x, *g_y, *g_z;
     CHECK(cudaMalloc((void **)&g_x, M))
     CHECK(cudaMalloc((void **)&g_y, M))
     CHECK(cudaMalloc((void **)&g_z, M))
@@ -42,13 +51,13 @@ int main(int argc, char **argv)
     return 0;
 }
 
-void __global__ sum(double *x, double *y, double *z, int N)
+void __global__ sum(real *x, real *y, real *z, int N)
 {
     int n = blockDim.x * blockIdx.x + threadIdx.x;
     if (n < N) { z[n] = x[n] + y[n]; }
 }
 
-void check(double *z, int N)
+void check(real *z, int N)
 {
     int has_error = 0;
     for (int n = 0; n < N; ++n)
