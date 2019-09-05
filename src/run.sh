@@ -172,4 +172,65 @@ nvcc -arch=sm_35 transpose5shared_without_conflict.cu
 printf '\nnvprof --unified-memory-profiling off ./a.out\n'
 nvprof --unified-memory-profiling off ./a.out 10000 16 16
 
+printf '\n===================================================\n'
+printf 'cd ../09*'
+printf '\n===================================================\n'
+cd ../09*
+
+printf '\ng++ -O3 reduce1.cpp\n'
+g++ -O3 reduce1.cpp
+printf '\n./a.out\n'
+./a.out
+
+printf '\nnvcc -arch=sm_35 reduce2one_kernel.cu\n'
+nvcc -arch=sm_35 reduce2one_kernel.cu
+printf '\nnvprof --unified-memory-profiling off ./a.out\n'
+nvprof --unified-memory-profiling off ./a.out
+
+printf '\nnvcc -arch=sm_35 reduce3two_kernels.cu\n'
+nvcc -arch=sm_35 reduce3two_kernels.cu
+printf '\nnvprof --unified-memory-profiling off ./a.out\n'
+nvprof --unified-memory-profiling off ./a.out
+
+printf '\nnvcc -arch=sm_35 reduce4more_parallelism.cu\n'
+nvcc -arch=sm_35 reduce4more_parallelism.cu
+printf '\nnvprof --unified-memory-profiling off ./a.out 10\n'
+nvprof --unified-memory-profiling off ./a.out 10
+
+printf '\n===================================================\n'
+printf 'cd ../10*'
+printf '\n===================================================\n'
+cd ../10*
+
+printf '\nnvcc -arch=sm_35 reduce5atomic_global.cu\n'
+nvcc -arch=sm_35 reduce5atomic_global.cu
+printf '\nnvprof --unified-memory-profiling off ./a.out 10\n'
+nvprof --unified-memory-profiling off ./a.out 10
+
+printf '\nnvcc -arch=sm_35 reduce6atomic_shared.cu\n'
+nvcc -arch=sm_35 reduce6atomic_shared.cu
+printf '\nnvprof --unified-memory-profiling off ./a.out 10\n'
+nvprof --unified-memory-profiling off ./a.out 10
+
+printf '\n===================================================\n'
+printf 'cd ../11*'
+printf '\n===================================================\n'
+cd ../11*
+
+printf '\nnvcc -arch=sm_35 reduce7syncwarp.cu\n'
+nvcc -arch=sm_35 reduce7syncwarp.cu
+printf '\nnvprof --unified-memory-profiling off ./a.out 10\n'
+nvprof --unified-memory-profiling off ./a.out 10
+
+printf '\nnvcc -arch=sm_35 reduce8shfl.cu\n'
+nvcc -arch=sm_35 reduce8shfl.cu
+printf '\nnvprof --unified-memory-profiling off ./a.out 10\n'
+nvprof --unified-memory-profiling off ./a.out 10
+
+printf '\nnvcc -arch=sm_35 reduce9cp.cu\n'
+nvcc -arch=sm_35 reduce9cp.cu
+printf '\nnvprof --unified-memory-profiling off ./a.out 10\n'
+nvprof --unified-memory-profiling off ./a.out 10
+
+
 

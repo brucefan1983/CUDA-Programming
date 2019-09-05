@@ -35,7 +35,6 @@ void __global__ reduce
     s_sum[tid] = tmp_sum;
     __syncthreads();
 
-    #pragma unroll
     for (int offset = blockDim.x >> 1; offset > 0; offset >>= 1)
     {
         if (tid < offset) { s_sum[tid] += s_sum[tid + offset]; }

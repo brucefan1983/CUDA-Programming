@@ -38,8 +38,8 @@ void __global__ reduce_1
         if (n < N) { y += g_x[n]; }
     }
 
-    thread_block_tile<32> g = tiled_partition<32>(this_thread_block());
-    #pragma unroll
+    thread_block_tile<32> g 
+        = tiled_partition<32>(this_thread_block());
     for (int i = g.size() >> 1; i > 0; i >>= 1)
     {
         y += g.shfl_down(y, i);
