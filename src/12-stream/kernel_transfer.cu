@@ -6,16 +6,6 @@
 void __global__ sum(double *x, double *y, double *z, int N);
 void run(int N_streams);
 
-void check(double *z, int N)
-{
-    int has_error = 0;
-    for (int n = 0; n < N; ++n)
-    {
-        has_error += (fabs(z[n] - 3.0) > EPSILON);
-    }
-    printf("%s\n", has_error ? "Has errors" : "No errors");
-}
-
 int main(void)
 {
     for (int n = 1; n < 128; n *=2)
@@ -92,7 +82,6 @@ void run(int N_streams)
     free(streams);
 
     cudaDeviceSynchronize();
-    check(z, N_all);
 
     CHECK(cudaFreeHost(x))
     CHECK(cudaFreeHost(y))
@@ -113,3 +102,4 @@ void __global__ sum(double *x, double *y, double *z, int N)
         }
     }
 }
+

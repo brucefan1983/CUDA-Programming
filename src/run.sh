@@ -232,5 +232,23 @@ nvcc -arch=sm_35 reduce9cp.cu
 printf '\nnvprof --unified-memory-profiling off ./a.out 10\n'
 nvprof --unified-memory-profiling off ./a.out 10
 
+printf '\n===================================================\n'
+printf 'cd ../12*'
+printf '\n===================================================\n'
+cd ../12*
 
+printf '\nnvcc -arch=sm_35 host_kernel.cu\n'
+nvcc -arch=sm_35 host_kernel.cu
+printf '\n./a.out\n'
+./a.out
+
+printf '\nnvcc -arch=sm_35 kernel_kernel.cu\n'
+nvcc -arch=sm_35 kernel_kernel.cu
+printf '\n./a.out\n'
+./a.out>t1.txt
+
+printf '\nnvcc -arch=sm_35 kernel_transfer.cu\n'
+nvcc -arch=sm_35 kernel_transfer.cu
+printf '\n./a.out\n'
+./a.out>t2.txt
 
