@@ -137,5 +137,39 @@ nvcc -arch=sm_35 add_unified.cu
 printf '\nnvprof --unified-memory-profiling off ./a.out\n'
 nvprof --unified-memory-profiling off ./a.out
 
+printf '\n===================================================\n'
+printf 'cd ../08*'
+printf '\n===================================================\n'
+cd ../08*
+
+printf '\nnvcc -arch=sm_35 copy.cu\n'
+nvcc -arch=sm_35 copy.cu
+printf '\nnvprof --unified-memory-profiling off ./a.out\n'
+nvprof --unified-memory-profiling off ./a.out 10000 16 16
+
+printf '\nnvcc -arch=sm_35 transpose1global_coalesced_read.cu\n'
+nvcc -arch=sm_35 transpose1global_coalesced_read.cu
+printf '\nnvprof --unified-memory-profiling off ./a.out\n'
+nvprof --unified-memory-profiling off ./a.out 10000 16 16
+
+printf '\nnvcc -arch=sm_35 transpose2global_coalesced_write.cu\n'
+nvcc -arch=sm_35 transpose2global_coalesced_write.cu
+printf '\nnvprof --unified-memory-profiling off ./a.out\n'
+nvprof --unified-memory-profiling off ./a.out 10000 16 16
+
+printf '\nnvcc -arch=sm_35 transpose3global_ldg.cu\n'
+nvcc -arch=sm_35 transpose3global_ldg.cu
+printf '\nnvprof --unified-memory-profiling off ./a.out\n'
+nvprof --unified-memory-profiling off ./a.out 10000 16 16
+
+printf '\nnvcc -arch=sm_35 transpose4shared_with_confilict.cu\n'
+nvcc -arch=sm_35 transpose4shared_with_conflict.cu
+printf '\nnvprof --unified-memory-profiling off ./a.out\n'
+nvprof --unified-memory-profiling off ./a.out 10000 16 16
+
+printf '\nnvcc -arch=sm_35 transpose5shared_without_conflict.cu\n'
+nvcc -arch=sm_35 transpose5shared_without_conflict.cu
+printf '\nnvprof --unified-memory-profiling off ./a.out\n'
+nvprof --unified-memory-profiling off ./a.out 10000 16 16
 
 

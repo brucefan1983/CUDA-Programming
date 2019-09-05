@@ -6,7 +6,8 @@
     typedef float real;
 #endif
 
-__global__ void copy(real *A, real *B, int N);
+__global__ void transpose(real *A, real *B, int N);
+void print_matrix(int N, real *A);
 
 int main(int argc, char **argv)
 {
@@ -24,19 +25,38 @@ int main(int argc, char **argv)
     CHECK(cudaMallocManaged(&B, sizeof(real) * N2))
     for (int n = 0; n < N2; ++n) { A[n] = n; }
 
-    copy<<<grid_size, block_size>>>(A, B, N);
+    transpose<<<grid_size, block_size>>>(A, B, N);
 
     CHECK(cudaDeviceSynchronize())
+    if (N <= 10)
+    {
+        printf("A =\n");
+        print_matrix(N, A);
+        printf("\nB = transpose(A) =\n");
+        print_matrix(N, B);
+    }
+
     CHECK(cudaFree(A))
     CHECK(cudaFree(B))
     return 0;
 }
 
-__global__ void copy(real *A, real *B, int N)
+__global__ void transpose(real *A, real *B, int N)
 {
     int nx = blockIdx.x * blockDim.x + threadIdx.x;
     int ny = blockIdx.y * blockDim.y + threadIdx.y;
-    int index = ny * N + nx;
-    if (nx < N && ny < N) B[index] = A[index];
+    if (nx < N && ny < N) B[nx * N + ny] = A[ny * N + nx];
+}
+
+void print_matrix(int N, real *A)
+{
+    for (int ny = 0; ny < N; ny++)
+    {
+        for (int nx = 0; nx < N; nx++)
+        {
+            printf("%g\t", A[ny * N + nx]);
+        }
+        printf("\n");
+    }
 }
 
