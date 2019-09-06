@@ -5,95 +5,47 @@
 #include <math.h>
 #include <time.h>
 
-static void __global__ gpu_sum_1(int N, real *g_x, real *g_tmp)
+static void __global__ gpu_sum
+(int N, int number_of_rounds, real *g_x, real *g_sum)
 {
     int tid = threadIdx.x;
     int bid = blockIdx.x;
-    int n = bid * blockDim.x + tid;
-    extern __shared__ real s_tmp[];
-    s_tmp[tid] = 0.0;
-
-    if (n < N)
+    __shared__ real s_sum;
+    s_sum = 0.0;
+    real y = 0.0;
+    int offset = tid + bid * blockDim.x * number_of_rounds;
+    for (int round = 0; round < number_of_rounds; ++round)
     {
-        s_tmp[tid] = g_x[n];
+        int n = round * blockDim.x + offset;
+        if (n < N) { y += g_x[n]; }
     }
     __syncthreads();
 
-    for (int offset = blockDim.x >> 1; offset > 0; offset >>= 1)
-    {
-        if (tid < offset)
-        {
-            s_tmp[tid] += s_tmp[tid + offset];
-        }
-        __syncthreads();
-    }
-
-    if (tid == 0)
-    {
-        g_tmp[bid] = s_tmp[0];
-    }
-}
-
-static void __global__ gpu_sum_2
-(int N, int number_of_patches, real *g_tmp, real *g_sum)
-{
-    int tid = threadIdx.x;
-    extern __shared__ real s_sum[];
-    s_sum[tid] = 0.0;
- 
-    for (int patch = 0; patch < number_of_patches; ++patch)
-    {
-        int n = tid + patch * blockDim.x;
-        if (n < N)
-        {
-            s_sum[tid] += g_tmp[n];
-        }
-    }
+    atomicAdd(&s_sum, y);
     __syncthreads();
-
-    for (int offset = blockDim.x >> 1; offset > 0; offset >>= 1)
-    {
-        if (tid < offset)
-        {
-            s_sum[tid] += s_sum[tid + offset];
-        }
-        __syncthreads();
-    }
-
-    if (tid == 0)
-    {
-        g_sum[0] = s_sum[0];
-    }
+    if (tid == 0) { atomicAdd(g_sum, s_sum); }
 }
 
 static real sum(int N, real *g_x)
 {
-    const int block_size = 128;
-    int grid_size = (N - 1) / block_size + 1;
-    int number_of_patches = (grid_size - 1) / 1024 + 1;
-
-    real *g_tmp;
-    CHECK(cudaMalloc((void**)&g_tmp, 
-        sizeof(real) * grid_size))
-    real *g_sum;
-    CHECK(cudaMalloc((void**)&g_sum, sizeof(real)))
-
-    gpu_sum_1
-    <<<grid_size, block_size, sizeof(real) * block_size>>>
-    (N, g_x, g_tmp);
-
-    gpu_sum_2<<<1, 1024, sizeof(real) * 1024>>>
-    (grid_size, number_of_patches, g_tmp, g_sum);
+    int block_size = 128;
+    int M = (N - 1) / 25600 + 1;
+    int grid_size = (N - 1) / (block_size * M) + 1;
 
     real *h_sum = (real*) malloc(sizeof(real));
+    h_sum[0] = 0.0;
+    real *g_sum;
+    CHECK(cudaMalloc((void**)&g_sum, sizeof(real)))
+    CHECK(cudaMemcpy(g_sum, h_sum, sizeof(real), 
+        cudaMemcpyHostToDevice))
+
+    gpu_sum<<<grid_size, block_size>>>(N, M, g_x, g_sum);
+
     CHECK(cudaMemcpy(h_sum, g_sum, sizeof(real), 
         cudaMemcpyDeviceToHost))
     real result = h_sum[0];
-
-    CHECK(cudaFree(g_tmp))
     CHECK(cudaFree(g_sum))
     free(h_sum);
-
     return result;
 }
 
