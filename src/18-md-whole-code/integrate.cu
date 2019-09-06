@@ -174,7 +174,6 @@ void production
     cudaDeviceSynchronize();
     clock_t time_begin = clock();
     FILE *fid_e = fopen("energy.txt", "w");
-    FILE *fid_v = fopen("velocity.txt", "w");
     for (int step = 0; step < Np; ++step)
     {  
         integrate(N, time_step, atom, 1);
@@ -187,29 +186,9 @@ void production
                 fid_e, "%g %g\n",
                 sum(N, atom->g_ke), sum(N, atom->g_pe)
             );
-
-            CHECK(cudaMemcpy(atom->vx, atom->g_vx, 
-                sizeof(real) * N, cudaMemcpyDeviceToHost))
-            CHECK(cudaMemcpy(atom->vy, atom->g_vy, 
-                sizeof(real) * N, cudaMemcpyDeviceToHost))
-            CHECK(cudaMemcpy(atom->vz, atom->g_vz, 
-                sizeof(real) * N, cudaMemcpyDeviceToHost))
-
-            for (int n = 0; n < N; ++n)
-            {
-                real factor = 1.0e5 / TIME_UNIT_CONVERSION;
-                fprintf
-                (
-                    fid_v, "%g %g %g\n", 
-                    atom->vx[n] * factor,
-                    atom->vy[n] * factor,
-                    atom->vz[n] * factor
-                );
-            }
         }
     }
     fclose(fid_e);
-    fclose(fid_v);
     cudaDeviceSynchronize();
     clock_t time_finish = clock();
     real time_used = (time_finish - time_begin) 
