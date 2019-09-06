@@ -1,84 +1,9 @@
 #!/bin/sh
 
 printf '\n===================================================\n'
-printf 'cd 02*'
+printf 'cd 05*'
 printf '\n===================================================\n'
-cd 02*
-
-printf '\ng++ hello.cpp\n'
-g++ hello.cpp
-printf '\n./a.out\n'
-./a.out
-
-printf '\nnvcc -arch=sm_35 hello1.cu\n'
-nvcc -arch=sm_35 hello1.cu
-printf '\n./a.out\n'
-./a.out
-
-printf '\nnvcc -arch=sm_35 hello2.cu\n'
-nvcc -arch=sm_35 hello2.cu
-printf '\n./a.out\n'
-./a.out
-
-printf '\nnvcc -arch=sm_35 hello3.cu\n'
-nvcc -arch=sm_35 hello3.cu
-printf '\n./a.out\n'
-./a.out
-
-printf '\nnvcc -arch=sm_35 hello4.cu\n'
-nvcc -arch=sm_35 hello4.cu
-printf '\n./a.out\n'
-./a.out
-
-printf '\nnvcc -arch=sm_35 hello5.cu\n'
-nvcc -arch=sm_35 hello5.cu
-printf '\n./a.out\n'
-./a.out
-
-printf '\n===================================================\n'
-printf 'cd ../03*'
-printf '\n===================================================\n'
-cd ../03*
-
-printf '\ng++ add.cpp\n'
-g++ add.cpp
-printf '\n./a.out\n'
-./a.out
-
-printf '\nnvcc -arch=sm_35 add1.cu\n'
-nvcc -arch=sm_35 add1.cu
-printf '\n./a.out\n'
-./a.out
-
-printf '\nnvcc -arch=sm_35 add2wrong.cu\n'
-nvcc -arch=sm_35 add2wrong.cu
-printf '\n./a.out\n'
-./a.out
-
-printf '\nnvcc -arch=sm_35 add3if.cu\n'
-nvcc -arch=sm_35 add3if.cu
-printf '\n./a.out\n'
-./a.out
-
-printf '\n===================================================\n'
-printf 'cd ../04*'
-printf '\n===================================================\n'
-cd ../04*
-
-printf '\nnvcc -arch=sm_35 add4check_api.cu\n'
-nvcc add4check_api.cu
-printf '\n./a.out\n'
-./a.out
-
-printf '\nnvcc -arch=sm_35 add5check_kernel.cu\n'
-nvcc add5check_kernel.cu
-printf '\n./a.out\n'
-./a.out
-
-printf '\n===================================================\n'
-printf 'cd ../05*'
-printf '\n===================================================\n'
-cd ../05*
+cd 05*
 
 printf '\ng++ -O3 add.cpp\n'
 g++ -O3 add.cpp
@@ -255,41 +180,6 @@ printf '\nnvcc -arch=sm_35 kernel_transfer.cu\n'
 nvcc -arch=sm_35 kernel_transfer.cu
 printf '\n./a.out>t2.txt\n'
 ./a.out>t2.txt
-
-printf '\n===================================================\n'
-printf 'cd ../13*'
-printf '\n===================================================\n'
-cd ../13*
-
-printf '\nnvcc -arch=sm_35 thrust_scan_vector.cu\n'
-nvcc -arch=sm_35 thrust_scan_vector.cu
-printf '\n./a.out\n'
-./a.out
-
-printf '\nnvcc -arch=sm_35 thrust_scan_pointer.cu\n'
-nvcc -arch=sm_35 thrust_scan_pointer.cu
-printf '\n./a.out\n'
-./a.out
-
-printf '\nnvcc -arch=sm_35 -lcublas cublas_gemm.cu\n'
-nvcc -arch=sm_35 -lcublas cublas_gemm.cu
-printf '\n./a.out\n'
-./a.out
-
-printf '\nnvcc -arch=sm_35 -lcusolver cusolver.cu\n'
-nvcc -arch=sm_35 -lcusolver cusolver.cu
-printf '\n./a.out\n'
-./a.out
-
-printf '\nnvcc -arch=sm_35 -lcurand curand_host1.cu\n'
-nvcc -arch=sm_35 -lcurand curand_host1.cu
-printf '\n./a.out>x1.txt\n'
-./a.out>x1.txt
-
-printf '\nnvcc -arch=sm_35 -lcurand curand_host2.cu\n'
-nvcc -arch=sm_35 -lcurand curand_host2.cu
-printf '\n./a.out>x2.txt\n'
-./a.out>x2.txt
 
 printf '\n===================================================\n'
 printf 'cd ../16*'
