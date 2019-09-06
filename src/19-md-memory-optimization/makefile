@@ -1,7 +1,9 @@
 all: ljmd
 
 CC = nvcc
-CFLAGS = -O3 -arch=sm_35 -DUSE_LDG --use_fast_math
+CFLAGS = -O3 \
+	-gencode arch=compute_35,code=sm_35 \
+	-gencode arch=compute_75,code=sm_75
 
 ljmd: initialize.o integrate.o neighbor.o \
 	force.o memory.o main.o
