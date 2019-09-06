@@ -5,19 +5,23 @@
 #else
     typedef float real;
 #endif
-
-real reduce(real *x, int N, int M);
+real reduce(real *x, int N, int K);
 
 int main(int argc, char **argv)
 {
-    int M = atoi(argv[1]);
+    int K = atoi(argv[1]);
     int N = 100000000;
+    int M = sizeof(real) * N;
+    real *h_x = (real *)malloc(M);
+    for (int n = 0; n < N; ++n) { h_x[n] = 1.0; }
     real *x;
-    CHECK(cudaMallocManaged(&x, sizeof(real) * N))
-    for (int n = 0; n < N; ++n) { x[n] = 1.0; }
+    CHECK(cudaMalloc(&x, M))
+    CHECK(cudaMemcpy(x, h_x, M, cudaMemcpyHostToDevice))
 
-    real sum = reduce(x, N, M);
+    real sum = reduce(x, N, K);
     printf("sum = %g.\n", sum);
+
+    free(h_x);
     CHECK(cudaFree(x))
     return 0;
 }
@@ -53,15 +57,20 @@ real reduce(real *x, int N, int M)
     int block_size = 128;
     int grid_size = (N - 1) / (block_size * M) + 1;
 
+    real *h_sum = (real *)malloc(sizeof(real));
+    h_sum[0] = 0.0;
     real *sum;
-    CHECK(cudaMallocManaged(&sum, sizeof(real)))
-    CHECK(cudaDeviceSynchronize())
-    sum[0] = 0.0;
+    CHECK(cudaMalloc(&sum, sizeof(real)))
+    CHECK(cudaMemcpy(sum, h_sum, sizeof(real), 
+        cudaMemcpyHostToDevice))
 
     reduce_1<<<grid_size, block_size>>>(x, sum, N, M);
 
-    CHECK(cudaDeviceSynchronize())
-    real result = sum[0];
+    CHECK(cudaMemcpy(h_sum, sum, sizeof(real), 
+        cudaMemcpyDeviceToHost))
+    real result = h_sum[0];
+
+    free(h_sum);
     CHECK(cudaFree(sum))
     return result;
 }
