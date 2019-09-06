@@ -5,13 +5,13 @@
 #include <math.h>
 #include <time.h>
 
-static void __global__ gpu_sum
-(int N, int number_of_rounds, real *g_x, real *g_sum)
+void __global__ gpu_sum
+(int N, int number_of_rounds, real *g_x, real *g_y)
 {
     int tid = threadIdx.x;
     int bid = blockIdx.x;
-    __shared__ real s_sum;
-    s_sum = 0.0;
+    __shared__ real s_y[128];
+
     real y = 0.0;
     int offset = tid + bid * blockDim.x * number_of_rounds;
     for (int round = 0; round < number_of_rounds; ++round)
@@ -19,11 +19,20 @@ static void __global__ gpu_sum
         int n = round * blockDim.x + offset;
         if (n < N) { y += g_x[n]; }
     }
+    s_y[tid] = y;
     __syncthreads();
 
-    atomicAdd(&s_sum, y);
-    __syncthreads();
-    if (tid == 0) { atomicAdd(g_sum, s_sum); }
+    for (int offset = blockDim.x >> 1; offset > 32; offset >>= 1)
+    {
+        if (tid < offset) { s_y[tid] += s_y[tid + offset]; }
+        __syncthreads();
+    }
+    for (int offset = 32; offset > 0; offset >>= 1)
+    {
+        if (tid < offset) { s_y[tid] += s_y[tid + offset]; }
+        __syncwarp();
+    }
+    if (tid == 0) { atomicAdd(g_y, s_y[0]); }
 }
 
 static real sum(int N, real *g_x)
