@@ -57,16 +57,6 @@ printf 'cd ../07*'
 printf '\n===================================================\n'
 cd ../07*
 
-printf '\nnvcc -arch=sm_35 add_unified.cu\n'
-nvcc -arch=sm_35 add_unified.cu
-printf '\nnvprof --unified-memory-profiling off ./a.out\n'
-nvprof --unified-memory-profiling off ./a.out
-
-printf '\n===================================================\n'
-printf 'cd ../08*'
-printf '\n===================================================\n'
-cd ../08*
-
 printf '\nnvcc -arch=sm_35 copy.cu\n'
 nvcc -arch=sm_35 copy.cu
 printf '\nnvprof --unified-memory-profiling off ./a.out 10000 16 16\n'
@@ -102,9 +92,9 @@ printf '\nnvprof --metrics shared_load_transactions_per_request,shared_store_tra
 nvprof --metrics shared_load_transactions_per_request,shared_store_transactions_per_request ./a.out 10000 16 16
 
 printf '\n===================================================\n'
-printf 'cd ../09*'
+printf 'cd ../08*'
 printf '\n===================================================\n'
-cd ../09*
+cd ../08*
 
 printf '\ng++ -O3 reduce1.cpp\n'
 g++ -O3 reduce1.cpp
@@ -127,9 +117,9 @@ printf '\nnvprof --unified-memory-profiling off ./a.out 10\n'
 nvprof --unified-memory-profiling off ./a.out 10
 
 printf '\n===================================================\n'
-printf 'cd ../10*'
+printf 'cd ../09*'
 printf '\n===================================================\n'
-cd ../10*
+cd ../09*
 
 printf '\nnvcc -arch=sm_35 reduce5atomic_global.cu\n'
 nvcc -arch=sm_35 reduce5atomic_global.cu
@@ -142,9 +132,9 @@ printf '\nnvprof --unified-memory-profiling off ./a.out 10\n'
 nvprof --unified-memory-profiling off ./a.out 10
 
 printf '\n===================================================\n'
-printf 'cd ../11*'
+printf 'cd ../10*'
 printf '\n===================================================\n'
-cd ../11*
+cd ../10*
 
 printf '\nnvcc -arch=sm_35 reduce7syncwarp.cu\n'
 nvcc -arch=sm_35 reduce7syncwarp.cu
@@ -162,9 +152,9 @@ printf '\nnvprof --unified-memory-profiling off ./a.out 10\n'
 nvprof --unified-memory-profiling off ./a.out 10
 
 printf '\n===================================================\n'
-printf 'cd ../12*'
+printf 'cd ../11*'
 printf '\n===================================================\n'
-cd ../12*
+cd ../11*
 
 printf '\nnvcc -arch=sm_35 host_kernel.cu\n'
 nvcc -arch=sm_35 host_kernel.cu
