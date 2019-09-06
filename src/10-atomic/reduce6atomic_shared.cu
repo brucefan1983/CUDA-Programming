@@ -50,6 +50,8 @@ real reduce(real *x, int N, int M)
 
     real *sum;
     CHECK(cudaMallocManaged(&sum, sizeof(real)))
+    CHECK(cudaDeviceSynchronize())
+    sum[0] = 0.0;
 
     reduce_1<<<grid_size, block_size>>>(x, sum, N, M);
 
