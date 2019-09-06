@@ -34,12 +34,16 @@ static real sum(int N, real *g_x)
 
     real *sum;
     CHECK(cudaMallocManaged((void**)&sum, sizeof(real)))
+#ifndef CONCURRENT
     CHECK(cudaDeviceSynchronize())
+#endif
     sum[0] = 0.0;
     
     gpu_sum<<<grid_size, block_size>>>(N, M, g_x, sum);
 
+#ifndef CONCURRENT
     CHECK(cudaDeviceSynchronize())
+#endif
     real result = sum[0];
     CHECK(cudaFree(sum))
     return result;
@@ -175,7 +179,9 @@ void production
                 sum(N, atom->ke), sum(N, atom->pe)
             );
 
-            cudaDeviceSynchronize(); // avoid buss error for K40
+#ifndef CONCURRENT
+            CHECK(cudaDeviceSynchronize())
+#endif
             for (int n = 0; n < N; ++n)
             {
                 real factor = 1.0e5 / TIME_UNIT_CONVERSION;

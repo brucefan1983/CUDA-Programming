@@ -99,7 +99,9 @@ void find_force(int N, int MN, Atom *atom)
     lj.e4s12 = e4s12;
 
     Box box;
-    cudaDeviceSynchronize(); // avoid buss error for K40
+#ifndef CONCURRENT
+    CHECK(cudaDeviceSynchronize())
+#endif
     box.lx = atom->box[0];
     box.ly = atom->box[1];
     box.lz = atom->box[2];

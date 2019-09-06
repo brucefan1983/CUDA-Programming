@@ -337,8 +337,8 @@ printf '\n./ljmd 40 1000\n'
 printf '\nnvprof --unified-memory-profiling off ./ljmd 40 1000\n'
 nvprof --unified-memory-profiling off ./ljmd 40 1000
 
-printf '\nmake clean\n'
-make clean
+printf '\nmake clean -f makefile.35ldg\n'
+make clean -f makefile.35ldg
 printf '\nmake -f makefile.35ldg\n'
 make -f makefile.35ldg
 printf '\n./ljmd 40 1000\n'
@@ -346,8 +346,8 @@ printf '\n./ljmd 40 1000\n'
 printf '\nnvprof --unified-memory-profiling off ./ljmd 40 1000\n'
 nvprof --unified-memory-profiling off ./ljmd 40 1000
 
-printf '\nmake clean\n'
-make clean
+printf '\nmake clean -f makefile.35fast_math\n'
+make clean -f makefile.35fast_math
 printf '\nmake -f makefile.35fast_math\n'
 make -f makefile.35fast_math
 printf '\n./ljmd 40 1000\n'
