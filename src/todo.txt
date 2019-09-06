@@ -1,0 +1,1 @@
+matrix transpose: optimize to 32x8 block size.
