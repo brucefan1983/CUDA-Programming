@@ -23,6 +23,7 @@ int main(void)
     {
         printf("%d ", h_y[i]);
     }
+    printf("\n");
 
     cudaFree(x);
     cudaFree(y);

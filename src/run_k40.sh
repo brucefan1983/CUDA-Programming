@@ -144,33 +144,37 @@ cd ../08*
 
 printf '\nnvcc -arch=sm_35 copy.cu\n'
 nvcc -arch=sm_35 copy.cu
-printf '\nnvprof --unified-memory-profiling off ./a.out\n'
+printf '\nnvprof --unified-memory-profiling off ./a.out 10000 16 16\n'
 nvprof --unified-memory-profiling off ./a.out 10000 16 16
 
 printf '\nnvcc -arch=sm_35 transpose1global_coalesced_read.cu\n'
 nvcc -arch=sm_35 transpose1global_coalesced_read.cu
-printf '\nnvprof --unified-memory-profiling off ./a.out\n'
+printf '\nnvprof --unified-memory-profiling off ./a.out 10000 16 16\n'
 nvprof --unified-memory-profiling off ./a.out 10000 16 16
 
 printf '\nnvcc -arch=sm_35 transpose2global_coalesced_write.cu\n'
 nvcc -arch=sm_35 transpose2global_coalesced_write.cu
-printf '\nnvprof --unified-memory-profiling off ./a.out\n'
+printf '\nnvprof --unified-memory-profiling off ./a.out 10000 16 16\n'
 nvprof --unified-memory-profiling off ./a.out 10000 16 16
 
 printf '\nnvcc -arch=sm_35 transpose3global_ldg.cu\n'
 nvcc -arch=sm_35 transpose3global_ldg.cu
-printf '\nnvprof --unified-memory-profiling off ./a.out\n'
+printf '\nnvprof --unified-memory-profiling off ./a.out 10000 16 16\n'
 nvprof --unified-memory-profiling off ./a.out 10000 16 16
 
 printf '\nnvcc -arch=sm_35 transpose4shared_with_confilict.cu\n'
 nvcc -arch=sm_35 transpose4shared_with_conflict.cu
-printf '\nnvprof --unified-memory-profiling off ./a.out\n'
+printf '\nnvprof --unified-memory-profiling off ./a.out 10000 16 16\n'
 nvprof --unified-memory-profiling off ./a.out 10000 16 16
+printf '\nnvprof --metrics shared_load_transactions_per_request,shared_store_transactions_per_request ./a.out 10000 16 16\n'
+nvprof --metrics shared_load_transactions_per_request,shared_store_transactions_per_request ./a.out 10000 16 16
 
 printf '\nnvcc -arch=sm_35 transpose5shared_without_conflict.cu\n'
 nvcc -arch=sm_35 transpose5shared_without_conflict.cu
-printf '\nnvprof --unified-memory-profiling off ./a.out\n'
+printf '\nnvprof --unified-memory-profiling off ./a.out 10000 16 16\n'
 nvprof --unified-memory-profiling off ./a.out 10000 16 16
+printf '\nnvprof --metrics shared_load_transactions_per_request,shared_store_transactions_per_request ./a.out 10000 16 16\n'
+nvprof --metrics shared_load_transactions_per_request,shared_store_transactions_per_request ./a.out 10000 16 16
 
 printf '\n===================================================\n'
 printf 'cd ../09*'
@@ -244,11 +248,104 @@ printf '\n./a.out\n'
 
 printf '\nnvcc -arch=sm_35 kernel_kernel.cu\n'
 nvcc -arch=sm_35 kernel_kernel.cu
-printf '\n./a.out\n'
-./a.out>t1.txt
+printf '\n./a.out>t.txt\n'
+./a.out>t.txt
 
 printf '\nnvcc -arch=sm_35 kernel_transfer.cu\n'
 nvcc -arch=sm_35 kernel_transfer.cu
-printf '\n./a.out\n'
+printf '\n./a.out>t2.txt\n'
 ./a.out>t2.txt
+
+printf '\n===================================================\n'
+printf 'cd ../13*'
+printf '\n===================================================\n'
+cd ../13*
+
+printf '\nnvcc -arch=sm_35 thrust_scan_vector.cu\n'
+nvcc -arch=sm_35 thrust_scan_vector.cu
+printf '\n./a.out\n'
+./a.out
+
+printf '\nnvcc -arch=sm_35 thrust_scan_pointer.cu\n'
+nvcc -arch=sm_35 thrust_scan_pointer.cu
+printf '\n./a.out\n'
+./a.out
+
+printf '\nnvcc -arch=sm_35 -lcublas cublas_gemm.cu\n'
+nvcc -arch=sm_35 -lcublas cublas_gemm.cu
+printf '\n./a.out\n'
+./a.out
+
+printf '\nnvcc -arch=sm_35 -lcusolver cusolver.cu\n'
+nvcc -arch=sm_35 -lcusolver cusolver.cu
+printf '\n./a.out\n'
+./a.out
+
+printf '\nnvcc -arch=sm_35 -lcurand curand_host1.cu\n'
+nvcc -arch=sm_35 -lcurand curand_host1.cu
+printf '\n./a.out>x1.txt\n'
+./a.out>x1.txt
+
+printf '\nnvcc -arch=sm_35 -lcurand curand_host2.cu\n'
+nvcc -arch=sm_35 -lcurand curand_host2.cu
+printf '\n./a.out>x2.txt\n'
+./a.out>x2.txt
+
+printf '\n===================================================\n'
+printf 'cd ../16*'
+printf '\n===================================================\n'
+cd ../16*
+
+printf '\nmake\n'
+make
+printf '\n./ljmd 10 1000\n'
+./ljmd 10 1000
+
+printf '\n===================================================\n'
+printf 'cd ../17*'
+printf '\n===================================================\n'
+cd ../17*
+
+printf '\nmake\n'
+make
+printf '\n./ljmd 40 1000\n'
+./ljmd 40 1000
+printf '\nnvprof --unified-memory-profiling off ./ljmd 40 1000\n'
+nvprof --unified-memory-profiling off ./ljmd 40 1000
+
+printf '\n===================================================\n'
+printf 'cd ../18*'
+printf '\n===================================================\n'
+cd ../18*
+
+printf '\nmake\n'
+make
+printf '\n./ljmd 40 1000\n'
+./ljmd 40 1000
+printf '\nnvprof --unified-memory-profiling off ./ljmd 40 1000\n'
+nvprof --unified-memory-profiling off ./ljmd 40 1000
+
+printf '\n===================================================\n'
+printf 'cd ../19*'
+printf '\n===================================================\n'
+cd ../19*
+
+printf '\nmake\n'
+make
+printf '\n./ljmd 40 1000\n'
+./ljmd 40 1000
+printf '\nnvprof --unified-memory-profiling off ./ljmd 40 1000\n'
+nvprof --unified-memory-profiling off ./ljmd 40 1000
+
+printf '\n===================================================\n'
+printf 'cd ../20*'
+printf '\n===================================================\n'
+cd ../20*
+
+printf '\nmake\n'
+make
+printf '\n./ljmd 40 1000\n'
+./ljmd 40 1000
+printf '\nnvprof --unified-memory-profiling off ./ljmd 40 1000\n'
+nvprof --unified-memory-profiling off ./ljmd 40 1000
 

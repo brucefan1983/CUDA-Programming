@@ -16,6 +16,7 @@ int main(void)
     {
         printf("%d ", (int) y[i]);
     }
+    printf("\n");
     return 0;
 }
 
