@@ -47,10 +47,10 @@ void __global__ reduce_1
     if (tid == 0) { atomicAdd(g_y, s_sum); }
 }
 
-real reduce(real *x, int N, int M)
+real reduce(real *x, int N, int K)
 {
     int block_size = 128;
-    int grid_size = (N - 1) / (block_size * M) + 1;
+    int grid_size = (N - 1) / (block_size * K) + 1;
 
     real *h_sum = (real *)malloc(sizeof(real));
     h_sum[0] = 0.0;
@@ -59,7 +59,7 @@ real reduce(real *x, int N, int M)
     CHECK(cudaMemcpy(sum, h_sum, sizeof(real), 
         cudaMemcpyHostToDevice))
 
-    reduce_1<<<grid_size, block_size>>>(x, sum, N, M);
+    reduce_1<<<grid_size, block_size>>>(x, sum, N, K);
 
     CHECK(cudaMemcpy(h_sum, sum, sizeof(real), 
         cudaMemcpyDeviceToHost))
