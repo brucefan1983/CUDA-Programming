@@ -19,14 +19,17 @@ int main(int argc, char **argv)
     dim3 block_size(block_size_x, block_size_y);
     dim3 grid_size(grid_size_x, grid_size_y);
 
+    int M = sizeof(real) * N2;
+    real *h_A = (real *)malloc(M);
+    for (int n = 0; n < N2; ++n) { h_A[n] = n; }
     real *A, *B;
-    CHECK(cudaMallocManaged(&A, sizeof(real) * N2))
-    CHECK(cudaMallocManaged(&B, sizeof(real) * N2))
-    for (int n = 0; n < N2; ++n) { A[n] = n; }
+    CHECK(cudaMallocManaged(&A, M))
+    CHECK(cudaMallocManaged(&B, M))
+    CHECK(cudaMemcpy(A, h_A, M, cudaMemcpyHostToDevice))
 
     copy<<<grid_size, block_size>>>(A, B, N);
 
-    CHECK(cudaDeviceSynchronize())
+    free(h_A);
     CHECK(cudaFree(A))
     CHECK(cudaFree(B))
     return 0;
