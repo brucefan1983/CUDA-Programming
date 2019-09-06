@@ -1,0 +1,159 @@
+
+===================================================
+cd 07*
+===================================================
+
+nvcc -arch=sm_50 copy.cu
+
+nvprof --unified-memory-profiling off ./a.out 10000 16 16
+==86755== NVPROF is profiling process 86755, command: ./a.out 10000 16 16
+==86755== Profiling application: ./a.out 10000 16 16
+==86755== Profiling result:
+            Type  Time(%)      Time     Calls       Avg       Min       Max  Name
+ GPU activities:   83.29%  61.653ms         1  61.653ms  61.653ms  61.653ms  [CUDA memcpy HtoD]
+                   16.71%  12.367ms         1  12.367ms  12.367ms  12.367ms  copy(float*, float*, int)
+      API calls:   49.45%  91.051ms         2  45.526ms  427.51us  90.624ms  cudaMalloc
+                   33.44%  61.575ms         1  61.575ms  61.575ms  61.575ms  cudaMemcpy
+                   16.70%  30.740ms         2  15.370ms  417.50us  30.323ms  cudaFree
+                    0.33%  605.33us        94  6.4390us     157ns  290.05us  cuDeviceGetAttribute
+                    0.04%  71.292us         1  71.292us  71.292us  71.292us  cuDeviceTotalMem
+                    0.02%  39.548us         1  39.548us  39.548us  39.548us  cuDeviceGetName
+                    0.01%  25.875us         1  25.875us  25.875us  25.875us  cudaLaunch
+                    0.00%  8.5150us         3  2.8380us     199ns  4.2900us  cudaSetupArgument
+                    0.00%  1.4440us         2     722ns     205ns  1.2390us  cuDeviceGetCount
+                    0.00%  1.0620us         1  1.0620us  1.0620us  1.0620us  cudaConfigureCall
+                    0.00%     430ns         2     215ns     162ns     268ns  cuDeviceGet
+
+nvcc -arch=sm_50 transpose1global_coalesced_read.cu
+
+nvprof --unified-memory-profiling off ./a.out 10000 16 16
+==86805== NVPROF is profiling process 86805, command: ./a.out 10000 16 16
+==86805== Profiling application: ./a.out 10000 16 16
+==86805== Profiling result:
+            Type  Time(%)      Time     Calls       Avg       Min       Max  Name
+ GPU activities:   59.72%  156.43ms         1  156.43ms  156.43ms  156.43ms  [CUDA memcpy DtoH]
+                   23.47%  61.489ms         1  61.489ms  61.489ms  61.489ms  [CUDA memcpy HtoD]
+                   16.81%  44.025ms         1  44.025ms  44.025ms  44.025ms  transpose(float*, float*, int)
+      API calls:   71.49%  262.55ms         2  131.27ms  61.411ms  201.14ms  cudaMemcpy
+                   20.61%  75.704ms         2  37.852ms  436.22us  75.268ms  cudaMalloc
+                    7.77%  28.547ms         2  14.273ms  359.64us  28.187ms  cudaFree
+                    0.09%  319.39us        94  3.3970us     158ns  138.12us  cuDeviceGetAttribute
+                    0.02%  63.062us         1  63.062us  63.062us  63.062us  cuDeviceTotalMem
+                    0.01%  31.231us         1  31.231us  31.231us  31.231us  cuDeviceGetName
+                    0.01%  25.929us         1  25.929us  25.929us  25.929us  cudaLaunch
+                    0.00%  4.4380us         3  1.4790us     190ns  3.8520us  cudaSetupArgument
+                    0.00%  1.4760us         2     738ns     221ns  1.2550us  cuDeviceGetCount
+                    0.00%  1.0610us         1  1.0610us  1.0610us  1.0610us  cudaConfigureCall
+                    0.00%     528ns         2     264ns     168ns     360ns  cuDeviceGet
+
+nvcc -arch=sm_50 transpose2global_coalesced_write.cu
+
+nvprof --unified-memory-profiling off ./a.out 10000 16 16
+==86855== NVPROF is profiling process 86855, command: ./a.out 10000 16 16
+==86855== Profiling application: ./a.out 10000 16 16
+==86855== Profiling result:
+            Type  Time(%)      Time     Calls       Avg       Min       Max  Name
+ GPU activities:   65.62%  158.98ms         1  158.98ms  158.98ms  158.98ms  [CUDA memcpy DtoH]
+                   25.38%  61.491ms         1  61.491ms  61.491ms  61.491ms  [CUDA memcpy HtoD]
+                    9.00%  21.810ms         1  21.810ms  21.810ms  21.810ms  transpose(float*, float*, int)
+      API calls:   70.12%  242.89ms         2  121.44ms  61.411ms  181.48ms  cudaMemcpy
+                   21.49%  74.446ms         2  37.223ms  419.40us  74.027ms  cudaMalloc
+                    8.24%  28.546ms         2  14.273ms  356.14us  28.190ms  cudaFree
+                    0.10%  357.27us        94  3.8000us     133ns  164.34us  cuDeviceGetAttribute
+                    0.02%  81.591us         1  81.591us  81.591us  81.591us  cuDeviceTotalMem
+                    0.01%  38.177us         1  38.177us  38.177us  38.177us  cuDeviceGetName
+                    0.01%  26.281us         1  26.281us  26.281us  26.281us  cudaLaunch
+                    0.00%  3.8370us         3  1.2790us     178ns  3.2690us  cudaSetupArgument
+                    0.00%  2.2740us         2  1.1370us     299ns  1.9750us  cuDeviceGetCount
+                    0.00%  1.1430us         1  1.1430us  1.1430us  1.1430us  cudaConfigureCall
+                    0.00%     728ns         2     364ns     256ns     472ns  cuDeviceGet
+
+nvcc -arch=sm_50 transpose3global_ldg.cu
+
+nvprof --unified-memory-profiling off ./a.out 10000 16 16
+==86905== NVPROF is profiling process 86905, command: ./a.out 10000 16 16
+==86905== Profiling application: ./a.out 10000 16 16
+==86905== Profiling result:
+            Type  Time(%)      Time     Calls       Avg       Min       Max  Name
+ GPU activities:   66.54%  158.63ms         1  158.63ms  158.63ms  158.63ms  [CUDA memcpy DtoH]
+                   25.80%  61.499ms         1  61.499ms  61.499ms  61.499ms  [CUDA memcpy HtoD]
+                    7.67%  18.280ms         1  18.280ms  18.280ms  18.280ms  transpose(float const *, float*, int)
+      API calls:   68.29%  239.00ms         2  119.50ms  61.424ms  177.58ms  cudaMemcpy
+                   22.82%  79.879ms         2  39.939ms  419.12us  79.460ms  cudaMalloc
+                    8.76%  30.663ms         2  15.332ms  353.04us  30.310ms  cudaFree
+                    0.09%  314.84us        94  3.3490us     151ns  136.35us  cuDeviceGetAttribute
+                    0.02%  60.482us         1  60.482us  60.482us  60.482us  cuDeviceTotalMem
+                    0.01%  30.962us         1  30.962us  30.962us  30.962us  cuDeviceGetName
+                    0.01%  28.950us         1  28.950us  28.950us  28.950us  cudaLaunch
+                    0.00%  3.7830us         3  1.2610us     198ns  3.1950us  cudaSetupArgument
+                    0.00%  1.4220us         2     711ns     204ns  1.2180us  cuDeviceGetCount
+                    0.00%  1.1840us         1  1.1840us  1.1840us  1.1840us  cudaConfigureCall
+                    0.00%     512ns         2     256ns     162ns     350ns  cuDeviceGet
+
+nvcc -arch=sm_50 transpose4shared_with_confilict.cu
+
+nvprof --unified-memory-profiling off ./a.out 10000 16 16
+==86955== NVPROF is profiling process 86955, command: ./a.out 10000 16 16
+==86955== Profiling application: ./a.out 10000 16 16
+==86955== Profiling result:
+            Type  Time(%)      Time     Calls       Avg       Min       Max  Name
+ GPU activities:   66.43%  159.43ms         1  159.43ms  159.43ms  159.43ms  [CUDA memcpy DtoH]
+                   25.67%  61.594ms         1  61.594ms  61.594ms  61.594ms  [CUDA memcpy HtoD]
+                    7.90%  18.959ms         1  18.959ms  18.959ms  18.959ms  transpose(float*, float*, int)
+      API calls:   69.48%  240.63ms         2  120.31ms  61.518ms  179.11ms  cudaMemcpy
+                   21.55%  74.622ms         2  37.311ms  432.15us  74.190ms  cudaMalloc
+                    8.85%  30.668ms         2  15.334ms  358.27us  30.310ms  cudaFree
+                    0.09%  300.44us        94  3.1960us     136ns  130.28us  cuDeviceGetAttribute
+                    0.02%  56.193us         1  56.193us  56.193us  56.193us  cuDeviceTotalMem
+                    0.01%  30.221us         1  30.221us  30.221us  30.221us  cudaLaunch
+                    0.01%  29.682us         1  29.682us  29.682us  29.682us  cuDeviceGetName
+                    0.00%  4.3330us         3  1.4440us     195ns  3.7300us  cudaSetupArgument
+                    0.00%  1.3970us         2     698ns     248ns  1.1490us  cuDeviceGetCount
+                    0.00%  1.1740us         1  1.1740us  1.1740us  1.1740us  cudaConfigureCall
+                    0.00%     492ns         2     246ns     149ns     343ns  cuDeviceGet
+
+nvprof --metrics shared_load_transactions_per_request,shared_store_transactions_per_request ./a.out 10000 16 16
+==86968== NVPROF is profiling process 86968, command: ./a.out 10000 16 16
+==86968== Some kernel(s) will be replayed on device 0 in order to collect all events/metrics.
+==86968== Profiling application: ./a.out 10000 16 16
+==86968== Profiling result:
+==86968== Metric result:
+Invocations                               Metric Name                             Metric Description         Min         Max         Avg
+Device "Quadro K2200 (0)"
+    Kernel: transpose(float*, float*, int)
+          1      shared_load_transactions_per_request    Shared Memory Load Transactions Per Request   16.000000   16.000000   16.000000
+          1     shared_store_transactions_per_request   Shared Memory Store Transactions Per Request    2.000000    2.000000    2.000000
+
+nvcc -arch=sm_50 transpose5shared_without_conflict.cu
+
+nvprof --unified-memory-profiling off ./a.out 10000 16 16
+==87018== NVPROF is profiling process 87018, command: ./a.out 10000 16 16
+==87018== Profiling application: ./a.out 10000 16 16
+==87018== Profiling result:
+            Type  Time(%)      Time     Calls       Avg       Min       Max  Name
+ GPU activities:   67.16%  159.18ms         1  159.18ms  159.18ms  159.18ms  [CUDA memcpy DtoH]
+                   25.97%  61.540ms         1  61.540ms  61.540ms  61.540ms  [CUDA memcpy HtoD]
+                    6.87%  16.285ms         1  16.285ms  16.285ms  16.285ms  transpose(float*, float*, int)
+      API calls:   68.18%  237.63ms         2  118.81ms  61.489ms  176.14ms  cudaMemcpy
+                   23.48%  81.844ms         2  40.922ms  423.90us  81.420ms  cudaMalloc
+                    8.19%  28.546ms         2  14.273ms  355.90us  28.190ms  cudaFree
+                    0.10%  362.47us        94  3.8560us     204ns  155.37us  cuDeviceGetAttribute
+                    0.02%  73.932us         1  73.932us  73.932us  73.932us  cuDeviceTotalMem
+                    0.01%  35.340us         1  35.340us  35.340us  35.340us  cuDeviceGetName
+                    0.01%  23.787us         1  23.787us  23.787us  23.787us  cudaLaunch
+                    0.00%  4.1320us         3  1.3770us     201ns  3.5160us  cudaSetupArgument
+                    0.00%  1.8190us         2     909ns     310ns  1.5090us  cuDeviceGetCount
+                    0.00%  1.0760us         1  1.0760us  1.0760us  1.0760us  cudaConfigureCall
+                    0.00%     672ns         2     336ns     233ns     439ns  cuDeviceGet
+
+nvprof --metrics shared_load_transactions_per_request,shared_store_transactions_per_request ./a.out 10000 16 16
+==87031== NVPROF is profiling process 87031, command: ./a.out 10000 16 16
+==87031== Some kernel(s) will be replayed on device 0 in order to collect all events/metrics.
+==87031== Profiling application: ./a.out 10000 16 16
+==87031== Profiling result:
+==87031== Metric result:
+Invocations                               Metric Name                             Metric Description         Min         Max         Avg
+Device "Quadro K2200 (0)"
+    Kernel: transpose(float*, float*, int)
+          1      shared_load_transactions_per_request    Shared Memory Load Transactions Per Request    2.000000    2.000000    2.000000
+          1     shared_store_transactions_per_request   Shared Memory Store Transactions Per Request    2.000000    2.000000    2.000000

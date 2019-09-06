@@ -26,8 +26,8 @@ int main(int argc, char **argv)
     real *h_B = (real *)malloc(M);
     for (int n = 0; n < N2; ++n) { h_A[n] = n; }
     real *A, *B;
-    CHECK(cudaMallocManaged(&A, M))
-    CHECK(cudaMallocManaged(&B, M))
+    CHECK(cudaMalloc(&A, M))
+    CHECK(cudaMalloc(&B, M))
     CHECK(cudaMemcpy(A, h_A, M, cudaMemcpyHostToDevice))
 
     transpose<<<grid_size, block_size>>>(A, B, N);

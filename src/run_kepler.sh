@@ -121,13 +121,8 @@ printf 'cd ../09*'
 printf '\n===================================================\n'
 cd ../09*
 
-printf '\nnvcc -arch=sm_35 reduce5atomic_global.cu\n'
-nvcc -arch=sm_35 reduce5atomic_global.cu
-printf '\nnvprof --unified-memory-profiling off ./a.out 10\n'
-nvprof --unified-memory-profiling off ./a.out 10
-
-printf '\nnvcc -arch=sm_35 reduce6atomic_shared.cu\n'
-nvcc -arch=sm_35 reduce6atomic_shared.cu
+printf '\nnvcc -arch=sm_35 reduce5atomic.cu\n'
+nvcc -arch=sm_35 reduce5atomic.cu
 printf '\nnvprof --unified-memory-profiling off ./a.out 10\n'
 nvprof --unified-memory-profiling off ./a.out 10
 
