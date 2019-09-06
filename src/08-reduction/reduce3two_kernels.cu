@@ -11,12 +11,16 @@ int main(void)
 {
     int N = 100000000;
     int M = sizeof(real) * N;
+    real *h_x = (real *)malloc(M);
+    for (int n = 0; n < N; ++n) { h_x[n] = 1.0; }
     real *x;
-    CHECK(cudaMallocManaged(&x, M))
-    for (int n = 0; n < N; ++n) { x[n] = 1.0; }
+    CHECK(cudaMalloc(&x, M))
+    CHECK(cudaMemcpy(x, h_x, M, cudaMemcpyHostToDevice))
 
     real sum = reduce(x, N);
     printf("sum = %g.\n", sum);
+
+    free(h_x);
     CHECK(cudaFree(x))
     return 0;
 }
@@ -70,14 +74,18 @@ real reduce(real *x, int N)
     int number_of_rounds = (grid_size - 1) / 1024 + 1;
 
     real *y, *sum;
-    CHECK(cudaMallocManaged(&y, sizeof(real) * grid_size))
-    CHECK(cudaMallocManaged(&sum, sizeof(real)))
+    CHECK(cudaMalloc(&y, sizeof(real) * grid_size))
+    CHECK(cudaMalloc(&sum, sizeof(real)))
 
     reduce_1<<<grid_size, block_size>>>(x, y, N);
     reduce_2<<<1, 1024>>>(y, sum, grid_size, number_of_rounds);
 
-    CHECK(cudaDeviceSynchronize())
-    real result = sum[0];
+    real *h_sum = (real *)malloc(sizeof(real));
+    CHECK(cudaMemcpy(h_sum, sum, sizeof(real), 
+        cudaMemcpyDeviceToHost))
+    real result = h_sum[0];
+
+    free(h_sum);
     CHECK(cudaFree(y))
     CHECK(cudaFree(sum))
     return result;
