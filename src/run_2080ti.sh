@@ -306,8 +306,8 @@ printf 'cd ../17*'
 printf '\n===================================================\n'
 cd ../17*
 
-printf '\nmake\n'
-make
+printf '\nmake -f makefile.75\n'
+make -f makefile.75
 printf '\n./ljmd 40 1000\n'
 ./ljmd 40 1000
 printf '\nnvprof ./ljmd 40 1000\n'
@@ -318,8 +318,8 @@ printf 'cd ../18*'
 printf '\n===================================================\n'
 cd ../18*
 
-printf '\nmake\n'
-make
+printf '\nmake -f makefile.75\n'
+make -f makefile.75
 printf '\n./ljmd 40 1000\n'
 ./ljmd 40 1000
 printf '\nnvprof ./ljmd 40 1000\n'
@@ -330,8 +330,26 @@ printf 'cd ../19*'
 printf '\n===================================================\n'
 cd ../19*
 
-printf '\nmake\n'
-make
+printf '\nmake -f makefile.75\n'
+make -f makefile.75
+printf '\n./ljmd 40 1000\n'
+./ljmd 40 1000
+printf '\nnvprof ./ljmd 40 1000\n'
+nvprof ./ljmd 40 1000
+
+printf '\nmake clean\n'
+make clean
+printf '\nmake -f makefile.75ldg\n'
+make -f makefile.75ldg
+printf '\n./ljmd 40 1000\n'
+./ljmd 40 1000
+printf '\nnvprof ./ljmd 40 1000\n'
+nvprof ./ljmd 40 1000
+
+printf '\nmake clean\n'
+make clean
+printf '\nmake -f makefile.75fast_math\n'
+make -f makefile.75fast_math
 printf '\n./ljmd 40 1000\n'
 ./ljmd 40 1000
 printf '\nnvprof ./ljmd 40 1000\n'
@@ -342,8 +360,8 @@ printf 'cd ../20*'
 printf '\n===================================================\n'
 cd ../20*
 
-printf '\nmake\n'
-make
+printf '\nmake -f makefile.75\n'
+make -f makefile.75
 printf '\n./ljmd 40 1000\n'
 ./ljmd 40 1000
 printf '\nnvprof ./ljmd 40 1000\n'
