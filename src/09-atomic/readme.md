@@ -1,9 +1,8 @@
-# Chapter 10: Using atomics
+# Chapter 9: Using atomics
 
 ## Source files for this chapter
 
+| file             | what to learn ? |
+|------------------| :---------------|
+| reduce5atomic.cu | using `atomicAdd()` with global memory address |
 
-| file   |      compile      |  run | what to learn |
-|----------|:-------------|:----------------|:----------------|
-| reduce5atomic_global.cu | nvcc -arch=sm_35 reduce5atomic_global.cu | nvprof --unified-memory-profiling off ./a.out | Using `atomicAdd()` with global memory address |
-| reduce6atomic_shared.cu | nvcc -arch=sm_35 reduce6atomic_shared.cu | nvprof --unified-memory-profiling off ./a.out | Using `atomicAdd()` with shared memory address |
