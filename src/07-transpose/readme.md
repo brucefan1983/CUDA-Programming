@@ -1,12 +1,14 @@
 # Chapter 8: using shared memory: matrix transpose
 
-
 ## Source files for the chapter
 
+| file     | what to learn |
+|----------|:--------------|
+| copy.cu | get the effective bandwidth for matrix copying |
+| transpose1global_coalesced_read.cu | coalesced read but non-coalesced write|
+| transpose2global_coalesced_write.cu | coalesced write but non-coalesced read|
+| transpose3global_ldg.cu | using `__ldg` for non-coalesced read (not needed for Pascal) |
+| transpose4shared_with_conflict.cu | using shared memory but with bank conflict|
+| transpose4shared_without_conflict.cu | using shared memory and without bank conflict|
 
-| file   |      compile      |  run | what to learn |
-|----------|:-------------|:-----------|:-----------|
-| copy.cu |  nvcc -arch=sm_35 copy.cu | nvprof --unified-memory-profiling off ./a.out 10000 10000 16 16 | get the effective bandwidth for matrix copying |
-| transpose_global.cu |  nvcc -arch=sm_35 transpose_global.cu | nvprof --unified-memory-profiling off ./a.out 10000 10000 16 16 | what is the performance when using global memory only? |
-| transpose_shared.cu |  nvcc -arch=sm_35 transpose_shared.cu | nvprof --unified-memory-profiling off ./a.out 10000 10000 16 16 | what is the performance when using shared memory too? |
 
