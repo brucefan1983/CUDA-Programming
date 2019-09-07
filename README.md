@@ -14,6 +14,7 @@ Source codes for my `CUDA` programming book
     * have studied **physics** at the undergraduate level (for the second part only)
 
 
+<<<<<<< HEAD
 ## How to compile and run?
 Check the following files:
   * run_maxwell_chapter7.sh (using my own desktop)
@@ -22,6 +23,9 @@ Check the following files:
 
 
 ## List of source codes:
+=======
+## Table of contents and List of source codes:
+>>>>>>> 208b4a85b93fa7c9e16bd59e77b94c59e552b493
 
 
 ### Chapter 1: Introduction to GPU hardware and `CUDA` programming tools
@@ -33,8 +37,8 @@ There is no source code for this chapter.
 
 | file      | what to learn? |
 |:----------|:---------------|
-| hello.cpp | writing a Hello Word program in C++ |
-| hello1.cu | a valid C++ program is (usually) also a valid `CUDA` program |
+| hello.cpp | writing a Hello Word program in `C++` |
+| hello1.cu | a valid `C++` program is (usually) also a valid `CUDA` program |
 | hello2.cu | write a simple `CUDA` kernel and call `printf()` within it |
 | hello3.cu | using multiple threads in a block |
 | hello4.cu | using multiple blocks in a grid |
