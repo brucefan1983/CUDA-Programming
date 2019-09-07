@@ -71,7 +71,7 @@ There is no source code for this chapter.
 ### Chapter 6: Memory organization in CUDA
 
 
-### Chapter 7: using shared memory: matrix transpose
+### Chapter 7: Using shared memory: matrix transpose
 
 | file                                 | what to learn? |
 |:-------------------------------------|:---------------|
@@ -82,5 +82,108 @@ There is no source code for this chapter.
 | transpose4shared_with_conflict.cu    | using shared memory but with bank conflict |
 | transpose5shared_without_conflict.cu | using shared memory and without bank conflict |
 
+
+### Chapter 8: Using shared memory: reduction
+
+| file                       | what to learn ? |
+|:---------------------------| :---------------|
+| reduce1.cpp                | reduction in C++ |
+| reduce2one_kernel.cu       | a slow version for reduction using one kernel |
+| reduce3two_kernels.cu      | a faster version for reduction using two kernels |
+| reduce4more_parallelism.cu | an even faster version for reduction with more parallelism |
+
+
+### Chapter 9: Using atomic functions
+
+| file             | what to learn ? |
+|:-----------------| :---------------|
+| reduce5atomic.cu | using `atomicAdd()` to eliminate the second kernel |
+
+
+### Chapter 10: Using warp-level functions
+
+| file               | what to learn ? |
+|:-------------------| :---------------|
+| reduce7syncwarp.cu | using the `__syncwarp()` function instead of the `__syncthreads()` function within warps |
+| reduce8shfl.cu     | using the `__shfl_down_sync()` or the `__shfl_xor_sync()` function for warp reduction |
+| reduce9cp.cu       | using the cooperative groups |
+
+
+### Chapter 11: CUDA streams 
+
+| file               | what to learn ? |
+|:-------------------| :---------------|
+| host_kernel.cu     | overlapping host and device computations |
+| kernel_kernel.cu   | overlaping multiple kernels |
+| kernel_transfer.cu | overlaping kernel execution and memory transfer |
+
+
+### Chapter 12: Using CUDA libraries
+
+| file                   | what to learn ? |
+|:-----------------------| :---------------|
+| thrust_scan_vector.cu  | using the device vector in `thrust` |
+| thrust_scan_pointer.cu | using the device pointer in `thrust` |
+| cublas_gemm.cu         | matrix multiplication in `cuBLAS` |
+| cusolver.cu            | matrix eigenvalues in `cuSolver` |
+| curand_host1.cu        | uniform random numbers in `cuRAND` |
+| curand_host2.cu        | Gaussian random numbers in `cuRAND` |
+
+
+### Chapter 13: Unified memory programming 
+
+| file           | what to learn ? |
+|:---------------| :---------------|
+| add_unified.cu | using unified memory |
+
+
+### Chapter 14: Summary for developing and optimizing CUDA programs 
+
+There is no source code for this chapter.
+
+
+### Chapter 15: Introduction to molecular dynamics simulation
+
+There is no source code for this chapter.
+
+
+### Chapter 16: A C++ program for molecular dynamics simulation
+
+How to compile and run?
+  * type `make` to compile
+  * type `./ljmd 8 10000` to run
+  * type `plot_results` in Matlab command window to check the results
+
+
+### Chapter 17: MD code: only accelerating the force-evaluation part
+
+How to compile and run?
+  * type `make` to compile
+  * type `./ljmd 40 10000` to run
+  * type `plot_results` in Matlab command window to check the results
+
+
+### Chapter 18: MD code: accelerating the whole code
+
+How to compile and run?
+  * type `make` to compile
+  * type `./ljmd 40 10000` to run
+  * type `plot_results` in Matlab command window to check the results
+
+
+### Chapter 19: MD code: various optimizations
+
+How to compile and run?
+  * type `make` or `make -f makefile.ldg` or `make -f makefile.fast_math` to compile
+  * type `./ljmd 40 10000` to run
+  * type `plot_results` in Matlab command window to check the results
+
+
+### Chapter 20: MD code: using unified memory
+
+How to compile and run?
+  * type `make` or `make -f makefile.pascal` to compile
+  * type `./ljmd 40 10000` to run
+  * type `plot_results` in Matlab command window to check the results
 
 
