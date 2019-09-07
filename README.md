@@ -20,7 +20,7 @@ Source codes for my `CUDA` programming book
   * src/run_kepler.sh 
   * src/run_pascal.slrum 
 * I have uploaded my testing results:
-  * src/results_quadro_k2200.txt (using my own desktop with Quadro k2200)
+  * src/results_quadro_k2200_chapter7.txt (using my own desktop with Quadro k2200)
   * src/results_k40.txt (using a workstation with Tesla K40)
   * src/results_p100.txt (using Finland's supercomputer with Tesla P100: https://research.csc.fi/taito-gpu)
 
