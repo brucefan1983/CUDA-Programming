@@ -15,9 +15,9 @@ Source codes for my `CUDA` programming book
 
 
 ## Check the following files to learn how to compile and run the source codes
-* run_maxwell_chapter7.sh (using my own desktop)
-* run_kepler.sh (using a workstation within Aalto University)
-* run_pascal.slrum (using Finland's CSC: https://research.csc.fi/taito-gpu)
+* run_maxwell_chapter7.sh (using my own desktop with Quadro k2000)
+* run_kepler.sh (using a workstation with Tesla K40)
+* run_pascal.slrum (using Finland's supercomputer with Tesla P100: https://research.csc.fi/taito-gpu)
 
 ## Table of contents and List of source codes:
 
