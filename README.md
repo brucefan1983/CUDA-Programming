@@ -14,10 +14,15 @@ Source codes for my `CUDA` programming book
     * have studied **physics** at the undergraduate level (for the second part only)
 
 
-## Check the following files to learn how to compile and run the source codes
-* run_maxwell_chapter7.sh (using my own desktop with Quadro k2200)
-* run_kepler.sh (using a workstation with Tesla K40)
-* run_pascal.slrum (using Finland's supercomputer with Tesla P100: https://research.csc.fi/taito-gpu)
+## how to compile and run
+* Check the following files
+  * src/run_maxwell_chapter7.sh 
+  * src/run_kepler.sh 
+  * src/run_pascal.slrum 
+* I have uploaded my testing results:
+  * src/results_quadro_k2200.txt (using my own desktop with Quadro k2200)
+  * src/results_k40.txt (using a workstation with Tesla K40)
+  * src/results_p100.txt (using Finland's supercomputer with Tesla P100: https://research.csc.fi/taito-gpu)
 
 ## Table of contents and List of source codes:
 
