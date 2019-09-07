@@ -14,27 +14,20 @@ Source codes for my `CUDA` programming book
     * have studied **physics** at the undergraduate level (for the second part only)
 
 
-<<<<<<< HEAD
 ## How to compile and run?
 Check the following files:
   * run_maxwell_chapter7.sh (using my own desktop)
   * run_kepler.sh (using a workstation within Aalto University)
   * run_pascal.slrum (using Finland's CSC: https://research.csc.fi/taito-gpu)
 
-
-## List of source codes:
-=======
 ## Table of contents and List of source codes:
->>>>>>> 208b4a85b93fa7c9e16bd59e77b94c59e552b493
 
 
 ### Chapter 1: Introduction to GPU hardware and `CUDA` programming tools
-
 There is no source code for this chapter.
 
 
 ### Chapter 2: Thread organization in `CUDA`
-
 | file      | what to learn? |
 |:----------|:---------------|
 | hello.cpp | writing a Hello Word program in `C++` |
@@ -46,7 +39,6 @@ There is no source code for this chapter.
 
 
 ### Chapter 3: The basic framework of a `CUDA` program
-
 | file         | what to learn ? |
 |:-------------|:----------------|
 | add.cpp      | adding up two arrays using `C++` |
@@ -56,7 +48,6 @@ There is no source code for this chapter.
 
 
 ### Chapter 4: Error checking
-
 | file                | what to learn ? |
 |:--------------------|:----------------|
 | add4check_api.cu    | how to check `CUDA` runtime API calls? |
@@ -64,7 +55,6 @@ There is no source code for this chapter.
 
 
 ### Chapter 5: The crucial ingredients for obtaining speedup
-
 | file                   | what to learn ? |
 |:-----------------------|:----------------|
 | add.cpp                | timing `C++` code |
@@ -75,12 +65,10 @@ There is no source code for this chapter.
 
 
 ### Chapter 6: Memory organization in `CUDA`
-
 There is no source code for this chapter.
 
 
 ### Chapter 7: Using shared memory: matrix transpose
-
 | file                                 | what to learn? |
 |:-------------------------------------|:---------------|
 | copy.cu                              | get the effective bandwidth for matrix copying |
@@ -92,7 +80,6 @@ There is no source code for this chapter.
 
 
 ### Chapter 8: Using shared memory: reduction
-
 | file                       | what to learn ? |
 |:---------------------------| :---------------|
 | reduce1.cpp                | reduction in `C++` |
@@ -102,14 +89,12 @@ There is no source code for this chapter.
 
 
 ### Chapter 9: Using atomic functions
-
 | file             | what to learn ? |
 |:-----------------| :---------------|
 | reduce5atomic.cu | using `atomicAdd()` to eliminate the second kernel |
 
 
 ### Chapter 10: Using warp-level functions
-
 | file               | what to learn ? |
 |:-------------------| :---------------|
 | reduce7syncwarp.cu | using the `__syncwarp()` function instead of the `__syncthreads()` function within warps |
@@ -118,7 +103,6 @@ There is no source code for this chapter.
 
 
 ### Chapter 11: `CUDA` streams 
-
 | file               | what to learn ? |
 |:-------------------| :---------------|
 | host_kernel.cu     | overlapping host and device computations |
@@ -127,7 +111,6 @@ There is no source code for this chapter.
 
 
 ### Chapter 12: Using `CUDA` libraries
-
 | file                   | what to learn ? |
 |:-----------------------| :---------------|
 | thrust_scan_vector.cu  | using the device vector in `thrust` |
@@ -139,24 +122,20 @@ There is no source code for this chapter.
 
 
 ### Chapter 13: Unified memory programming 
-
 | file           | what to learn ? |
 |:---------------| :---------------|
 | add_unified.cu | using unified memory |
 
 
 ### Chapter 14: Summary for developing and optimizing `CUDA` programs 
-
 There is no source code for this chapter.
 
 
 ### Chapter 15: Introduction to molecular dynamics simulation
-
 There is no source code for this chapter.
 
 
 ### Chapter 16: A `C++` program for molecular dynamics simulation
-
 How to compile and run?
   * type `make` to compile
   * type `./ljmd 8 10000` to run
@@ -164,7 +143,6 @@ How to compile and run?
 
 
 ### Chapter 17: MD code: only accelerating the force-evaluation part
-
 How to compile and run?
   * type `make` to compile
   * type `./ljmd 40 10000` to run
@@ -172,7 +150,6 @@ How to compile and run?
 
 
 ### Chapter 18: MD code: accelerating the whole code
-
 How to compile and run?
   * type `make` to compile
   * type `./ljmd 40 10000` to run
@@ -180,7 +157,6 @@ How to compile and run?
 
 
 ### Chapter 19: MD code: various optimizations
-
 How to compile and run?
   * type `make` or `make -f makefile.ldg` or `make -f makefile.fast_math` to compile
   * type `./ljmd 40 10000` to run
@@ -188,7 +164,6 @@ How to compile and run?
 
 
 ### Chapter 20: MD code: using unified memory
-
 How to compile and run?
   * type `make` or `make -f makefile.pascal` to compile
   * type `./ljmd 40 10000` to run
