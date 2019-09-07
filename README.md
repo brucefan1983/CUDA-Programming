@@ -14,6 +14,13 @@ Source codes for my `CUDA` programming book
     * have studied **physics** at the undergraduate level (for the second part only)
 
 
+## How to compile and run?
+Check the following files:
+  * run_maxwell_chapter7.sh (using my own desktop)
+  * run_kepler.sh (using a workstation within Aalto University)
+  * run_pascal.slrum (using Finland's CSC: https://research.csc.fi/taito-gpu)
+
+
 ## List of source codes:
 
 
