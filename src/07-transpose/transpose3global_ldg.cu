@@ -1,5 +1,6 @@
 #include "error.cuh"
 #include <stdio.h>
+#define TILE_DIM 32
 #ifdef USE_DP
     typedef double real;
 #else
@@ -13,12 +14,10 @@ void print_matrix(int N, real *A);
 int main(int argc, char **argv)
 {
     int N = atoi(argv[1]);
-    int block_size_x = atoi(argv[2]);
-    int block_size_y = atoi(argv[3]);
     int N2 = N * N;
-    int grid_size_x = (N - 1) / block_size_x + 1;
-    int grid_size_y = (N - 1) / block_size_y + 1;
-    dim3 block_size(block_size_x, block_size_y);
+    int grid_size_x = (N - 1) / TILE_DIM + 1;
+    int grid_size_y = (N - 1) / TILE_DIM + 1;
+    dim3 block_size(TILE_DIM, TILE_DIM);
     dim3 grid_size(grid_size_x, grid_size_y);
 
     int M = sizeof(real) * N2;
