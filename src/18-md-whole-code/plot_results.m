@@ -1,18 +1,5 @@
-clear; close all; font_size=12;
-load velocity.txt;
+clear;close all; font_size=12;
 load energy.txt;
-
-figure
-histogram(velocity(:,1));
-xlabel('v_x (m/s)', 'fontsize', font_size);
-ylabel('number of counts', 'fontsize', font_size);
-set(gca,'fontsize', font_size);
-
-figure
-histogram(sqrt(sum(velocity.^2,2)));
-xlabel('v (m/s)', 'fontsize', font_size);
-ylabel('number of counts', 'fontsize', font_size);
-set(gca,'fontsize', font_size);
 
 t=(1:size(energy,1))*0.5; %ps
 figure;
