@@ -14,7 +14,7 @@ Source codes for my `CUDA` programming book
     * have studied **physics** at the undergraduate level (for the second part only)
 
 
-## how to compile and run
+## How to compile and run
 * Check the following files
   * `src/run_kepler.sh` 
   * `src/run_pascal.slrum` 
