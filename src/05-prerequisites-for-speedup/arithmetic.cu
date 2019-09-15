@@ -16,7 +16,7 @@ void check(real *x, int N);
 int main(int argc, char **argv)
 {
     int N = atoi(argv[1]);
-    int block_size = atoi(argv[2]);
+    const int block_size = 128;
     int M = sizeof(real) * N;
     real *x = (real*) malloc(M);
     real *g_x;

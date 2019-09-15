@@ -29,28 +29,18 @@ printf '\n./a.out\n'
 
 printf '\nnvcc -arch=sm_35 arithmetic.cu\n'
 nvcc -arch=sm_35 arithmetic.cu
-printf '\nnvprof --unified-memory-profiling off ./a.out 100000000 128\n'
-nvprof --unified-memory-profiling off ./a.out 100000000 128
-printf '\nnvprof --unified-memory-profiling off ./a.out 10000000 128\n'
-nvprof --unified-memory-profiling off ./a.out 10000000 128
-printf '\nnvprof --unified-memory-profiling off ./a.out 1000000 128\n'
-nvprof --unified-memory-profiling off ./a.out 1000000 128
-printf '\nnvprof --unified-memory-profiling off ./a.out 100000 128\n'
-nvprof --unified-memory-profiling off ./a.out 100000 128
-printf '\nnvprof --unified-memory-profiling off ./a.out 10000 128\n'
-nvprof --unified-memory-profiling off ./a.out 10000 128
-printf '\nnvprof --unified-memory-profiling off ./a.out 1000 128\n'
-nvprof --unified-memory-profiling off ./a.out 1000 128
-printf '\nnvprof --unified-memory-profiling off ./a.out 100000000 32\n'
-nvprof --unified-memory-profiling off ./a.out 100000000 32
-printf '\nnvprof --unified-memory-profiling off ./a.out 100000000 64\n'
-nvprof --unified-memory-profiling off ./a.out 100000000 64
-printf '\nnvprof --unified-memory-profiling off ./a.out 100000000 256\n'
-nvprof --unified-memory-profiling off ./a.out 100000000 256
-printf '\nnvprof --unified-memory-profiling off ./a.out 100000000 512\n'
-nvprof --unified-memory-profiling off ./a.out 100000000 512
-printf '\nnvprof --unified-memory-profiling off ./a.out 100000000 1024\n'
-nvprof --unified-memory-profiling off ./a.out 100000000 1024
+printf '\nnvprof --unified-memory-profiling off ./a.out 100000000\n'
+nvprof --unified-memory-profiling off ./a.out 100000000
+printf '\nnvprof --unified-memory-profiling off ./a.out 10000000\n'
+nvprof --unified-memory-profiling off ./a.out 10000000
+printf '\nnvprof --unified-memory-profiling off ./a.out 1000000\n'
+nvprof --unified-memory-profiling off ./a.out 1000000
+printf '\nnvprof --unified-memory-profiling off ./a.out 100000\n'
+nvprof --unified-memory-profiling off ./a.out 100000
+printf '\nnvprof --unified-memory-profiling off ./a.out 10000\n'
+nvprof --unified-memory-profiling off ./a.out 10000
+printf '\nnvprof --unified-memory-profiling off ./a.out 1000\n'
+nvprof --unified-memory-profiling off ./a.out 1000
 
 printf '\n===================================================\n'
 printf 'cd ../07*'
