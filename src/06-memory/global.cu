@@ -1,3 +1,4 @@
+#include "error.cuh"
 #include <stdio.h>
 __device__ int x = 1;
 __device__ int y[2];
@@ -11,6 +12,7 @@ void __global__ my_kernel(void)
 int main(void)
 {
     my_kernel<<<1, 1>>>();
-    cudaDeviceReset();
+    CHECK(cudaDeviceReset())
     return 0;
 }
+
