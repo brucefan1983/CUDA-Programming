@@ -47,7 +47,7 @@ There is no source code for this chapter.
 | `add1.cu`      | adding up two arrays using `CUDA` |
 | `add2wrong.cu` | what if the memory transfer direction is wrong? |
 | `add3if.cu`    | when do we need an if statement in the kernel? |
-| `add4device.cu`| how to define and call device functions? |
+| `add4device.cu`| how to define and call `__device__` functions? |
 
 
 ### Chapter 4: Error checking
