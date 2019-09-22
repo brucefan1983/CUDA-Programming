@@ -62,7 +62,6 @@ There is no source code for this chapter.
 |:-----------------------|:----------------|
 | `add.cpp`              | timing `C++` code |
 | `add.cu`               | timing `CUDA` code using nvprof |
-| `copy.cu`              | theoretical and effective memory bandwidths |
 | `arithmetic.cpp`       | increasing arithmetic intensity in `C++` |
 | `arithmetic.cu`        | increasing arithmetic intensity in `CUDA` |
 
@@ -75,7 +74,7 @@ There is no source code for this chapter.
 
 
 
-### Chapter 7: Using shared memory: matrix transpose
+### Chapter 7: Using global memory: matrix transpose
 | file                                   | what to learn? |
 |:---------------------------------------|:---------------|
 | `copy.cu`                              | get the effective bandwidth for matrix copying |
