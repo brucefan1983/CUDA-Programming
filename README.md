@@ -71,6 +71,7 @@ There is no source code for this chapter.
 | file                   | what to learn ? |
 |:-----------------------|:----------------|
 | `global.cu`           | how to use static global memory? |
+| `device_query.cu`     | how to query some properties of your GPU? |
 
 
 
