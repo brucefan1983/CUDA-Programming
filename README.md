@@ -4,7 +4,7 @@ Source codes for my `CUDA` programming book
 ## About the book:
   * To be published by in early 2020.
   * The language for the book is **Chinese**.
-  * Covers from Kepler to Volta and is based on `CUDA` 10.1.
+  * Covers **from Kepler to Volta** and is based on `CUDA` 10.1.
   * The book has two parts:
     * Part 1: Teaches `CUDA` programming step by step (14 chapters);
     * part 2: Developing a molecular dynamics code from the ground up (6 chapters) 
@@ -22,7 +22,7 @@ Source codes for my `CUDA` programming book
   * `src/results_k40.txt` (using a workstation with Tesla K40)
   * `src/results_p100.txt` (using a supercomputer with Tesla P100: https://research.csc.fi/taito-gpu)
 
-## Table of contents and List of source codes:
+## Table of contents and list of source codes:
 
 
 ### Chapter 1: Introduction to GPU hardware and `CUDA` programming tools
@@ -47,6 +47,7 @@ There is no source code for this chapter.
 | `add1.cu`      | adding up two arrays using `CUDA` |
 | `add2wrong.cu` | what if the memory transfer direction is wrong? |
 | `add3if.cu`    | when do we need an if statement in the kernel? |
+| `add4device.cu`| how to define and call device functions? |
 
 
 ### Chapter 4: Error checking
@@ -67,7 +68,10 @@ There is no source code for this chapter.
 
 
 ### Chapter 6: Memory organization in `CUDA`
-There is no source code for this chapter.
+| file                   | what to learn ? |
+|:-----------------------|:----------------|
+| `global.cu`           | how to use static global memory? |
+
 
 
 ### Chapter 7: Using shared memory: matrix transpose
