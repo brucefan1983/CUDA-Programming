@@ -4,7 +4,7 @@ Source codes for my `CUDA` programming book
 ## About the book:
   * To be published by in early 2020.
   * The language for the book is **Chinese**.
-  * Covers **from Kepler to Volta** and is based on `CUDA` 10.1.
+  * Covers **from Kepler to Turing (compute capability 3.0-7.5)** and is based on `CUDA` 10.1.
   * The book has two parts:
     * Part 1: Teaches `CUDA` programming step by step (14 chapters);
     * part 2: Developing a molecular dynamics code from the ground up (6 chapters) 
