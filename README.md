@@ -89,6 +89,7 @@ There is no source code for this chapter.
 | `reduce1one_kernel.cu`       | a slow version for reduction using one kernel |
 | `reduce2shared.cu`           | a faster version for reduction using shared memory |
 | `reduce3more_parallelism.cu` | an even faster version for reduction with more parallelism |
+| `reduce4two_kernels.cu`      | an even faster version with two kernels |
 | `shared_with_conflict.cu`    | using shared memory for matrix transpose but with bank conflict |
 | `shared_without_conflict.cu` | using shared memory for matrix transpose and without bank conflict |
 
