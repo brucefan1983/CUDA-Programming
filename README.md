@@ -75,23 +75,22 @@ There is no source code for this chapter.
 
 
 ### Chapter 7: Using global memory: matrix transpose
-| file                                   | what to learn? |
-|:---------------------------------------|:---------------|
-| `copy.cu`                              | get the effective bandwidth for matrix copying |
-| `transpose1global_coalesced_read.cu`   | coalesced read but non-coalesced write |
-| `transpose2global_coalesced_write.cu`  | coalesced write but non-coalesced read |
-| `transpose3global_ldg.cu`              | using `__ldg` for non-coalesced read (not needed for Pascal) |
-| `transpose4shared_with_conflict.cu`    | using shared memory but with bank conflict |
-| `transpose5shared_without_conflict.cu` | using shared memory and without bank conflict |
+| file                  | what to learn? |
+|:----------------------|:---------------|
+| `copy.cu`             | get the effective bandwidth for matrix copying |
+| `coalesced_read.cu`   | coalesced read but non-coalesced write |
+| `coalesced_write.cu`  | coalesced write but non-coalesced read |
+| `ldg.cu`              | using `__ldg` for non-coalesced read (not needed for Pascal) |
 
-
-### Chapter 8: Using shared memory: reduction
+### Chapter 8: Using shared memory: reduction and matrix transpose
 | file                         | what to learn ? |
 |:-----------------------------| :---------------|
-| `reduce1.cpp`                | reduction in `C++` |
-| `reduce2one_kernel.cu`       | a slow version for reduction using one kernel |
-| `reduce3two_kernels.cu`      | a faster version for reduction using two kernels |
-| `reduce4more_parallelism.cu` | an even faster version for reduction with more parallelism |
+| `reduce.cpp`                 | reduction in `C++` |
+| `reduce1one_kernel.cu`       | a slow version for reduction using one kernel |
+| `reduce2shared.cu`           | a faster version for reduction using shared memory |
+| `reduce3more_parallelism.cu` | an even faster version for reduction with more parallelism |
+| `shared_with_conflict.cu`    | using shared memory for matrix transpose but with bank conflict |
+| `shared_without_conflict.cu` | using shared memory for matrix transpose and without bank conflict |
 
 
 ### Chapter 9: Using atomic functions
