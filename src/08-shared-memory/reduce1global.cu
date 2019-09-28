@@ -28,20 +28,13 @@ int main(void)
 void __global__ reduce(real *g_x, real *g_y, int N)
 {
     int tid = threadIdx.x;
-    int bid = blockIdx.x;
-    int n = bid * blockDim.x + tid;
-    __shared__ real s_y[128];
-    s_y[tid] = 0.0;
-    if (n < N) { s_y[tid] += g_x[n]; }
-    __syncthreads();
-
-    for (int offset = blockDim.x >> 1; offset > 0; offset >>= 1)
+    real *x = g_x + blockDim.x * blockIdx.x;
+    for (int offset = blockDim.x / 2; offset > 0; offset /= 2)
     {
-        if (tid < offset) { s_y[tid] += s_y[tid + offset]; }
+        if (tid < offset) { x[tid] += x[tid + offset]; }
         __syncthreads();
     }
-
-    if (tid == 0) { g_y[bid] = s_y[0]; }
+    if (tid == 0) { g_y[blockIdx.x] = x[0]; }
 }
 
 real reduce(real *x, int N)
