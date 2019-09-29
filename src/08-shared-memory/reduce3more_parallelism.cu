@@ -5,7 +5,7 @@
 #else
     typedef float real;
 #endif
-#define NUM_ROUNDS 4
+#define NUM_ROUNDS 10
 
 real reduce(real *x, int N);
 
@@ -41,12 +41,11 @@ void __global__ reduce(real *g_x, real *g_y, int N)
         if (n < N) { y += g_x[n]; }
     }
     s_y[tid] = y;
-    __syncthreads();
 
     for (int offset = blockDim.x >> 1; offset > 0; offset >>= 1)
     {
-        if (tid < offset) { s_y[tid] += s_y[tid + offset]; }
         __syncthreads();
+        if (tid < offset) { s_y[tid] += s_y[tid + offset]; }
     }
 
     if (tid == 0) { g_y[bid] = s_y[0]; }

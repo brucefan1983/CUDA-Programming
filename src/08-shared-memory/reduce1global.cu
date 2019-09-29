@@ -29,10 +29,10 @@ void __global__ reduce(real *g_x, real *g_y, int N)
 {
     int tid = threadIdx.x;
     real *x = g_x + blockDim.x * blockIdx.x;
-    for (int offset = blockDim.x / 2; offset > 0; offset /= 2)
+    for (int offset = blockDim.x >> 1; offset > 0; offset >>= 1)
     {
-        if (tid < offset) { x[tid] += x[tid + offset]; }
         __syncthreads();
+        if (tid < offset) { x[tid] += x[tid + offset]; }
     }
     if (tid == 0) { g_y[blockIdx.x] = x[0]; }
 }
