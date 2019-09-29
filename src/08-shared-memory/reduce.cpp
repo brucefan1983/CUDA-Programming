@@ -18,7 +18,7 @@ int main(void)
     double time_used = (time_finish - time_begin) 
         / double(CLOCKS_PER_SEC);
     printf("Time used = %f s.\n", time_used);
-    printf("sum = %g.\n", sum);
+    printf("sum = %f.\n", sum);
     free(x);
     return 0;
 }
