@@ -10,12 +10,18 @@
 const int TILE_DIM = 32;
 const int BLOCK_Y = 4;
 
-__global__ void transpose(real *A, real *B, int N);
-void print_matrix(int N, real *A);
+__global__ void transpose(const real *A, real *B, const int N);
+void print_matrix(const int N, const real *A);
 
 int main(int argc, char **argv)
 {
+    if (argc != 2) 
+    {
+        printf("usage: %s N\n", argv[0]);
+        exit(1);
+    }
     int N = atoi(argv[1]);
+
     int N2 = N * N;
     int grid_size_x = (N - 1) / TILE_DIM + 1;
     int grid_size_y = (N - 1) / TILE_DIM + 1;
@@ -25,7 +31,10 @@ int main(int argc, char **argv)
     int M = sizeof(real) * N2;
     real *h_A = (real *)malloc(M);
     real *h_B = (real *)malloc(M);
-    for (int n = 0; n < N2; ++n) { h_A[n] = n; }
+    for (int n = 0; n < N2; ++n)
+    {
+        h_A[n] = n;
+    }
     real *A, *B;
     CHECK(cudaMalloc(&A, M))
     CHECK(cudaMalloc(&B, M))
@@ -42,13 +51,14 @@ int main(int argc, char **argv)
         print_matrix(N, h_B);
     }
 
-    free(h_A); free(h_B);
+    free(h_A);
+    free(h_B);
     CHECK(cudaFree(A))
     CHECK(cudaFree(B))
     return 0;
 }
 
-__global__ void transpose(real *A, real *B, int N)
+__global__ void transpose(const real *A, real *B, const int N)
 {
     __shared__ real S[TILE_DIM][TILE_DIM + 1];
     int bx = blockIdx.x * TILE_DIM;
@@ -76,7 +86,7 @@ __global__ void transpose(real *A, real *B, int N)
     }
 }
 
-void print_matrix(int N, real *A)
+void print_matrix(const int N, const real *A)
 {
     for (int ny = 0; ny < N; ny++)
     {
