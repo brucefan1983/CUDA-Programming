@@ -1,11 +1,13 @@
 #include "error.cuh"
 #include <stdio.h>
-#define TILE_DIM 32
+
 #ifdef USE_DP
     typedef double real;
 #else
     typedef float real;
 #endif
+
+const int TILE_DIM = 32;
 
 __global__ void transpose(real *A, real *B, int N);
 void print_matrix(int N, real *A);
