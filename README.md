@@ -78,6 +78,7 @@ There is no source code for this chapter.
 | file                  | what to learn? |
 |:----------------------|:---------------|
 | `copy.cu`             | get the effective bandwidth for matrix copying |
+| `copy_unroll.cu`      | unrolling can make it faster|
 | `coalesced_read.cu`   | coalesced read but non-coalesced write |
 | `coalesced_write.cu`  | coalesced write but non-coalesced read |
 | `ldg.cu`              | using `__ldg` for non-coalesced read (not needed for Pascal) |
@@ -86,18 +87,19 @@ There is no source code for this chapter.
 | file                         | what to learn ? |
 |:-----------------------------| :---------------|
 | `reduce.cpp`                 | reduction in `C++` |
-| `reduce1one_kernel.cu`       | a slow version for reduction using one kernel |
+| `reduce1global.cu`           | a slow version for reduction using global memory only |
 | `reduce2shared.cu`           | a faster version for reduction using shared memory |
 | `reduce3more_parallelism.cu` | an even faster version for reduction with more parallelism |
 | `reduce4dynamic.cu`          | using dynamic shared memory for reduction |
 | `shared_with_conflict.cu`    | using shared memory for matrix transpose but with bank conflict |
 | `shared_without_conflict.cu` | using shared memory for matrix transpose and without bank conflict |
+| `transpose_unroll.cu`        | using unrolling for transpose |
 
 
 ### Chapter 9: Using atomic functions
 | file               | what to learn ? |
 |:-------------------| :---------------|
-| `reduce5atomic.cu` | using `atomicAdd()` to eliminate the second kernel |
+| `reduce5atomic.cu` | using `atomicAdd()` to get the final answer |
 
 
 ### Chapter 10: Using warp-level functions
