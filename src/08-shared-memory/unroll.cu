@@ -51,25 +51,27 @@ int main(int argc, char **argv)
 __global__ void transpose(real *A, real *B, int N)
 {
     __shared__ real S[TILE_DIM][TILE_DIM + 1];
+    int bx = blockIdx.x * TILE_DIM;
+    int by = blockIdx.y * TILE_DIM;
 
-    int nx = blockIdx.x * TILE_DIM + threadIdx.x;
-    int ny = blockIdx.y * TILE_DIM + threadIdx.y;
+    int nx1 = bx + threadIdx.x;
+    int ny1 = by + threadIdx.y;
     for (int y = 0; y < TILE_DIM; y += BLOCK_Y)
     {
-        if (nx < N && (ny + y) < N)
+        if (nx1 < N && (ny1 + y) < N)
         {
-            S[threadIdx.y + y][threadIdx.x] = A[(ny + y) * N + nx];
+            S[threadIdx.y + y][threadIdx.x] = A[(ny1 + y) * N + nx1];
         }
     }
     __syncthreads();
 
-    nx = blockIdx.x * TILE_DIM + threadIdx.y;
-    ny = blockIdx.y * TILE_DIM + threadIdx.x;
+    int nx2 = bx + threadIdx.y;
+    int ny2 = by + threadIdx.x;
     for (int y = 0; y < TILE_DIM; y += BLOCK_Y)
     {
-        if ((nx + y) < N && ny < N)
+        if ((nx2 + y) < N && ny2 < N)
         {
-            B[(nx + y) * N + ny] = S[threadIdx.x][threadIdx.y + y];
+            B[(nx2 + y) * N + ny2] = S[threadIdx.x][threadIdx.y + y];
         }
     }
 }

@@ -1,11 +1,13 @@
 #include "error.cuh"
 #include <stdio.h>
-#define TILE_DIM 32
+
 #ifdef USE_DP
     typedef double real;
 #else
     typedef float real;
 #endif
+
+const int TILE_DIM = 32;
 
 __global__ void transpose(real *A, real *B, int N);
 void print_matrix(int N, real *A);
@@ -48,8 +50,8 @@ int main(int argc, char **argv)
 __global__ void transpose(real *A, real *B, int N)
 {
     __shared__ real S[TILE_DIM][TILE_DIM + 1];
-    int bx = blockIdx.x * blockDim.x;
-    int by = blockIdx.y * blockDim.y;
+    int bx = blockIdx.x * TILE_DIM;
+    int by = blockIdx.y * TILE_DIM;
 
     int nx1 = bx + threadIdx.x;
     int ny1 = by + threadIdx.y;
