@@ -8,6 +8,7 @@
 #endif
 
 const int TILE_DIM = 32;
+const int BLOCK_Y = 4;
 
 __global__ void copy(real *A, real *B, int N);
 void print_matrix(int N, real *A);
@@ -18,7 +19,7 @@ int main(int argc, char **argv)
     int N2 = N * N;
     int grid_size_x = (N - 1) / TILE_DIM + 1;
     int grid_size_y = (N - 1) / TILE_DIM + 1;
-    dim3 block_size(TILE_DIM, TILE_DIM);
+    dim3 block_size(TILE_DIM, BLOCK_Y);
     dim3 grid_size(grid_size_x, grid_size_y);
 
     int M = sizeof(real) * N2;
@@ -51,8 +52,14 @@ __global__ void copy(real *A, real *B, int N)
 {
     int nx = blockIdx.x * TILE_DIM + threadIdx.x;
     int ny = blockIdx.y * TILE_DIM + threadIdx.y;
-    int index = ny * N + nx;
-    if (nx < N && ny < N) B[index] = A[index];
+    for (int y = 0; y < TILE_DIM; y += BLOCK_Y)
+    {
+        if (nx < N && (ny + y) < N)
+        {
+            int index = (ny + y) * N + nx;
+            B[index] = A[index];
+        }
+    }
 }
 
 void print_matrix(int N, real *A)
