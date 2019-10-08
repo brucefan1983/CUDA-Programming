@@ -9,12 +9,18 @@
 
 const int TILE_DIM = 32;
 
-__global__ void copy(real *A, real *B, int N);
-void print_matrix(int N, real *A);
+__global__ void copy(const real *A, real *B, const int N);
+void print_matrix(const int N, const real *A);
 
 int main(int argc, char **argv)
 {
+    if (argc != 2) 
+    {
+        printf("usage: %s N\n", argv[0]);
+        exit(1);
+    }
     int N = atoi(argv[1]);
+
     int N2 = N * N;
     int grid_size_x = (N - 1) / TILE_DIM + 1;
     int grid_size_y = (N - 1) / TILE_DIM + 1;
@@ -24,7 +30,10 @@ int main(int argc, char **argv)
     int M = sizeof(real) * N2;
     real *h_A = (real *)malloc(M);
     real *h_B = (real *)malloc(M);
-    for (int n = 0; n < N2; ++n) { h_A[n] = n; }
+    for (int n = 0; n < N2; ++n)
+    {
+        h_A[n] = n;
+    }
     real *A, *B;
     CHECK(cudaMalloc(&A, M))
     CHECK(cudaMalloc(&B, M))
@@ -41,21 +50,25 @@ int main(int argc, char **argv)
         print_matrix(N, h_B);
     }
 
-    free(h_A); free(h_B);
+    free(h_A);
+    free(h_B);
     CHECK(cudaFree(A))
     CHECK(cudaFree(B))
     return 0;
 }
 
-__global__ void copy(real *A, real *B, int N)
+__global__ void copy(const real *A, real *B, const int N)
 {
     int nx = blockIdx.x * TILE_DIM + threadIdx.x;
     int ny = blockIdx.y * TILE_DIM + threadIdx.y;
     int index = ny * N + nx;
-    if (nx < N && ny < N) B[index] = A[index];
+    if (nx < N && ny < N)
+    {
+        B[index] = A[index];
+    }
 }
 
-void print_matrix(int N, real *A)
+void print_matrix(const int N, const real *A)
 {
     for (int ny = 0; ny < N; ny++)
     {
