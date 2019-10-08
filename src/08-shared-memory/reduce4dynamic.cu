@@ -1,11 +1,13 @@
 #include "error.cuh"
 #include <stdio.h>
+
 #ifdef USE_DP
     typedef double real;
 #else
     typedef float real;
 #endif
-#define NUM_ROUNDS 10
+
+const int NUM_ROUNDS = 10;
 
 real reduce(real *x, int N);
 
