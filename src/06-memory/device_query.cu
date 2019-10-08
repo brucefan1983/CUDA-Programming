@@ -4,9 +4,14 @@
 int main(int argc, char *argv[])
 {
     int device_id = 0;
+    if (argc > 1) device_id = atoi(argv[1]);
+    CHECK(cudaSetDevice(device_id))
+
     cudaDeviceProp prop;
     CHECK(cudaGetDeviceProperties(&prop, device_id))
 
+    printf("Device id:                                 %d\n",
+        device_id);
     printf("Device name:                               %s\n",
         prop.name);
     printf("Compute capability:                        %d.%d\n",
@@ -38,3 +43,4 @@ int main(int argc, char *argv[])
 
     return 0;
 }
+
