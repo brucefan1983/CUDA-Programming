@@ -5,23 +5,31 @@
 
 #ifdef USE_DP
     typedef double real;
-    #define EPSILON 1.0e-14
+    const real EPSILON = 1.0e-14;
 #else
     typedef float real;
-    #define EPSILON 1.0e-6
+    const real EPSILON = 1.0e-6;
 #endif
-void __global__ arithmetic(real *x, int N);
-void check(real *x, int N);
+
+void __global__ arithmetic(real *x, const int N);
+void check(const real *x, const int N);
 
 int main(int argc, char **argv)
 {
+    if (argc != 2) 
+    {
+        printf("usage: %s N\n", argv[0]);
+        exit(1);
+    }
     int N = atoi(argv[1]);
-    const int block_size = 128;
+
+
     int M = sizeof(real) * N;
     real *x = (real*) malloc(M);
     real *g_x;
     CHECK(cudaMalloc((void **)&g_x, M))
 
+    const int block_size = 128;
     int grid_size = (N - 1) / block_size + 1;
     arithmetic<<<grid_size, block_size>>>(g_x, N);
    
@@ -34,10 +42,10 @@ int main(int argc, char **argv)
     return 0;
 }
 
-void __global__ arithmetic(real *g_x, int N)
+void __global__ arithmetic(real *g_x, const int N)
 {
     int n = blockDim.x * blockIdx.x + threadIdx.x;
-    if (n < N) 
+    if (n < N)
     {
         real a = 0;
         for (int m = 0; m < 1000; ++m)
@@ -48,12 +56,15 @@ void __global__ arithmetic(real *g_x, int N)
     }
 }
 
-void check(real *x, int N)
+void check(const real *y, const int N)
 {
-    int has_error = 0;
+    bool has_error = false;
     for (int n = 0; n < N; ++n)
     {
-        has_error += (fabs(x[n] - 1000.0) > EPSILON);
+        if (fabs(y[n] - 1000.0) > EPSILON)
+        {
+            has_error = true;
+        }
     }
     printf("%s\n", has_error ? "Has errors" : "No errors");
 }

@@ -2,29 +2,29 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
-#define EPSILON 1.0e-14
-void arithmetic(double *x, int N);
-void check(double *x, int N);
+
+const double EPSILON = 1.0e-14;
+void arithmetic(double *x, const int N);
+void check(const double *x, const int N);
 
 int main(void)
 {
-    int N = 1000000;
-    int M = sizeof(double) * N;
+    const int N = 1000000;
+    const int M = sizeof(double) * N;
     double *x = (double*) malloc(M);
 
     clock_t time_begin = clock();
     arithmetic(x, N);
     clock_t time_finish = clock();
-    double time_used = (time_finish - time_begin)
-                     / double(CLOCKS_PER_SEC);
-    printf("Time used for host function = %g s.\n", time_used);
+    double time_used = (time_finish - time_begin) / double(CLOCKS_PER_SEC);
+    printf("Time used = %g s.\n", time_used);
 
     check(x, N);
     free(x);
     return 0;
 }
 
-void arithmetic(double *x, int N)
+void arithmetic(double *x, const int N)
 {
     for (int n = 0; n < N; ++n)
     {
@@ -37,12 +37,15 @@ void arithmetic(double *x, int N)
     }
 }
 
-void check(double *y, int N)
+void check(const double *y, const int N)
 {
-    int has_error = 0;
+    bool has_error = false;
     for (int n = 0; n < N; ++n)
     {
-        has_error += (fabs(y[n] - 1000.0) > EPSILON);
+        if (fabs(y[n] - 1000.0) > EPSILON)
+        {
+            has_error = true;
+        }
     }
     printf("%s\n", has_error ? "Has errors" : "No errors");
 }
