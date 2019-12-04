@@ -11,7 +11,7 @@ int main(void)
 {
     dim3 block_size(2, 4);
     hello_from_gpu<<<1, block_size>>>();
-    cudaDeviceReset();
+    cudaDeviceSynchronize();
     return 0;
 }
 
