@@ -1,7 +1,10 @@
 #include <math.h>
 #include <stdio.h>
 
-const double EPSILON = 1.0e-14;
+const double EPSILON = 1.0e-15;
+const double a = 1.23;
+const double b = 2.34;
+const double c = 3.57;
 void __global__ add1(const double *x, const double *y, double *z, const int N);
 void __global__ add2(const double *x, const double *y, double *z, const int N);
 void __global__ add3(const double *x, const double *y, double *z, const int N);
@@ -11,43 +14,44 @@ int main(void)
 {
     const int N = 100000001;
     const int M = sizeof(double) * N;
-    double *x = (double*) malloc(M);
-    double *y = (double*) malloc(M);
-    double *z = (double*) malloc(M);
+    double *h_x = (double*) malloc(M);
+    double *h_y = (double*) malloc(M);
+    double *h_z = (double*) malloc(M);
+
     for (int n = 0; n < N; ++n)
     {
-        x[n] = 1.0;
-        y[n] = 2.0;
+        h_x[n] = a;
+        h_y[n] = b;
     }
 
-    double *g_x, *g_y, *g_z;
-    cudaMalloc((void **)&g_x, M);
-    cudaMalloc((void **)&g_y, M);
-    cudaMalloc((void **)&g_z, M);
-    cudaMemcpy(g_x, x, M, cudaMemcpyHostToDevice);
-    cudaMemcpy(g_y, y, M, cudaMemcpyHostToDevice);
+    double *d_x, *d_y, *d_z;
+    cudaMalloc((void **)&d_x, M);
+    cudaMalloc((void **)&d_y, M);
+    cudaMalloc((void **)&d_z, M);
+    cudaMemcpy(d_x, h_x, M, cudaMemcpyHostToDevice);
+    cudaMemcpy(d_y, h_y, M, cudaMemcpyHostToDevice);
 
     const int block_size = 128;
-    const int grid_size = (N - 1) / block_size + 1;
+    const int grid_size = (N + block_size - 1) / block_size;
 
-    add1<<<grid_size, block_size>>>(g_x, g_y, g_z, N);
-    cudaMemcpy(z, g_z, M, cudaMemcpyDeviceToHost);
-    check(z, N);
+    add1<<<grid_size, block_size>>>(d_x, d_y, d_z, N);
+    cudaMemcpy(h_z, d_z, M, cudaMemcpyDeviceToHost);
+    check(h_z, N);
 
-    add2<<<grid_size, block_size>>>(g_x, g_y, g_z, N);
-    cudaMemcpy(z, g_z, M, cudaMemcpyDeviceToHost);
-    check(z, N);
+    add2<<<grid_size, block_size>>>(d_x, d_y, d_z, N);
+    cudaMemcpy(h_z, d_z, M, cudaMemcpyDeviceToHost);
+    check(h_z, N);
 
-    add3<<<grid_size, block_size>>>(g_x, g_y, g_z, N);
-    cudaMemcpy(z, g_z, M, cudaMemcpyDeviceToHost);
-    check(z, N);
+    add3<<<grid_size, block_size>>>(d_x, d_y, d_z, N);
+    cudaMemcpy(h_z, d_z, M, cudaMemcpyDeviceToHost);
+    check(h_z, N);
 
-    free(x);
-    free(y);
-    free(z);
-    cudaFree(g_x);
-    cudaFree(g_y);
-    cudaFree(g_z);
+    free(h_x);
+    free(h_y);
+    free(h_z);
+    cudaFree(d_x);
+    cudaFree(d_y);
+    cudaFree(d_z);
     return 0;
 }
 
@@ -98,7 +102,7 @@ void check(const double *z, const int N)
     bool has_error = false;
     for (int n = 0; n < N; ++n)
     {
-        if (fabs(z[n] - 3.0) > EPSILON)
+        if (fabs(z[n] - c) > EPSILON)
         {
             has_error = true;
         }
