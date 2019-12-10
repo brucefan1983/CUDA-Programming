@@ -1,6 +1,9 @@
 # `CUDA`-Programming
 Source codes for my `CUDA` programming book
 
+## Warning
+* The code is still under development.
+
 ## About the book:
   * To be published by in early 2020.
   * The language for the book is **Chinese**.
