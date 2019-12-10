@@ -14,7 +14,7 @@ printf '\n add3if.cu \n'
 nvcc add3if.cu -o add3if
 ./add3if
 
-printf '\n hello4.cu \n'
+printf '\n add4device.cu \n'
 nvcc add4device.cu -o add4device
 ./add4device
 
