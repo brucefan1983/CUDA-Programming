@@ -50,8 +50,8 @@ int main(void)
         CHECK(cudaEventDestroy(stop));
     }
 
-    float t_ave = t_sum / NUM_REPEATS;
-    float t_err = sqrt(t2_sum / NUM_REPEATS - t_ave * t_ave);
+    const float t_ave = t_sum / NUM_REPEATS;
+    const float t_err = sqrt(t2_sum / NUM_REPEATS - t_ave * t_ave);
     printf("Time = %g +- %g ms.\n", t_ave, t_err);
 
     free(x);

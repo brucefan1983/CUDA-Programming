@@ -61,8 +61,8 @@ int main(int argc, char **argv)
         CHECK(cudaEventDestroy(stop));
     }
 
-    float t_ave = t_sum / NUM_REPEATS;
-    float t_err = sqrt(t2_sum / NUM_REPEATS - t_ave * t_ave);
+    const float t_ave = t_sum / NUM_REPEATS;
+    const float t_err = sqrt(t2_sum / NUM_REPEATS - t_ave * t_ave);
     printf("Time = %g +- %g ms.\n", t_ave, t_err);
 
     free(h_x);
@@ -72,7 +72,7 @@ int main(int argc, char **argv)
 
 void __global__ arithmetic(real *d_x, const real x0, const int N)
 {
-    int n = blockDim.x * blockIdx.x + threadIdx.x;
+    const int n = blockDim.x * blockIdx.x + threadIdx.x;
     if (n < N)
     {
         real x_tmp = d_x[n];

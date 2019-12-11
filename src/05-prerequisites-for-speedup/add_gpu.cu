@@ -68,8 +68,8 @@ int main(void)
         CHECK(cudaEventDestroy(stop));
     }
 
-    float t_ave = t_sum / NUM_REPEATS;
-    float t_err = sqrt(t2_sum / NUM_REPEATS - t_ave * t_ave);
+    const float t_ave = t_sum / NUM_REPEATS;
+    const float t_err = sqrt(t2_sum / NUM_REPEATS - t_ave * t_ave);
     printf("Time = %g +- %g ms.\n", t_ave, t_err);
 
     CHECK(cudaMemcpy(h_z, d_z, M, cudaMemcpyDeviceToHost));
@@ -86,7 +86,7 @@ int main(void)
 
 void __global__ add(const real *x, const real *y, real *z, const int N)
 {
-    int n = blockDim.x * blockIdx.x + threadIdx.x;
+    const int n = blockDim.x * blockIdx.x + threadIdx.x;
     if (n < N)
     {
         z[n] = x[n] + y[n];

@@ -39,7 +39,6 @@ int main(void)
     const int block_size = 128;
     const int grid_size = (N + block_size - 1) / block_size;
 
-
     float t_sum = 0;
     float t2_sum = 0;
     for (int repeat = 0; repeat <= NUM_REPEATS; ++repeat)
@@ -70,8 +69,8 @@ int main(void)
         CHECK(cudaEventDestroy(stop));
     }
 
-    float t_ave = t_sum / NUM_REPEATS;
-    float t_err = sqrt(t2_sum / NUM_REPEATS - t_ave * t_ave);
+    const float t_ave = t_sum / NUM_REPEATS;
+    const float t_err = sqrt(t2_sum / NUM_REPEATS - t_ave * t_ave);
     printf("Time = %g +- %g ms.\n", t_ave, t_err);
 
     check(h_z, N);
@@ -87,7 +86,7 @@ int main(void)
 
 void __global__ add(const real *x, const real *y, real *z, const int N)
 {
-    int n = blockDim.x * blockIdx.x + threadIdx.x;
+    const int n = blockDim.x * blockIdx.x + threadIdx.x;
     if (n < N)
     {
         z[n] = x[n] + y[n];
