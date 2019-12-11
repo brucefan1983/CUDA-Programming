@@ -72,7 +72,7 @@ void __device__ add3_device(const double x, const double y, double &z)
 
 void __global__ add1(const double *x, const double *y, double *z, const int N)
 {
-    int n = blockDim.x * blockIdx.x + threadIdx.x;
+    const int n = blockDim.x * blockIdx.x + threadIdx.x;
     if (n < N)
     {
         z[n] = add1_device(x[n], y[n]);
@@ -81,7 +81,7 @@ void __global__ add1(const double *x, const double *y, double *z, const int N)
 
 void __global__ add2(const double *x, const double *y, double *z, const int N)
 {
-    int n = blockDim.x * blockIdx.x + threadIdx.x;
+    const int n = blockDim.x * blockIdx.x + threadIdx.x;
     if (n < N)
     {
         add2_device(x[n], y[n], &z[n]);
@@ -90,7 +90,7 @@ void __global__ add2(const double *x, const double *y, double *z, const int N)
 
 void __global__ add3(const double *x, const double *y, double *z, const int N)
 {
-    int n = blockDim.x * blockIdx.x + threadIdx.x;
+    const int n = blockDim.x * blockIdx.x + threadIdx.x;
     if (n < N)
     {
         add3_device(x[n], y[n], z[n]);
