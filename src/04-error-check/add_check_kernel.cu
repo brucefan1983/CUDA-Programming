@@ -50,7 +50,7 @@ int main(void)
 
 void __global__ add(const double *x, const double *y, double *z, const int N)
 {
-    int n = blockDim.x * blockIdx.x + threadIdx.x;
+    const int n = blockDim.x * blockIdx.x + threadIdx.x;
     if (n < N)
     {
         z[n] = x[n] + y[n];
