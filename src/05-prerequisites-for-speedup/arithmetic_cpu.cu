@@ -14,7 +14,7 @@ void arithmetic(real *x, const real x0, const int N);
 
 int main(void)
 {
-    const int N = 100000;
+    const int N = 10000;
     const int M = sizeof(real) * N;
     real *x = (real*) malloc(M);
 
