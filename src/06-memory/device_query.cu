@@ -5,10 +5,10 @@ int main(int argc, char *argv[])
 {
     int device_id = 0;
     if (argc > 1) device_id = atoi(argv[1]);
-    CHECK(cudaSetDevice(device_id))
+    CHECK(cudaSetDevice(device_id));
 
     cudaDeviceProp prop;
-    CHECK(cudaGetDeviceProperties(&prop, device_id))
+    CHECK(cudaGetDeviceProperties(&prop, device_id));
 
     printf("Device id:                                 %d\n",
         device_id);

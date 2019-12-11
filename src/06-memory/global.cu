@@ -12,7 +12,7 @@ void __global__ my_kernel(void)
 int main(void)
 {
     my_kernel<<<1, 1>>>();
-    CHECK(cudaDeviceReset())
+    CHECK(cudaDeviceReset());
     return 0;
 }
 
