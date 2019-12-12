@@ -7,12 +7,12 @@
     typedef float real;
 #endif
 
-const int NUM_REPEATS = 10;
+const int NUM_REPEATS = 100;
 
-void timing(real *h_x, real *d_x, const int N, const int method);
-real reduce(real *d_x, const int N, const int method);
-void __global__ reduce_more(real *d_x, real *d_y, const int N);
-void __global__ reduce_atomic(real *d_x, real *d_y, const int N);
+void timing(real *h_x, real *d_x, const int N, const bool atomic);
+real reduce(real *d_x, const int N, const bool atomic);
+template<bool using_atomic>
+void __global__ reduce(real *d_x, real *d_y, const int N);
 
 int main(void)
 {
@@ -26,17 +26,17 @@ int main(void)
     real *d_x;
     CHECK(cudaMalloc(&d_x, M));
 
-    printf("\nusing atomicAdd:\n");
-    timing(h_x, d_x, N, 1);
     printf("\nusing two kernels:\n");
-    timing(h_x, d_x, N, 0);
+    timing(h_x, d_x, N, false);
+    printf("\nusing atomicAdd:\n");
+    timing(h_x, d_x, N, true);
 
     free(h_x);
     CHECK(cudaFree(d_x));
     return 0;
 }
 
-void timing(real *h_x, real *d_x, const int N, const int method)
+void timing(real *h_x, real *d_x, const int N, const bool atomic)
 {
     real sum = 0;
     float t_sum = 0;
@@ -52,7 +52,7 @@ void timing(real *h_x, real *d_x, const int N, const int method)
         CHECK(cudaEventCreate(&stop));
         CHECK(cudaEventRecord(start));
 
-        sum = reduce(d_x, N, method); 
+        sum = reduce(d_x, N, atomic); 
 
         CHECK(cudaEventRecord(stop));
         CHECK(cudaEventSynchronize(stop));
@@ -77,7 +77,7 @@ void timing(real *h_x, real *d_x, const int N, const int method)
     printf("sum = %f.\n", sum);
 }
 
-real reduce(real *d_x, const int N, const int method)
+real reduce(real *d_x, const int N, const bool atomic)
 {
     const int block_size = 1024;
     const int repeat_size = 10;
@@ -89,18 +89,18 @@ real reduce(real *d_x, const int N, const int method)
     real *d_y;
     CHECK(cudaMalloc(&d_y, ymem));
 
-    if (method == 0)
+    if (atomic)
     {
-        reduce_more<<<grid_size, block_size, smem>>>(d_x, d_y, N);
+        reduce<true><<<grid_size, block_size, smem>>>(d_x, d_y, N);
     }
     else
     {
-        reduce_atomic<<<grid_size, block_size, smem>>>(d_x, d_y, N);
+        reduce<false><<<grid_size, block_size, smem>>>(d_x, d_y, N);
     }
-    
-    if (method == 0 && grid_size > 1)
+
+    if (!atomic && grid_size > 1)
     {
-        reduce_more<<<1, block_size, smem>>>(d_y, d_y, grid_size);
+        reduce<false><<<1, block_size, smem>>>(d_y, d_y, grid_size);
     }
 
     real h_y[1];
@@ -110,7 +110,8 @@ real reduce(real *d_x, const int N, const int method)
     return h_y[0];
 }
 
-void __global__ reduce_more(real *d_x, real *d_y, const int N)
+template<bool using_atomic>
+void __global__ reduce(real *d_x, real *d_y, const int N)
 {
     const int tid = threadIdx.x;
     const int bid = blockIdx.x;
@@ -136,38 +137,16 @@ void __global__ reduce_more(real *d_x, real *d_y, const int N)
 
     if (tid == 0)
     {
-        d_y[bid] = s_y[0];
-    }
-}
-
-void __global__ reduce_atomic(real *d_x, real *d_y, const int N)
-{
-    const int tid = threadIdx.x;
-    const int bid = blockIdx.x;
-    extern __shared__ real s_y[];
-
-    real y = 0.0;
-    const int stride = blockDim.x * gridDim.x;
-    for (int n = bid * blockDim.x + tid; n < N; n += stride)
-    {
-        y += d_x[n];
-    }
-    s_y[tid] = y;
-    __syncthreads();
-
-    for (int offset = blockDim.x >> 1; offset > 0; offset >>= 1)
-    {
-        if (tid < offset)
+        if (using_atomic)
         {
-            s_y[tid] += s_y[tid + offset];
+            atomicAdd(d_y, s_y[0]);
         }
-        __syncthreads();
-    }
-
-    if (tid == 0)
-    {
-        atomicAdd(d_y, s_y[0]);
+        else
+        {
+            d_y[bid] = s_y[0];
+        }
     }
 }
+
 
 
