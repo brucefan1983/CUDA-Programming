@@ -27,7 +27,7 @@ int main(void)
     }
     real *d_x;
     CHECK(cudaMalloc(&d_x, M));
-;
+
     printf("\nusing global memory only:\n");
     timing(h_x, d_x, N, 0);
     printf("\nusing static shared memory:\n");
