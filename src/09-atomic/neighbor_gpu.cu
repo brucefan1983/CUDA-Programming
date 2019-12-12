@@ -44,7 +44,6 @@ int main(void)
     printf("\nusing atomicAdd:\n");
     timing(d_NN, d_NL, d_x, d_y, true);
 
-
     CHECK(cudaMemcpy(h_NN, d_NN, mem1, cudaMemcpyDeviceToHost));
     CHECK(cudaMemcpy(h_NL, d_NL, mem2, cudaMemcpyDeviceToHost));
 
