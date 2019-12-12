@@ -34,7 +34,7 @@ int main(void)
     timing(h_x, d_x, N, 1);
     printf("\nusing dynamic shared memory:\n");
     timing(h_x, d_x, N, 2);
-    printf("\nusing dynamic shared memory:\n");
+    printf("\nusing more parallelism:\n");
     timing(h_x, d_x, N, 3);
 
     free(h_x);
