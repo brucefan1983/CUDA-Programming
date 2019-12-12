@@ -85,8 +85,13 @@ void timing(real *h_x, real *d_x, const int N, const int method)
 
 real reduce(real *d_x, const int N, const int method)
 {
-    const int block_size = 128;
-    const int grid_size = (N + block_size - 1) / block_size;
+    const int block_size = 1024;
+    int grid_size = (N + block_size - 1) / block_size;
+    if (method == 3)
+    {
+        const int repeat_size = 10;
+        grid_size = (grid_size + repeat_size - 1) / repeat_size;
+    }
     const int M = sizeof(real) * grid_size;
     const int smem = sizeof(real) * block_size;
     real *d_y;
@@ -105,7 +110,7 @@ real reduce(real *d_x, const int N, const int method)
             reduce_dynamic<<<grid_size, block_size, smem>>>(d_x, d_y, N);
             break;
         case 3:
-            reduce_more<<<10000, block_size, smem>>>(d_x, d_y, N);
+            reduce_more<<<grid_size, block_size, smem>>>(d_x, d_y, N);
             break;
         default:
             printf("Error: wrong method\n");
@@ -152,7 +157,7 @@ void __global__ reduce_shared(real *d_x, real *d_y, const int N)
     const int tid = threadIdx.x;
     const int bid = blockIdx.x;
     const int n = bid * blockDim.x + tid;
-    __shared__ real s_y[128];
+    __shared__ real s_y[1024];
     s_y[tid] = (n < N) ? d_x[n] : 0.0;
     __syncthreads();
 
