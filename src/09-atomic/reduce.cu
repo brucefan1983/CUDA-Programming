@@ -83,14 +83,16 @@ real reduce(real *d_x, const int N, const bool atomic)
     const int repeat_size = 10;
     int grid_size = (N + block_size - 1) / block_size;
     grid_size = (grid_size + repeat_size - 1) / repeat_size;
-    const int ymem = sizeof(real) * grid_size;
+    const int ymem = atomic ? sizeof(real) : sizeof(real) * grid_size;
     const int smem = sizeof(real) * block_size;
 
+    real h_y[1] = {0};
     real *d_y;
     CHECK(cudaMalloc(&d_y, ymem));
 
     if (atomic)
     {
+        CHECK(cudaMemcpy(d_y, h_y, sizeof(real), cudaMemcpyHostToDevice));
         reduce<true><<<grid_size, block_size, smem>>>(d_x, d_y, N);
     }
     else
@@ -103,7 +105,6 @@ real reduce(real *d_x, const int N, const bool atomic)
         reduce<false><<<1, block_size, smem>>>(d_y, d_y, grid_size);
     }
 
-    real h_y[1];
     CHECK(cudaMemcpy(h_y, d_y, sizeof(real), cudaMemcpyDeviceToHost));
     CHECK(cudaFree(d_y));
 
