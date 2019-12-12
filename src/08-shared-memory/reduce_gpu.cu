@@ -205,7 +205,8 @@ void __global__ reduce_more(real *d_x, real *d_y, const int N)
     extern __shared__ real s_y[];
 
     real y = 0.0;
-    for (int n = bid * blockDim.x + tid; n < N; n += blockDim.x * gridDim.x)
+    const int stride = blockDim.x * gridDim.x;
+    for (int n = bid * blockDim.x + tid; n < N; n += stride)
     {
         y += d_x[n];
     }
