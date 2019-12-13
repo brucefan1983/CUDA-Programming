@@ -7,7 +7,7 @@
     typedef float real;
 #endif
 
-const int NUM_REPEATS = 100;
+const int NUM_REPEATS = 10;
 
 void timing(real *h_x, real *d_x, const int N, const bool atomic);
 real reduce(real *d_x, const int N, const bool atomic);
