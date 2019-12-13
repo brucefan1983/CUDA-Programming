@@ -1,95 +1,115 @@
 #include "error.cuh"
 #include <math.h>
 #include <stdio.h>
-#define EPSILON 1.0e-14
-void __global__ sum(double *x, double *y, double *z, int N);
-void run(int N_streams);
+
+#ifdef USE_DP
+    typedef double real;
+#else
+    typedef float real;
+#endif
+
+const int NUM_REPEATS = 10;
+const int N1 = 1000;
+const int MAX_NUM_STREAMS = 20;
+const int N = N1 * MAX_NUM_STREAMS;
+const int M = sizeof(real) * N;
+const int block_size = 128;
+const int grid_size = (N1 - 1) / block_size + 1;
+cudaStream_t streams[MAX_NUM_STREAMS];
+
+void timing(const real *d_x, const real *d_y, real *d_z, const int num);
 
 int main(void)
 {
-    for (int n = 0; n < 30; ++n)
+    real *h_x = (real*) malloc(M);
+    real *h_y = (real*) malloc(M);
+    for (int n = 0; n < N; ++n)
     {
-        run(n+1);
+        h_x[n] = 1.23;
+        h_y[n] = 2.34;
     }
+
+    real *d_x, *d_y, *d_z;
+    CHECK(cudaMalloc(&d_x, M));
+    CHECK(cudaMalloc(&d_y, M));
+    CHECK(cudaMalloc(&d_z, M));
+    CHECK(cudaMemcpy(d_x, h_x, M, cudaMemcpyHostToDevice));
+    CHECK(cudaMemcpy(d_y, h_y, M, cudaMemcpyHostToDevice));
+
+    for (int n = 0 ; n < MAX_NUM_STREAMS; ++n)
+    {
+        CHECK(cudaStreamCreate(&(streams[n])));
+    }
+
+    for (int num = 1; num <= MAX_NUM_STREAMS; ++num)
+    {
+        printf("\nUsing %d streams:\n", num);
+        timing(d_x, d_y, d_z, num);
+    }
+
+    for (int n = 0 ; n < MAX_NUM_STREAMS; ++n)
+    {
+        CHECK(cudaStreamDestroy(streams[n]));
+    }
+
+    free(h_x);
+    free(h_y);
+    CHECK(cudaFree(d_x));
+    CHECK(cudaFree(d_y));
+    CHECK(cudaFree(d_z));
     return 0;
 }
 
-void run(int N_streams)
+void __global__ add(const real *d_x, const real *d_y, real *d_z)
 {
-    int N1 = 1000;
-    int M1 = sizeof(double) * N1;
-    int N_all = N1 * N_streams;
-    int M_all = M1 * N_streams;
-    double *x = (double*) malloc(M_all);
-    double *y = (double*) malloc(M_all);
-    double *z = (double*) malloc(M_all);
-    for (int n = 0; n < N_all; ++n)
-    {
-        x[n] = 1.0;
-        y[n] = 2.0;
-        z[n] = 0.0;
-    }
-    double *g_x, *g_y, *g_z;
-    CHECK(cudaMalloc((void **)&g_x, M_all))
-    CHECK(cudaMalloc((void **)&g_y, M_all))
-    CHECK(cudaMalloc((void **)&g_z, M_all))
-    CHECK(cudaMemcpy(g_x, x, M_all, cudaMemcpyHostToDevice))
-    CHECK(cudaMemcpy(g_y, y, M_all, cudaMemcpyHostToDevice))
-
-    cudaStream_t *streams = (cudaStream_t *) 
-        malloc(N_streams * sizeof(cudaStream_t));
-    for (int i = 0 ; i < N_streams ; i++)
-    {
-        CHECK(cudaStreamCreate(&(streams[i])));
-    }
-
-    cudaEvent_t start, stop;
-    CHECK(cudaEventCreate(&start));
-    CHECK(cudaEventCreate(&stop));
-    CHECK(cudaEventRecord(start));
-
-    for (int i = 0; i < N_streams; i++)
-    {
-        int offset = i * N1;
-        int block_size = 128;
-        int grid_size = (N1 - 1) / block_size + 1;
-        sum<<<grid_size, block_size, 0, streams[i]>>>
-        (g_x + offset, g_y + offset, g_z + offset, N1);
-    }
-
-    CHECK(cudaEventRecord(stop));
-    CHECK(cudaEventSynchronize(stop));
-    float elapsed_time;
-    CHECK(cudaEventElapsedTime(&elapsed_time, start, stop));
-    printf("%d\t%g\n", N_streams, elapsed_time);
-
-    for (int i = 0 ; i < N_streams; i++)
-    {
-        CHECK(cudaStreamDestroy(streams[i]));
-    }
-    free(streams);
-    CHECK(cudaEventDestroy(start));
-    CHECK(cudaEventDestroy(stop));
-
-    CHECK(cudaMemcpy(z, g_z, M_all, cudaMemcpyDeviceToHost))
-
-    free(x);
-    free(y);
-    free(z);
-    CHECK(cudaFree(g_x))
-    CHECK(cudaFree(g_y))
-    CHECK(cudaFree(g_z))
-}
-
-void __global__ sum(double *x, double *y, double *z, int N)
-{
-    int n = blockDim.x * blockIdx.x + threadIdx.x;
-    if (n < N)
+    const int n = blockDim.x * blockIdx.x + threadIdx.x;
+    if (n < N1)
     {
         for (int i = 0; i < 1000000; ++i)
         {
-            z[n] = x[n] + y[n];
+            d_z[n] = d_x[n] + d_y[n];
         }
     }
 }
+
+void timing(const real *d_x, const real *d_y, real *d_z, const int num)
+{
+    float t_sum = 0;
+    float t2_sum = 0;
+
+    for (int repeat = 0; repeat <= NUM_REPEATS; ++repeat)
+    {
+        cudaEvent_t start, stop;
+        CHECK(cudaEventCreate(&start));
+        CHECK(cudaEventCreate(&stop));
+        CHECK(cudaEventRecord(start));
+
+        for (int n = 0; n < num; ++n)
+        {
+            int offset = n * N1;
+            add<<<grid_size, block_size, 0, streams[n]>>>
+            (d_x + offset, d_y + offset, d_z + offset);
+        }
+ 
+        CHECK(cudaEventRecord(stop));
+        CHECK(cudaEventSynchronize(stop));
+        float elapsed_time;
+        CHECK(cudaEventElapsedTime(&elapsed_time, start, stop));
+        printf("Time = %g ms.\n", elapsed_time);
+
+        if (repeat > 0)
+        {
+            t_sum += elapsed_time;
+            t2_sum += elapsed_time * elapsed_time;
+        }
+
+        CHECK(cudaEventDestroy(start));
+        CHECK(cudaEventDestroy(stop));
+    }
+
+    const float t_ave = t_sum / NUM_REPEATS;
+    const float t_err = sqrt(t2_sum / NUM_REPEATS - t_ave * t_ave);
+    printf("Time = %g +- %g ms.\n", t_ave, t_err);
+}
+
 
