@@ -45,6 +45,7 @@ int main(void)
 
     for (int num = 1; num <= MAX_NUM_STREAMS; num *= 2)
     {
+        printf("\nUsing %d streams:\n", num);
         timing(h_x, h_y, h_z, d_x, d_y, d_z, num);
     }
 
