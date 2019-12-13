@@ -10,7 +10,7 @@ void __global__ test_warp_primitives(void);
 int main(int argc, char **argv)
 {
     test_warp_primitives<<<1, BLOCK_SIZE>>>();
-    CHECK(cudaDeviceSynchronize())
+    CHECK(cudaDeviceSynchronize());
     return 0;
 }
 
@@ -30,14 +30,14 @@ void __global__ test_warp_primitives(void)
     unsigned mask1 = __ballot_sync(FULL_MASK, tid > 0);
     unsigned mask2 = __ballot_sync(FULL_MASK, tid == 0);
     if (tid == 0) printf("FULL_MASK = %x\n", FULL_MASK);
-    if (tid == 0) printf("nask1     = %x\n", mask1);
+    if (tid == 1) printf("nask1     = %x\n", mask1);
     if (tid == 0) printf("mask2     = %x\n", mask2);
 
     int result = __all_sync(FULL_MASK, tid);
     if (tid == 0) printf("all_sync (FULL_MASK): %d\n", result);
 
     result = __all_sync(mask1, tid);
-    if (tid == 0) printf("all_sync     (mask1): %d\n", result);
+    if (tid == 1) printf("all_sync     (mask1): %d\n", result);
 
     result = __any_sync(FULL_MASK, tid);
     if (tid == 0) printf("any_sync (FULL_MASK): %d\n", result);
