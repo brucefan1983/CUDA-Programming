@@ -3,7 +3,7 @@
 ## CPU
 | program     | S | D |
 |:------------|:---------|:---------|
-| add (chapter 5) | 1.5 ms | 3.0 ms | 77 ms  |  160 ms |
+| add (chapter 5) | 77 ms  |  160 ms |
 | arithmatic (chapter 5) | 320 ms |  450 ms |
 
 ## GPU
