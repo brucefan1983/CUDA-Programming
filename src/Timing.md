@@ -28,4 +28,7 @@
 | neighbor with atomicAdd (chapter 9) | 1.8 ms | 2.6  ms | 1.9 ms | 11 ms | - | - | - | - |
 | reduction with two kernels (chapter 9) | not used | not used | 1.0 ms | 1.6 ms | not used | not used | not used | not used |
 | reduction with atomicAdd (chapter 9) | not used | not used | 1.0 ms | 1.6 ms | not used | not used | not used | not used |
+| reduction with syncwarp (chapter 10) | not used | not used | 0.9 ms | 1.6 ms | not used | not used | not used | not used |
+| reduction with shfl (chapter 10) | not used | not used | 0.9 ms | 1.6 ms | not used | not used | not used | not used |
+| reduction with CP (chapter 10) | not used | not used | 0.9 ms | 1.6 ms | not used | not used | not used | not used |
 
