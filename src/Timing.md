@@ -16,4 +16,6 @@
 | transpose with coalesced read (chapter 7) | 4.5 ms |  6.2 ms | 5.3 ms | 5.4 ms |
 | transpose with coalesced write (chapter 7) | 1.6 ms |  2.2 ms | 2.8 ms | 3.7 ms |
 | transpose with ldg read (chapter 7) | 1.6 ms |  2.2 ms | 2.8 ms | 3.7 ms |
+| transpose with bank conflict (chapter 8) | 1.8 ms | 2.6  ms | 3.5 ms | 4.3 ms |
+| transpose with bank conflict (chapter 8) | 1.4 ms | 2.5  ms | 2.3 ms | 4.2 ms |
 
