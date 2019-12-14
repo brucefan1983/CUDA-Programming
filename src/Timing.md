@@ -5,6 +5,8 @@
 |:------------|:---------|:---------|
 | vector addition (chapter 5) | 77 ms  |  160 ms |
 | arithmatic (chapter 5) | 320 ms |  450 ms |
+| reduction (chapter 8) | 96 ms |  96 ms |
+| neighbor (chapter 9) | 230 ms |  230 ms |
 
 ## GPU
 | computation     | V100 (S) | V100 (D) | 2080ti (S) | 2080ti (D) |
