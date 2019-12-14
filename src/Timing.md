@@ -20,6 +20,10 @@
 | transpose with ldg read (chapter 7) | 1.6 ms |  2.2 ms | 2.8 ms | 3.7 ms |
 | transpose with bank conflict (chapter 8) | 1.8 ms | 2.6  ms | 3.5 ms | 4.3 ms |
 | transpose without bank conflict (chapter 8) | 1.4 ms | 2.5  ms | 2.3 ms | 4.2 ms |
+| reduction with global memory only (chapter 8) | not used | not used | 3.2 ms | 3.8 ms |
+| reduction with static shared memory (chapter 8) | not used | not used | 2.9 ms | 4.8 ms |
+| reduction with dynamic shared memory (chapter 8) | not used | not used | 2.9 ms | 4.8 ms |
+| reduction with less blocks (chapter 8) | not used | not used | 1.0 ms | 1.7 ms |
 | neighbor without atomicAdd (chapter 9) | 2.0 ms | 2.7  ms | 1.9 ms | 17 ms |
 | neighbor with atomicAdd (chapter 9) | 1.8 ms | 2.6  ms | 1.9 ms | 11 ms |
 
