@@ -80,25 +80,22 @@ There is no source code for this chapter.
 ### Chapter 7: Using global memory: matrix transpose
 | file                  | what to learn? |
 |:----------------------|:---------------|
-| `matrix.cu`             | get the effective bandwidth for matrix copying |
+| `matrix.cu`           | effects of coalesced and uncoalesced memory accesses |
 
 ### Chapter 8: Using shared memory: reduction and matrix transpose
 | file                         | what to learn ? |
 |:-----------------------------| :---------------|
-| `reduce.cpp`                 | reduction in `C++` |
-| `reduce1global.cu`           | a slow version for reduction using global memory only |
-| `reduce2shared.cu`           | a faster version for reduction using shared memory |
-| `reduce3more_parallelism.cu` | an even faster version for reduction with more parallelism |
-| `reduce4dynamic.cu`          | using dynamic shared memory for reduction |
-| `shared_with_conflict.cu`    | using shared memory for matrix transpose but with bank conflict |
-| `shared_without_conflict.cu` | using shared memory for matrix transpose and without bank conflict |
-| `transpose_unroll.cu`        | using unrolling for transpose |
+| `reduce_cpu.cu`              | reduction in `C++` |
+| `reduce_gpu.cu`              | doing reduction in CUDA |
+| `bank_conflict.cu`           | how to avoid shared memory bank conflict |
 
 
 ### Chapter 9: Using atomic functions
 | file               | what to learn ? |
 |:-------------------| :---------------|
-| `reduce5atomic.cu` | using `atomicAdd()` to get the final answer |
+| `reduce.cu`        | using `atomicAdd` for reduction (good or bad?) |
+| `neighbor_cpu.cu`  | neighbor list construction using CPU |
+| `neighbor_gpu.cu`  | neighbor list construction using GPU, with and without using `atomicAdd` |
 
 
 ### Chapter 10: Using warp-level functions
