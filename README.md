@@ -63,10 +63,10 @@ There is no source code for this chapter.
 ### Chapter 5: The crucial ingredients for obtaining speedup
 | file                   | what to learn ? |
 |:-----------------------|:----------------|
-| `add.cpp`              | timing `C++` code |
-| `add.cu`               | timing `CUDA` code using nvprof |
-| `arithmetic.cpp`       | increasing arithmetic intensity in `C++` |
-| `arithmetic.cu`        | increasing arithmetic intensity in `CUDA` |
+| `add_cpu.cu`              | timing `C++` code |
+| `add_gpu.cu`               | timing `CUDA` code using nvprof |
+| `arithmetic_cpu.cu`       | increasing arithmetic intensity in `C++` |
+| `arithmetic_gpu.cu`        | increasing arithmetic intensity in `CUDA` |
 
 
 ### Chapter 6: Memory organization in `CUDA`
@@ -80,11 +80,7 @@ There is no source code for this chapter.
 ### Chapter 7: Using global memory: matrix transpose
 | file                  | what to learn? |
 |:----------------------|:---------------|
-| `copy.cu`             | get the effective bandwidth for matrix copying |
-| `copy_unroll.cu`      | unrolling can make it faster|
-| `coalesced_read.cu`   | coalesced read but non-coalesced write |
-| `coalesced_write.cu`  | coalesced write but non-coalesced read |
-| `ldg.cu`              | using `__ldg` for non-coalesced read (not needed for Pascal) |
+| `matrix.cu`             | get the effective bandwidth for matrix copying |
 
 ### Chapter 8: Using shared memory: reduction and matrix transpose
 | file                         | what to learn ? |
