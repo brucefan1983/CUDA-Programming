@@ -34,13 +34,14 @@
 * Array length = 1.0e8.
 * CPU function takes 96 ms for both single and double precisions.
 * GPU timing results are listed in the following table:
+
 | computation     | 2080ti (S) | 2080ti (D) |
 |:------------|:---------|:---------|
 | reduction with global memory only    | 3.2 ms | 3.8 ms |
-| reduction with static shared memory  | 2.9 ms | 4.8 ms |
-| reduction with dynamic shared memory | 2.9 ms | 4.8 ms |
+| reduction with static shared memory  | 2.9 ms | 4.8 ms (?) |
+| reduction with dynamic shared memory | 2.9 ms | 4.8 ms (?) |
 | reduction with less blocks           | 1.0 ms | 1.7 ms |
-| reduction with two kernels           | 1.0 ms | 1.6 ms | 
+| reduction with two kernels           | 1.0 ms (?) | 1.6 ms (?) | 
 | reduction with atomicAdd             | 1.0 ms | 1.6 ms |
 | reduction with syncwarp              | 0.9 ms | 1.6 ms | 
 | reduction with shfl                  | 0.9 ms | 1.6 ms | 
