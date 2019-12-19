@@ -13,7 +13,7 @@
 * If we include cudaMemcpy, GeForce RTX 2080ti takes 130 ms and 250 ms using single and double precisions, respectively. Slower than the CPU!
 
 ### A function with high arithmetic intensity
-* CPU function (with an array length of $10^4$) takes 320 ms and 450 ms using single and double precisions, respectively. 
+* CPU function (with an array length of $$10^4$$) takes 320 ms and 450 ms using single and double precisions, respectively. 
 * GeForce RTX 2080ti (with an array length of $10^6$) takes 15 ms and 450 ms using single and double precisions, respectively.
 * Tesla V100 (with an array length of $10^6$) takes 11 ms and 28 ms using single and double precisions, respectively.
 
