@@ -15,7 +15,18 @@
 ### A function with high arithmetic intensity
 * CPU function (with an array length of 10^4) takes 320 ms and 450 ms using single and double precisions, respectively. 
 * GeForce RTX 2080ti (with an array length of 10^6) takes 15 ms and 450 ms using single and double precisions, respectively.
-* Tesla V100 (with an array length of $10^6$) takes 11 ms and 28 ms using single and double precisions, respectively.
+* Tesla V100 (with an array length of 10^6) takes 11 ms and 28 ms using single and double precisions, respectively.
+
+## Chapters 7 and 8
+
+| computation     | V100 (S) | V100 (D) | 2080ti (S) | 2080ti (D) | P100 (S) | P100 (D) | K40 (S) | K40 (D) |
+|:------------|:---------|:---------|:---------|:---------|:---------|:---------|:---------|:---------|
+| matrix copy (chapter 7) | 1.1 ms |  2.0 ms | 1.6 ms | 2.9 ms | 1.5 ms | - | 5.2 ms | - |
+| transpose with coalesced read (chapter 7) | 4.5 ms |  6.2 ms | 5.3 ms | 5.4 ms | 6.0 ms | - | 8.2 ms | - |
+| transpose with coalesced write (chapter 7) | 1.6 ms |  2.2 ms | 2.8 ms | 3.7 ms | 2.4 ms | - | 12 ms | - |
+| transpose with ldg read (chapter 7) | 1.6 ms |  2.2 ms | 2.8 ms | 3.7 ms | 2.4 ms | - | 7.0 ms | - |
+| transpose with bank conflict (chapter 8) | 1.8 ms | 2.6  ms | 3.5 ms | 4.3 ms | 2.0 ms | - | 7.9 ms | - |
+| transpose without bank conflict (chapter 8) | 1.4 ms | 2.5  ms | 2.3 ms | 4.2 ms | 2.0 ms | - | 7.9 ms | - |
 
 ## CPU
 | computation     | S | D |
