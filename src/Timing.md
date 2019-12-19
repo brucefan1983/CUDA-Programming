@@ -34,7 +34,6 @@
 * Array length = 1.0e8.
 * CPU function takes 96 ms for both single and double precisions.
 * GPU timing results are listed in the following table:
-## GPU
 | computation     | 2080ti (S) | 2080ti (D) |
 |:------------|:---------|:---------|
 | reduction with global memory only    | 3.2 ms | 3.8 ms |
