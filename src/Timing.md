@@ -3,7 +3,12 @@
 ## Chapter 5
 
 ### vector addition
-* CPU function takes 77 ms and 160 ms using single and double precisions, respectively.
+* CPU function takes 77 ms and 160 ms using single and double precisions, respectively. 
+* Computation times using different GPUs are listed in the table below:
+
+|  V100 (S) | V100 (D) | 2080ti (S) | 2080ti (D) | P100 (S) | P100 (D) | K40 (S) | K40 (D) |
+|:---------|:---------|:---------|:---------|:---------|:---------|:---------|:---------|
+| 1.5 ms | 3.0 ms |  2.1 ms |  4.3 ms | 2.2 ms |  4.3 ms | 6.5 ms | 13 ms |
 
 ## CPU
 | computation     | S | D |
