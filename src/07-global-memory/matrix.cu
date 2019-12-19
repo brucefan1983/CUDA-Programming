@@ -148,7 +148,7 @@ __global__ void transpose2(const real *A, real *B, const int N)
     const int ny = blockIdx.y * blockDim.y + threadIdx.y;
     if (nx < N && ny < N)
     {
-        B[ny * N + nx] = __ldg(&A[nx * N + ny]);
+        B[ny * N + nx] = A[nx * N + ny];
     }
 }
 
