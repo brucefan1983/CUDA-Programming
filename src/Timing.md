@@ -1,4 +1,9 @@
-# My testing result
+# Summary of my testing results
+
+## Chapter 5
+
+### vector addition
+* CPU function takes 77 ms and 160 ms using single and double precisions, respectively.
 
 ## CPU
 | computation     | S | D |
