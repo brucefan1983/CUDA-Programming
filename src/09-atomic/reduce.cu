@@ -12,7 +12,6 @@ const int N = 100000000;
 const int M = sizeof(real) * N;
 const int BLOCK_SIZE = 128;
 const int MAX_THREAD = 1024;
-const int NUM_ROUNDS = 10;
 
 void timing(const real *d_x, const bool atomic);
 
@@ -77,7 +76,6 @@ void __global__ reduce(const real *d_x, real *d_y, const int N)
 real reduce(const real *d_x, const bool atomic)
 {
     int grid_size = (N + BLOCK_SIZE - 1) / BLOCK_SIZE;
-    grid_size = (grid_size + NUM_ROUNDS - 1) / NUM_ROUNDS;
     const int ymem = atomic ? sizeof(real) : sizeof(real) * grid_size;
     const int smem1 = sizeof(real) * BLOCK_SIZE;
     const int smem2 = sizeof(real) * MAX_THREAD;
