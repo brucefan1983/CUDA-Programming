@@ -2,7 +2,7 @@
 Source codes for my `CUDA` programming book
 
 ## 1. Warning
-* The code is still under development.
+* The codes are still under development.
 
 ## 2. About the book:
   * To be published by in early 2020.
