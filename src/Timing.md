@@ -29,23 +29,25 @@
 | transpose without bank conflict  | 1.4 ms | 2.5 ms | 2.3 ms | 4.2 ms |  |
 
 
-## Reduction (chapters 8-10)
+## Reduction (chapters 8-10 and 14)
 
 * Array length = 1.0e8.
-* CPU function takes about 96 ms for both single and double precisions.
-* GPU timing results are listed in the following table:
+* Using single precision with both CPU and GPU.
+* GPU = Tesla K40.
 
-
-| computation     |  K 40 (S) |
-|:------------|:---------|
-| reduction with global memory only    | 16.3 ms |
-| reduction with static shared memory  | 10.8 ms |
-| reduction with dynamic shared memory | 10.8 ms |
-| reduction with two kernels           | 10.1 ms | 
-| reduction with atomicAdd             | 9.8 ms |
-| reduction with syncwarp              | 8.4 ms |
-| reduction with shfl                  | 7.0 ms |
-| reduction with CP                    | 7.0 ms |
+| computation & machine                         | time    |      result    |
+|:----------------------------------------------|:--------|:---------------|
+| CPU with naive summation                      | 96 ms   | | 
+| global memory only                            | 16.3 ms | | 
+| static shared memory                          | 10.8 ms | | 
+| dynamic shared memory                         | 10.8 ms | | 
+| two kernels                                   | 10.1 ms |  | 
+| atomicAdd                                     | 9.8 ms  | | 
+| two kernels and syncwarp                      | 8.4 ms  | | 
+| two kernels and shfl                          | 7.0 ms  | | 
+| two kernels and CP                            | 7.0 ms  | | 
+| two kernels and less blocks                   | 7.0 ms  | | 
+| two kernels and less blocks and no cudaMalloc | 7.0 ms  | | 
 
 
 ## Neighbor list construction (chapter 9)
