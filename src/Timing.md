@@ -31,9 +31,9 @@
 
 ## Reduction (chapters 8-10 and 14)
 
-* Array length = 1.0e8.
-* Using single precision with both CPU and GPU.
-* GPU = Tesla K40.
+* Array length = 1.0e8 and each element has a value of 1.23.
+* The correct summation should be 123000000.
+* Using single precision with both CPU and GPU (Tesla K40).
 
 | computation & machine                         | time    |   result  |
 |:----------------------------------------------|:--------|:----------|
