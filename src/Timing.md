@@ -38,14 +38,14 @@
 
 | computation     |  K 40 (S) |
 |:------------|:---------|
-| reduction with global memory only    | 16 ms |
-| reduction with static shared memory  | 11 ms |
-| reduction with dynamic shared memory | 11 ms |
-| reduction with two kernels           | 10 ms | 
-| reduction with atomicAdd             | 10 ms |
-| reduction with syncwarp              | ? ms |
-| reduction with shfl                  | ? ms |
-| reduction with CP                    | ? ms |
+| reduction with global memory only    | 16.3 ms |
+| reduction with static shared memory  | 10.8 ms |
+| reduction with dynamic shared memory | 10.8 ms |
+| reduction with two kernels           | 10.1 ms | 
+| reduction with atomicAdd             | 9.8 ms |
+| reduction with syncwarp              | 8.4 ms |
+| reduction with shfl                  | 7.0 ms |
+| reduction with CP                    | 7.0 ms |
 
 
 ## Neighbor list construction (chapter 9)
