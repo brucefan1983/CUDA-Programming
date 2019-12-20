@@ -11,15 +11,14 @@ using namespace cooperative_groups;
 
 const int NUM_REPEATS = 10;
 const int N = 100000000;
-const int block_size = 128;
-const int repeat_size = 10;
+const int M = sizeof(real) * N;
+const int BLOCK_SIZE = 128;
+const int MAX_THREAD = 1024;
 
-void timing(real *h_x, real *d_x, const int method);
-real reduce(real *d_x, const int method);
+void timing(const real *d_x, const int method);
 
 int main(void)
 {
-    const int M = sizeof(real) * N;
     real *h_x = (real *) malloc(M);
     for (int n = 0; n < N; ++n)
     {
@@ -27,61 +26,21 @@ int main(void)
     }
     real *d_x;
     CHECK(cudaMalloc(&d_x, M));
+    CHECK(cudaMemcpy(d_x, h_x, M, cudaMemcpyHostToDevice));
 
     printf("\nusing syncwarp:\n");
-    timing(h_x, d_x, 0);
+    timing(d_x, 0);
     printf("\nusing shfl:\n");
-    timing(h_x, d_x, 1);
+    timing(d_x, 1);
     printf("\nusing cooperative group:\n");
-    timing(h_x, d_x, 2);
+    timing(d_x, 2);
 
     free(h_x);
     CHECK(cudaFree(d_x));
     return 0;
 }
 
-void timing(real *h_x, real *d_x, const int method)
-{
-    real sum = 0;
-    float t_sum = 0;
-    float t2_sum = 0;
-
-    for (int repeat = 0; repeat < NUM_REPEATS * 2; ++repeat)
-    {
-        const int M = sizeof(real) * N;
-        CHECK(cudaMemcpy(d_x, h_x, M, cudaMemcpyHostToDevice));
-
-        cudaEvent_t start, stop;
-        CHECK(cudaEventCreate(&start));
-        CHECK(cudaEventCreate(&stop));
-        CHECK(cudaEventRecord(start));
-
-        sum = reduce(d_x, method); 
-
-        CHECK(cudaEventRecord(stop));
-        CHECK(cudaEventSynchronize(stop));
-        float elapsed_time;
-        CHECK(cudaEventElapsedTime(&elapsed_time, start, stop));
-        printf("Time = %g ms.\n", elapsed_time);
-
-        if (repeat >= NUM_REPEATS)
-        {
-            t_sum += elapsed_time;
-            t2_sum += elapsed_time * elapsed_time;
-        }
-
-        CHECK(cudaEventDestroy(start));
-        CHECK(cudaEventDestroy(stop));
-    }
-
-    const float t_ave = t_sum / NUM_REPEATS;
-    const float t_err = sqrt(t2_sum / NUM_REPEATS - t_ave * t_ave);
-    printf("Time = %g +- %g ms.\n", t_ave, t_err);
-
-    printf("sum = %f.\n", sum);
-}
-
-void __global__ reduce_syncwarp(real *d_x, real *d_y, const int N)
+void __global__ reduce_syncwarp(const real *d_x, real *d_y, const int N)
 {
     const int tid = threadIdx.x;
     const int bid = blockIdx.x;
@@ -120,7 +79,7 @@ void __global__ reduce_syncwarp(real *d_x, real *d_y, const int N)
     }
 }
 
-void __global__ reduce_shfl(real *d_x, real *d_y, const int N)
+void __global__ reduce_shfl(const real *d_x, real *d_y, const int N)
 {
     const int tid = threadIdx.x;
     const int bid = blockIdx.x;
@@ -158,7 +117,7 @@ void __global__ reduce_shfl(real *d_x, real *d_y, const int N)
     }
 }
 
-void __global__ reduce_cp(real *d_x, real *d_y, const int N)
+void __global__ reduce_cp(const real *d_x, real *d_y, const int N)
 {
     const int tid = threadIdx.x;
     const int bid = blockIdx.x;
@@ -196,12 +155,12 @@ void __global__ reduce_cp(real *d_x, real *d_y, const int N)
     }
 }
 
-real reduce(real *d_x, const int method)
+real reduce(const real *d_x, const int method)
 {
-    int grid_size = (N + block_size - 1) / block_size;
-    grid_size = (grid_size + repeat_size - 1) / repeat_size;
+    const int grid_size = (N + BLOCK_SIZE - 1) / BLOCK_SIZE;
     const int ymem = sizeof(real) * grid_size;
-    const int smem = sizeof(real) * block_size;
+    const int smem1 = sizeof(real) * BLOCK_SIZE;
+    const int smem2 = sizeof(real) * MAX_THREAD;
 
     real h_y[1] = {0};
     real *d_y;
@@ -210,25 +169,16 @@ real reduce(real *d_x, const int method)
     switch (method)
     {
         case 0:
-            reduce_syncwarp<<<grid_size, block_size, smem>>>(d_x, d_y, N);
-            if (grid_size > 1)
-            {
-                reduce_syncwarp<<<1, 1024, sizeof(real) * 1024>>>(d_y, d_y, grid_size);
-            }
+            reduce_syncwarp<<<grid_size, BLOCK_SIZE, smem1>>>(d_x, d_y, N);
+            reduce_syncwarp<<<1, MAX_THREAD, smem2>>>(d_y, d_y, grid_size);
             break;
         case 1:
-            reduce_shfl<<<grid_size, block_size, smem>>>(d_x, d_y, N);
-            if (grid_size > 1)
-            {
-                reduce_shfl<<<1, 1024, sizeof(real) * 1024>>>(d_y, d_y, grid_size);
-            }
+            reduce_shfl<<<grid_size, BLOCK_SIZE, smem1>>>(d_x, d_y, N);
+            reduce_shfl<<<1, MAX_THREAD, smem2>>>(d_y, d_y, grid_size);
             break;
         case 2:
-            reduce_cp<<<grid_size, block_size, smem>>>(d_x, d_y, N);
-            if (grid_size > 1)
-            {
-                reduce_cp<<<1, 1024, sizeof(real) * 1024>>>(d_y, d_y, grid_size);
-            }
+            reduce_cp<<<grid_size, BLOCK_SIZE, smem1>>>(d_x, d_y, N);
+            reduce_cp<<<1, MAX_THREAD, smem2>>>(d_y, d_y, grid_size);
             break;
         default:
             printf("Wrong method.\n");
@@ -239,6 +189,44 @@ real reduce(real *d_x, const int method)
     CHECK(cudaFree(d_y));
 
     return h_y[0];
+}
+
+void timing(const real *d_x, const int method)
+{
+    real sum = 0;
+    float t_sum = 0;
+    float t2_sum = 0;
+
+    for (int repeat = 0; repeat <= NUM_REPEATS; ++repeat)
+    {
+        cudaEvent_t start, stop;
+        CHECK(cudaEventCreate(&start));
+        CHECK(cudaEventCreate(&stop));
+        CHECK(cudaEventRecord(start));
+
+        sum = reduce(d_x, method); 
+
+        CHECK(cudaEventRecord(stop));
+        CHECK(cudaEventSynchronize(stop));
+        float elapsed_time;
+        CHECK(cudaEventElapsedTime(&elapsed_time, start, stop));
+        printf("Time = %g ms.\n", elapsed_time);
+
+        if (repeat > 0)
+        {
+            t_sum += elapsed_time;
+            t2_sum += elapsed_time * elapsed_time;
+        }
+
+        CHECK(cudaEventDestroy(start));
+        CHECK(cudaEventDestroy(stop));
+    }
+
+    const float t_ave = t_sum / NUM_REPEATS;
+    const float t_err = sqrt(t2_sum / NUM_REPEATS - t_ave * t_ave);
+    printf("Time = %g +- %g ms.\n", t_ave, t_err);
+
+    printf("sum = %f.\n", sum);
 }
 
 
