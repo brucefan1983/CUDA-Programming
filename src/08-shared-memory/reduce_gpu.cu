@@ -11,7 +11,6 @@ const int NUM_REPEATS = 10;
 const int N = 100000000;
 const int M = sizeof(real) * N;
 const int BLOCK_SIZE = 128;
-const int NUM_ROUNDS = 10;
 
 void timing(real *h_x, real *d_x, const int method);
 
@@ -31,8 +30,6 @@ int main(void)
     timing(h_x, d_x, 1);
     printf("\nUsing dynamic shared memory:\n");
     timing(h_x, d_x, 2);
-    printf("\nUsing less blocks:\n");
-    timing(h_x, d_x, 3);
 
     free(h_x);
     CHECK(cudaFree(d_x));
@@ -65,7 +62,7 @@ void __global__ reduce_shared(real *d_x, real *d_y)
     const int tid = threadIdx.x;
     const int bid = blockIdx.x;
     const int n = bid * blockDim.x + tid;
-    __shared__ real s_y[1024];
+    __shared__ real s_y[128];
     s_y[tid] = (n < N) ? d_x[n] : 0.0;
     __syncthreads();
 
@@ -110,42 +107,9 @@ void __global__ reduce_dynamic(real *d_x, real *d_y)
     }
 }
 
-void __global__ reduce_less(real *d_x, real *d_y)
-{
-    const int tid = threadIdx.x;
-    const int bid = blockIdx.x;
-    extern __shared__ real s_y[];
-
-    real y = 0.0;
-    for (int n = bid * blockDim.x + tid; n < N; n += blockDim.x * gridDim.x)
-    {
-        y += d_x[n];
-    }
-    s_y[tid] = y;
-    __syncthreads();
-
-    for (int offset = blockDim.x >> 1; offset > 0; offset >>= 1)
-    {
-        if (tid < offset)
-        {
-            s_y[tid] += s_y[tid + offset];
-        }
-        __syncthreads();
-    }
-
-    if (tid == 0)
-    {
-        d_y[bid] = s_y[0];
-    }
-}
-
 real reduce(real *d_x, const int method)
 {
     int grid_size = (N + BLOCK_SIZE - 1) / BLOCK_SIZE;
-    if (method >= 3)
-    {
-        grid_size = (grid_size + NUM_ROUNDS - 1) / NUM_ROUNDS;
-    }
     const int ymem = sizeof(real) * grid_size;
     const int smem = sizeof(real) * BLOCK_SIZE;
     real *d_y;
@@ -162,9 +126,6 @@ real reduce(real *d_x, const int method)
             break;
         case 2:
             reduce_dynamic<<<grid_size, BLOCK_SIZE, smem>>>(d_x, d_y);
-            break;
-        case 3:
-            reduce_less<<<grid_size, BLOCK_SIZE, smem>>>(d_x, d_y);
             break;
         default:
             printf("Error: wrong method\n");
