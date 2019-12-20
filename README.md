@@ -1,10 +1,10 @@
 # `CUDA`-Programming
 Source codes for my `CUDA` programming book
 
-## Warning
+## 1. Warning
 * The code is still under development.
 
-## About the book:
+## 2. About the book:
   * To be published by in early 2020.
   * The language for the book is **Chinese**.
   * Covers **from Kepler to Turing (compute capability 3.0-7.5)** and is based on `CUDA` 10.1.
@@ -16,7 +16,7 @@ Source codes for my `CUDA` programming book
     * have studied **mathematics** at the undergraduate level (for some chapters)
     * have studied **physics** at the undergraduate level (for the second part only)
 
-## Table of contents and list of source codes:
+## 3. Table of contents and list of source codes:
 
 ### Chapter 1: Introduction to GPU hardware and `CUDA` programming tools
 There is no source code for this chapter.
@@ -164,9 +164,9 @@ How to compile and run?
   * type `plot_results` in Matlab command window to check the results
   
   
-## Summary of my testing results
+## 4. Summary of my testing results
 
-### Vector addition (chapter 5)
+### 4.1. Vector addition (chapter 5)
 
 * Array length = 1.0e8.
 * CPU function takes 77 ms and 160 ms using single and double precisions, respectively. 
@@ -178,12 +178,12 @@ How to compile and run?
 
 * If we include cudaMemcpy, GeForce RTX 2080ti takes 130 ms and 250 ms using single and double precisions, respectively. Slower than the CPU!
 
-### A function with high arithmetic intensity (chapter 5)
+### 4.2. A function with high arithmetic intensity (chapter 5)
 * CPU function (with an array length of 10^4) takes 320 ms and 450 ms using single and double precisions, respectively. 
 * GeForce RTX 2080ti (with an array length of 10^6) takes 15 ms and 450 ms using single and double precisions, respectively.
 * Tesla V100 (with an array length of 10^6) takes 11 ms and 28 ms using single and double precisions, respectively.
 
-### Matrix copy and transpose (chapters 7 and 8)
+### 4.3. Matrix copy and transpose (chapters 7 and 8)
 
 | computation     | V100 (S) | V100 (D) | 2080ti (S) | 2080ti (D) | K40 (S) |
 |:---------------------------------|:-------|:-------|:-------|:-------|:-------|
@@ -195,7 +195,7 @@ How to compile and run?
 | transpose without bank conflict  | 1.4 ms | 2.5 ms | 2.3 ms | 4.2 ms |  |
 
 
-### Reduction (chapters 8-10 and 14)
+### 4.4. Reduction (chapters 8-10 and 14)
 
 * Array length = 1.0e8 and each element has a value of 1.23.
 * The correct summation should be 123000000.
@@ -216,7 +216,7 @@ How to compile and run?
 | two kernels and less blocks and no cudaMalloc | 2.6 ms  | 122999920 |
 
 
-### Neighbor list construction (chapter 9)
+### 4.5. Neighbor list construction (chapter 9)
 
 * Number of atoms = 22464.
 * CPU function takes 230 ms for both single and double precisions.
