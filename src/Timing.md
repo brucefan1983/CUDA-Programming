@@ -36,16 +36,16 @@
 * GPU timing results are listed in the following table:
 
 
-| computation     | 2080ti (S) | K 40 (D) |
-|:------------|:---------|:---------|
-| reduction with global memory only    | 3.2 ms | 18 ms |
-| reduction with static shared memory  | 2.9 ms | 11 ms |
-| reduction with dynamic shared memory | 2.9 ms | 11 ms |
-| reduction with two kernels           | 1.0 ms (?) | 1.6 ms (?) | 
-| reduction with atomicAdd             | 1.0 ms | 1.6 ms |
-| reduction with syncwarp              | 0.9 ms | 1.6 ms | 
-| reduction with shfl                  | 0.9 ms | 1.6 ms | 
-| reduction with CP                    | 0.9 ms | 1.6 ms | 
+| computation     |  K 40 (S) |
+|:------------|:---------|
+| reduction with global memory only    | 16 ms |
+| reduction with static shared memory  | 11 ms |
+| reduction with dynamic shared memory | 11 ms |
+| reduction with two kernels           | 10 ms | 
+| reduction with atomicAdd             | 10 ms |
+| reduction with syncwarp              | ? ms |
+| reduction with shfl                  | ? ms |
+| reduction with CP                    | ? ms |
 
 
 ## Neighbor list construction (chapter 9)
