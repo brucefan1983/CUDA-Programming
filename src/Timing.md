@@ -32,7 +32,7 @@
 ## Reduction (chapters 8-10)
 
 * Array length = 1.0e8.
-* CPU function takes about 100 ms for both single and double precisions.
+* CPU function takes about 96 ms for both single and double precisions.
 * GPU timing results are listed in the following table:
 
 
