@@ -35,19 +35,19 @@
 * Using single precision with both CPU and GPU.
 * GPU = Tesla K40.
 
-| computation & machine                         | time    |      result    |
-|:----------------------------------------------|:--------|:---------------|
-| CPU with naive summation                      | 96 ms   | | 
-| global memory only                            | 16.3 ms | | 
-| static shared memory                          | 10.8 ms | | 
-| dynamic shared memory                         | 10.8 ms | | 
-| two kernels                                   | 10.1 ms |  | 
-| atomicAdd                                     | 9.8 ms  | | 
-| two kernels and syncwarp                      | 8.4 ms  | | 
-| two kernels and shfl                          | 7.0 ms  | | 
-| two kernels and CP                            | 7.0 ms  | | 
-| two kernels and less blocks                   | 7.0 ms  | | 
-| two kernels and less blocks and no cudaMalloc | 7.0 ms  | | 
+| computation & machine                         | time    |   result  |
+|:----------------------------------------------|:--------|:----------|
+| CPU with naive summation                      | 85 ms   | 33554432  | 
+| global memory only                            | 16.3 ms | 123633392 | 
+| static shared memory                          | 10.8 ms | 123633392 | 
+| dynamic shared memory                         | 10.8 ms | 123633392 | 
+| two kernels                                   | 10.1 ms | 122999376 | 
+| atomicAdd                                     | 9.8 ms  | 123633392 | 
+| two kernels and syncwarp                      | 8.4 ms  | 122999376 | 
+| two kernels and shfl                          | 7.0 ms  | 122999376 | 
+| two kernels and CP                            | 7.0 ms  | 122999376 | 
+| two kernels and less blocks                   | 2.8 ms  | 122999920 | 
+| two kernels and less blocks and no cudaMalloc | 2.6 ms  | 122999920 |
 
 
 ## Neighbor list construction (chapter 9)
