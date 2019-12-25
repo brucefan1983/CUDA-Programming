@@ -224,7 +224,7 @@ How to compile and run?
 
 | computation     | V100 (S) | V100 (D) | 2080ti (S) | 2080ti (D) | 
 |:----------------|:---------|:---------|:-----------|:-----------|
-| neighbor without atomicAdd | 2.0 ms | 2.7  ms | 1.9 ms | 17 ms |
+| neighbor without atomicAdd | 1.9 ms | 2.6  ms | 1.8 ms | 16 ms |
 | neighbor with atomicAdd    | 1.8 ms | 2.6  ms | 1.9 ms | 11 ms |
 
 
