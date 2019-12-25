@@ -109,17 +109,17 @@ void read_xy(real *x, real *y)
 void __global__ find_neighbor_atomic
 (int *d_NN, int *d_NL, const real *d_x, const real *d_y)
 {
-    int n1 = blockIdx.x * blockDim.x + threadIdx.x;
+    const int n1 = blockIdx.x * blockDim.x + threadIdx.x;
     if (n1 < N)
     {
         d_NN[n1] = 0;
-        real x1 = d_x[n1];
-        real y1 = d_y[n1];
+        const real x1 = d_x[n1];
+        const real y1 = d_y[n1];
         for (int n2 = n1 + 1; n2 < N; ++n2)
         {
-            real x12 = d_x[n2] - x1;
-            real y12 = d_y[n2] - y1;
-            real distance_square = x12 * x12 + y12 * y12;
+            const real x12 = d_x[n2] - x1;
+            const real y12 = d_y[n2] - y1;
+            const real distance_square = x12 * x12 + y12 * y12;
             if (distance_square < cutoff_square)
             {
                 d_NL[n1 * MN + atomicAdd(&d_NN[n1], 1)] = n2;
@@ -132,18 +132,18 @@ void __global__ find_neighbor_atomic
 void __global__ find_neighbor_no_atomic
 (int *d_NN, int *d_NL, const real *d_x, const real *d_y)
 {
-    int n1 = blockIdx.x * blockDim.x + threadIdx.x;
+    const int n1 = blockIdx.x * blockDim.x + threadIdx.x;
     if (n1 < N)
     {
         int count = 0;
-        real x1 = d_x[n1];
-        real y1 = d_y[n1];
+        const real x1 = d_x[n1];
+        const real y1 = d_y[n1];
         for (int n2 = 0; n2 < N; ++n2)
         {
-            real x12 = d_x[n2] - x1;
-            real y12 = d_y[n2] - y1;
-            real distance_square = x12 * x12 + y12 * y12;
-            if ((n2 != n1) && (distance_square < cutoff_square))
+            const real x12 = d_x[n2] - x1;
+            const real y12 = d_y[n2] - y1;
+            const real distance_square = x12 * x12 + y12 * y12;
+            if ((distance_square < cutoff_square) && (n2 != n1))
             {
                 d_NL[(count++) * N + n1] = n2;
             }
