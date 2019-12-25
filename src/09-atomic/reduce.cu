@@ -11,9 +11,8 @@ const int NUM_REPEATS = 10;
 const int N = 100000000;
 const int M = sizeof(real) * N;
 const int BLOCK_SIZE = 128;
-const int MAX_THREAD = 1024;
 
-void timing(const real *d_x, const bool atomic);
+void timing(const real *d_x);
 
 int main(void)
 {
@@ -26,29 +25,21 @@ int main(void)
     CHECK(cudaMalloc(&d_x, M));
     CHECK(cudaMemcpy(d_x, h_x, M, cudaMemcpyHostToDevice));
 
-    printf("\nusing two kernels:\n");
-    timing(d_x, false);
     printf("\nusing atomicAdd:\n");
-    timing(d_x, true);
+    timing(d_x);
 
     free(h_x);
     CHECK(cudaFree(d_x));
     return 0;
 }
 
-template<bool using_atomic>
 void __global__ reduce(const real *d_x, real *d_y, const int N)
 {
     const int tid = threadIdx.x;
     const int bid = blockIdx.x;
+    const int n = bid * blockDim.x + tid;
     extern __shared__ real s_y[];
-
-    real y = 0.0;
-    for (int n = bid * blockDim.x + tid; n < N; n += blockDim.x * gridDim.x)
-    {
-        y += d_x[n];
-    }
-    s_y[tid] = y;
+    s_y[tid] = (n < N) ? d_x[n] : 0.0;
     __syncthreads();
 
     for (int offset = blockDim.x >> 1; offset > 0; offset >>= 1)
@@ -62,42 +53,21 @@ void __global__ reduce(const real *d_x, real *d_y, const int N)
 
     if (tid == 0)
     {
-        if (using_atomic)
-        {
-            atomicAdd(d_y, s_y[0]);
-        }
-        else
-        {
-            d_y[bid] = s_y[0];
-        }
+        atomicAdd(d_y, s_y[0]);
     }
 }
 
-real reduce(const real *d_x, const bool atomic)
+real reduce(const real *d_x)
 {
-    int grid_size = (N + BLOCK_SIZE - 1) / BLOCK_SIZE;
-    const int ymem = atomic ? sizeof(real) : sizeof(real) * grid_size;
-    const int smem1 = sizeof(real) * BLOCK_SIZE;
-    const int smem2 = sizeof(real) * MAX_THREAD;
+    const int grid_size = (N + BLOCK_SIZE - 1) / BLOCK_SIZE;
+    const int smem = sizeof(real) * BLOCK_SIZE;
 
     real h_y[1] = {0};
     real *d_y;
-    CHECK(cudaMalloc(&d_y, ymem));
+    CHECK(cudaMalloc(&d_y, sizeof(real)));
+    CHECK(cudaMemcpy(d_y, h_y, sizeof(real), cudaMemcpyHostToDevice));
 
-    if (atomic)
-    {
-        CHECK(cudaMemcpy(d_y, h_y, ymem, cudaMemcpyHostToDevice));
-        reduce<true><<<grid_size, BLOCK_SIZE, smem1>>>(d_x, d_y, N);
-    }
-    else
-    {
-        reduce<false><<<grid_size, BLOCK_SIZE, smem1>>>(d_x, d_y, N);
-    }
-
-    if (!atomic && grid_size > 1)
-    {
-        reduce<false><<<1, MAX_THREAD, smem2>>>(d_y, d_y, grid_size);
-    }
+    reduce<<<grid_size, BLOCK_SIZE, smem>>>(d_x, d_y, N);
 
     CHECK(cudaMemcpy(h_y, d_y, sizeof(real), cudaMemcpyDeviceToHost));
     CHECK(cudaFree(d_y));
@@ -105,7 +75,7 @@ real reduce(const real *d_x, const bool atomic)
     return h_y[0];
 }
 
-void timing(const real *d_x, const bool atomic)
+void timing(const real *d_x)
 {
     real sum = 0;
     float t_sum = 0;
@@ -118,7 +88,7 @@ void timing(const real *d_x, const bool atomic)
         CHECK(cudaEventCreate(&stop));
         CHECK(cudaEventRecord(start));
 
-        sum = reduce(d_x, atomic); 
+        sum = reduce(d_x); 
 
         CHECK(cudaEventRecord(stop));
         CHECK(cudaEventSynchronize(stop));
