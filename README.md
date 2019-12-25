@@ -222,10 +222,10 @@ How to compile and run?
 * CPU function takes 230 ms for both single and double precisions.
 * GPU timing results are list in the following table:
 
-| computation     | V100 (S) | V100 (D) | 2080ti (S) | 2080ti (D) | 
+| computation     | V100 (S) | V100 (D) | K40 (S) | K40 (D) | 
 |:----------------|:---------|:---------|:-----------|:-----------|
-| neighbor without atomicAdd | 1.9 ms | 2.6  ms | 1.8 ms | 16 ms |
-| neighbor with atomicAdd    | 1.8 ms | 2.6  ms | 1.9 ms | 11 ms |
+| neighbor without atomicAdd | 1.9 ms | 2.6  ms | 10.1 ms | 10.9 ms |
+| neighbor with atomicAdd    | 1.8 ms | 2.6  ms | 10.5 ms | 14.5 ms |
 
 
 
