@@ -13,6 +13,7 @@ const int NUM_REPEATS = 10;
 const int N = 100000000;
 const int M = sizeof(real) * N;
 const int BLOCK_SIZE = 128;
+const unsigned FULL_MASK = 0xffffffff;
 
 void timing(const real *d_x, const int method);
 
@@ -92,7 +93,6 @@ void __global__ reduce_shfl(const real *d_x, real *d_y, const int N)
 
     real y = s_y[tid];
 
-    #define FULL_MASK 0xffffffff
     for (int offset = 16; offset > 0; offset >>= 1)
     {
         y += __shfl_down_sync(FULL_MASK, y, offset);
