@@ -1,0 +1,22 @@
+clear; font_size=12;
+close all;
+load t1.txt;
+N=size(t1,1);
+figure;
+subplot(1,2,1);
+plot(1:N,t1,'o-');
+xlabel('Number of streams','fontsize',font_size);
+ylabel('Total time (ms)','fontsize',font_size);
+title('(a)');
+ylim([0,80]);
+set(gca,'fontsize',font_size);
+set(gca,'ticklength',get(gca,'ticklength')*2);
+
+subplot(1,2,2);
+plot(1:N,t1(1)*(1:N).'./t1,'o-');
+xlabel('Number of streams','fontsize',font_size);
+ylabel('Speedup factor','fontsize',font_size);
+title('(b)');
+ylim([0,16]);
+set(gca,'fontsize',font_size);
+set(gca,'ticklength',get(gca,'ticklength')*2);

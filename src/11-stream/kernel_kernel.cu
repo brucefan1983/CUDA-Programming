@@ -9,8 +9,8 @@
 #endif
 
 const int NUM_REPEATS = 10;
-const int N1 = 1000;
-const int MAX_NUM_STREAMS = 20;
+const int N1 = 1024;
+const int MAX_NUM_STREAMS = 30;
 const int N = N1 * MAX_NUM_STREAMS;
 const int M = sizeof(real) * N;
 const int block_size = 128;
@@ -43,7 +43,6 @@ int main(void)
 
     for (int num = 1; num <= MAX_NUM_STREAMS; ++num)
     {
-        printf("\nUsing %d streams:\n", num);
         timing(d_x, d_y, d_z, num);
     }
 
@@ -65,7 +64,7 @@ void __global__ add(const real *d_x, const real *d_y, real *d_z)
     const int n = blockDim.x * blockIdx.x + threadIdx.x;
     if (n < N1)
     {
-        for (int i = 0; i < 1000000; ++i)
+        for (int i = 0; i < 100000; ++i)
         {
             d_z[n] = d_x[n] + d_y[n];
         }
@@ -95,7 +94,6 @@ void timing(const real *d_x, const real *d_y, real *d_z, const int num)
         CHECK(cudaEventSynchronize(stop));
         float elapsed_time;
         CHECK(cudaEventElapsedTime(&elapsed_time, start, stop));
-        printf("Time = %g ms.\n", elapsed_time);
 
         if (repeat > 0)
         {
@@ -109,7 +107,7 @@ void timing(const real *d_x, const real *d_y, real *d_z, const int num)
 
     const float t_ave = t_sum / NUM_REPEATS;
     const float t_err = sqrt(t2_sum / NUM_REPEATS - t_ave * t_ave);
-    printf("Time = %g +- %g ms.\n", t_ave, t_err);
+    printf("%g\n", t_ave);
 }
 
 
