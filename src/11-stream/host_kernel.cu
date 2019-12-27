@@ -39,10 +39,10 @@ int main(void)
     CHECK(cudaMemcpy(d_x, h_x, M, cudaMemcpyHostToDevice));
     CHECK(cudaMemcpy(d_y, h_y, M, cudaMemcpyHostToDevice));
 
-    printf("Without CPU-GPU overlap (ratio = 20)\n");
-    timing(h_x, h_y, h_z, d_x, d_y, d_z, 20, false);
-    printf("With CPU-GPU overlap (ratio = 20)\n");
-    timing(h_x, h_y, h_z, d_x, d_y, d_z, 20, true);
+    printf("Without CPU-GPU overlap (ratio = 10)\n");
+    timing(h_x, h_y, h_z, d_x, d_y, d_z, 10, false);
+    printf("With CPU-GPU overlap (ratio = 10)\n");
+    timing(h_x, h_y, h_z, d_x, d_y, d_z, 10, true);
 
     printf("Without CPU-GPU overlap (ratio = 1)\n");
     timing(h_x, h_y, h_z, d_x, d_y, d_z, 1, false);
