@@ -9,7 +9,7 @@
 #endif
 
 const int NUM_REPEATS = 10;
-const int N = 1 << 27;
+const int N = 1 << 22;
 const int M = sizeof(real) * N;
 const int MAX_NUM_STREAMS = 64;
 cudaStream_t streams[MAX_NUM_STREAMS];
@@ -45,7 +45,6 @@ int main(void)
 
     for (int num = 1; num <= MAX_NUM_STREAMS; num *= 2)
     {
-        printf("\nUsing %d streams:\n", num);
         timing(h_x, h_y, h_z, d_x, d_y, d_z, num);
     }
 
@@ -69,7 +68,7 @@ void __global__ add(const real *x, const real *y, real *z, int N)
     const int n = blockDim.x * blockIdx.x + threadIdx.x;
     if (n < N)
     {
-        for (int i = 0; i < 100; ++i)
+        for (int i = 0; i < 40; ++i)
         {
             z[n] = x[n] + y[n];
         }
@@ -117,7 +116,6 @@ void timing
         CHECK(cudaEventSynchronize(stop));
         float elapsed_time;
         CHECK(cudaEventElapsedTime(&elapsed_time, start, stop));
-        printf("Time = %g ms.\n", elapsed_time);
 
         if (repeat > 0)
         {
@@ -131,7 +129,7 @@ void timing
 
     const float t_ave = t_sum / NUM_REPEATS;
     const float t_err = sqrt(t2_sum / NUM_REPEATS - t_ave * t_ave);
-    printf("Time = %g +- %g ms.\n", t_ave, t_err);
+    printf("%d %g\n", num, t_ave);
 }
 
 
