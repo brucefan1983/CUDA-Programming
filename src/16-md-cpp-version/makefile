@@ -1,26 +1,25 @@
 all: ljmd
 
-CC = g++
-CFLAGS = -O3
+CC = nvcc
+CFLAGS = -O3 -arch=sm_70 
 
-ljmd: initialize.o integrate.o neighbor.o \
-	force.o memory.o main.o
+ljmd: initialize.o integrate.o neighbor.o force.o memory.o main.o
 	$(CC) -o ljmd \
-	initialize.o integrate.o neighbor.o \
-	force.o memory.o main.o
+	initialize.o integrate.o neighbor.o force.o memory.o main.o
 
-initialize.o: initialize.cpp
-	$(CC) $(CFLAGS) -c initialize.cpp
-integrate.o: integrate.cpp
-	$(CC) $(CFLAGS) -c integrate.cpp
-memory.o: memory.cpp
-	$(CC) $(CFLAGS) -c memory.cpp
-neighbor.o: neighbor.cpp
-	$(CC) $(CFLAGS) -c neighbor.cpp
-force.o: force.cpp
-	$(CC) $(CFLAGS) -c force.cpp
-main.o: main.cpp
-	$(CC) $(CFLAGS) -c main.cpp
+initialize.o: initialize.cu
+	$(CC) $(CFLAGS) -c initialize.cu
+integrate.o: integrate.cu
+	$(CC) $(CFLAGS) -c integrate.cu
+memory.o: memory.cu
+	$(CC) $(CFLAGS) -c memory.cu
+neighbor.o: neighbor.cu
+	$(CC) $(CFLAGS) -c neighbor.cu
+force.o: force.cu
+	$(CC) $(CFLAGS) -c force.cu
+main.o: main.cu
+	$(CC) $(CFLAGS) -c main.cu
 
 clean:
 	rm *o ljmd
+
