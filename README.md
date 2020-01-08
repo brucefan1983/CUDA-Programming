@@ -31,7 +31,7 @@ There is no source code for this chapter.
 ### Chapter 2: Thread organization in `CUDA`
 | file        | what to learn? | how to compile? | how to run? |
 |:------------|:---------------|:---------------|:---------------|
-| `hello.cpp` | writing a Hello Word program in `C++` |`g++ hello.cpp` in Linux or `cl hello.cpp` in Windows |`./a.out` in Linux or `hello` in Windows|
+| `hello.cpp` | writing a Hello Word program in `C++` |`g++ hello.cpp` in Linux or `cl hello.cpp` in Windows |`./a.out` in Linux or `hello` in Windows (we only give the Linux command in the remaining examples) |
 | `hello1.cu` | a valid `C++` program is (usually) also a valid `CUDA` program | `nvcc hello1.cu` |`./a.out` |
 | `hello2.cu` | write a simple `CUDA` kernel and call `printf()` within it | `nvcc hello1.cu` |`./a.out` |
 | `hello3.cu` | using multiple threads in a block | `nvcc hello1.cu` |`./a.out` |
