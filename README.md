@@ -185,6 +185,11 @@ How to compile and run?
 
 * If we include cudaMemcpy, GeForce RTX 2080ti takes 130 ms and 250 ms using single and double precisions, respectively. Slower than the CPU!
 
+* If we include cudaMemcpy, GeForce RTX 2070-laptop takes 180 ms and 360 ms using single and double precisions, respectively. Slower than the CPU!
+
+
+
+
 ### 4.2. A function with high arithmetic intensity (chapter 5)
 * CPU function (with an array length of 10^4) takes 320 ms and 450 ms using single and double precisions, respectively. 
 * GeForce RTX 2080ti (with an array length of 10^6) takes 15 ms and 450 ms using single and double precisions, respectively.
