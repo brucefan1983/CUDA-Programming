@@ -202,6 +202,15 @@ Type  Time(%)      Time     Calls       Avg       Min       Max  Name
 * GeForce RTX 2080ti (with an array length of 10^6) takes 15 ms and 450 ms using single and double precisions, respectively.
 * Tesla V100 (with an array length of 10^6) takes 11 ms and 28 ms using single and double precisions, respectively.
 * GeForce RTX 2070-laptop (with an array length of 10^6) takes 28 ms and 1000 ms using single and double precisions, respectively.
+*  GeForce RTX 2070-laptop with single precision:
+| N    | time |
+|:-------|:-------|
+| 1000    | 0.91 ms | 
+| 10000   | 0.99 ms | 
+| 100000  | 3.8 ms | 
+| 1000000       | 28 ms |
+| 10000000   | 250 ms | 
+| 100000000  | 2500 ms |
 
 ### 4.3. Matrix copy and transpose (chapters 7 and 8)
 
