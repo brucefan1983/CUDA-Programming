@@ -16,12 +16,13 @@ Source codes for my `CUDA` programming book
     * have mastered `C` and know some `C++` (for the whole book)
     * have studied **mathematics** at the undergraduate level (for some chapters)
     * have studied **physics** at the undergraduate level (for the second part only)
+    
+## 3. Testing systems
+* We only use the command line program `CMD` in Windows and the host compiler is `cl` from Visual Studio.
+* When using `nvcc` to compile a CUDA code, we use the compiling flag `-Xcompiler "/wd 4819"` to suppress warnings related to unicode.
+* The Linux host compiler we used is `g++`.
 
-## 3. Table of contents and list of source codes:
-
-### Notes:
-* We only use the command line program CMD in Windows.
-* The host compiler we used is g++ in Linux 
+## 4. Table of contents and list of source codes:
 
 ### Chapter 1: Introduction to GPU hardware and `CUDA` programming tools
 There is no source code for this chapter.
@@ -169,7 +170,7 @@ How to compile and run?
   * type `plot_results` in Matlab command window to check the results
   
   
-## 4. Summary of my testing results
+## 5. Summary of my testing results
 
 ### 4.1. Vector addition (chapter 5)
 
