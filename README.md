@@ -5,9 +5,10 @@ Source codes for my `CUDA` programming book
 * The codes are still under development.
 
 ## 2. About the book:
-  * To be published by in early 2020.
+  * To be published by in 2020.
   * The language for the book is **Chinese**.
   * Covers **from Kepler to Turing (compute capability 3.0-7.5)** and is based on `CUDA` 10.1.
+  * Tested in both **Windows** and **Linux**.
   * The book has two parts:
     * Part 1: Teaches `CUDA` programming step by step (14 chapters);
     * part 2: Developing a molecular dynamics code from the ground up (6 chapters) 
@@ -18,6 +19,10 @@ Source codes for my `CUDA` programming book
 
 ## 3. Table of contents and list of source codes:
 
+### Notes:
+* We only use the command line program CMD in Windows.
+* The host compiler we used is g++ in Linux 
+
 ### Chapter 1: Introduction to GPU hardware and `CUDA` programming tools
 There is no source code for this chapter.
 
@@ -25,7 +30,7 @@ There is no source code for this chapter.
 ### Chapter 2: Thread organization in `CUDA`
 | file        | what to learn? | how to compile? | how to run? |
 |:------------|:---------------|:---------------|:---------------|
-| `hello.cpp` | writing a Hello Word program in `C++` |`g++ hello.cpp` |`./a.out` |
+| `hello.cpp` | writing a Hello Word program in `C++` |`g++ hello.cpp` in Linux or `cl hello.cpp` in Windows |`./a.out` in Linux or `hello` in Windows|
 | `hello1.cu` | a valid `C++` program is (usually) also a valid `CUDA` program | `nvcc hello1.cu` |`./a.out` |
 | `hello2.cu` | write a simple `CUDA` kernel and call `printf()` within it | `nvcc hello1.cu` |`./a.out` |
 | `hello3.cu` | using multiple threads in a block | `nvcc hello1.cu` |`./a.out` |
