@@ -31,12 +31,12 @@ There is no source code for this chapter.
 ### Chapter 2: Thread organization in `CUDA`
 | file        | what to learn? | how to compile? | how to run? |
 |:------------|:---------------|:---------------|:---------------|
-| `hello.cpp` | writing a Hello Word program in `C++` |`g++ hello.cpp` in Linux or `cl hello.cpp` in Windows |`./a.out` in Linux or `hello` in Windows (we only give the Linux command in the remaining examples) |
-| `hello1.cu` | a valid `C++` program is (usually) also a valid `CUDA` program | `nvcc hello1.cu` |`./a.out` |
-| `hello2.cu` | write a simple `CUDA` kernel and call `printf()` within it | `nvcc hello1.cu` |`./a.out` |
-| `hello3.cu` | using multiple threads in a block | `nvcc hello1.cu` |`./a.out` |
-| `hello4.cu` | using multiple blocks in a grid | `nvcc hello1.cu` |`./a.out` |
-| `hello5.cu` | using a 2D block |`nvcc hello1.cu` |`./a.out` |
+| `hello.cpp` | writing a Hello Word program in `C++` |`g++ hello.cpp` in Linux or `cl hello.cpp` in Windows |`./a.out` in Linux or `hello` in Windows |
+| `hello1.cu` | a valid `C++` program is (usually) also a valid `CUDA` program | `nvcc hello1.cu` in Linux or `nvcc -Xcompiler "/wd 4819 hello1.cu` in Windows |`./a.out` in Linux or `a` in Windows |
+| `hello2.cu` | write a simple `CUDA` kernel and call `printf()` within it | `nvcc hello2.cu` in Linux or `nvcc -Xcompiler "/wd 4819 hello1.cu` in Windows |`./a.out` in Linux or `a` in Windows |
+| `hello3.cu` | using multiple threads in a block | `nvcc hello3.cu` in Linux or `nvcc -Xcompiler "/wd 4819 hello1.cu` in Windows |`./a.out` in Linux or `a` in Windows |
+| `hello4.cu` | using multiple blocks in a grid | `nvcc hello4.cu` in Linux or `nvcc -Xcompiler "/wd 4819 hello1.cu` in Windows |`./a.out` in Linux or `a` in Windows |
+| `hello5.cu` | using a 2D block | `nvcc hello5.cu` in Linux or `nvcc -Xcompiler "/wd 4819 hello1.cu` in Windows |`./a.out` in Linux or `a` in Windows |
 
 
 ### Chapter 3: The basic framework of a `CUDA` program
