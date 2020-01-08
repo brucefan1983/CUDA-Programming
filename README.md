@@ -179,9 +179,9 @@ How to compile and run?
 * CPU function takes 77 ms and 160 ms using single and double precisions, respectively. 
 * Computation times using different GPUs are listed in the table below:
 
-|  V100 (S) | V100 (D) | 2080ti (S) | 2080ti (D) | P100 (S) | P100 (D) | K40 (S) | K40 (D) |
-|:---------|:---------|:---------|:---------|:---------|:---------|:---------|:---------|
-| 1.5 ms | 3.0 ms |  2.1 ms |  4.3 ms | 2.2 ms |  4.3 ms | 6.5 ms | 13 ms |
+|  V100 (S) | V100 (D) | 2080ti (S) | 2080ti (D) | P100 (S) | P100 (D) | laptop-2070 (S) | laptop-2070 (D) | K40 (S) | K40 (D) |
+|:---------|:---------|:---------|:---------|:---------|:---------|:---------|:---------|:---------|:---------|
+| 1.5 ms | 3.0 ms |  2.1 ms |  4.3 ms | 2.2 ms |  4.3 ms | 3.3 ms | 6.8 ms | 6.5 ms | 13 ms |
 
 * If we include cudaMemcpy, GeForce RTX 2080ti takes 130 ms and 250 ms using single and double precisions, respectively. Slower than the CPU!
 
