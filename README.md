@@ -60,17 +60,18 @@ There is no source code for this chapter.
 ### Chapter 5: The crucial ingredients for obtaining speedup
 | file        | what to learn? | how to compile? | how to run? |
 |:------------|:---------------|:---------------|:---------------|
-| `add_cpu.cu`              | timing `C++` code |
-| `add_gpu.cu`               | timing `CUDA` code using nvprof |
-| `arithmetic_cpu.cu`       | increasing arithmetic intensity in `C++` |
-| `arithmetic_gpu.cu`        | increasing arithmetic intensity in `CUDA` |
+| `add1cpu.cu`              | timing `C++` code | `nvcc add1cpu.cu` in Linux or `nvcc -Xcompiler "/wd 4819" add1cpu.cu` in Windows |`cuda-memcheck ./a.out` in Linux or `a` in Windows |
+| `add2gpu.cu`               | timing `CUDA` kernel using Events | `nvcc add2gpu.cu` in Linux or `nvcc -Xcompiler "/wd 4819" add2gpu.cu` in Windows |`./a.out` in Linux or `a` in Windows |
+| `add3memcpy.cu`               | timing `CUDA` code using Events and `nvprof` | `nvcc add3memcpy.cu` in Linux or `nvcc -Xcompiler "/wd 4819" add3memcpy.cu` in Windows |`./a.out` in Linux or `a` in Windows; can also add `nvprof` before the executable |
+| `arithmetic1cpu.cu`       | increasing arithmetic intensity in `C++` | `nvcc arithmetic1cpu.cu` in Linux or `nvcc -Xcompiler "/wd 4819" arithmetic1cpu.cu` in Windows |`./a.out` in Linux or `a` in Windows |
+| `arithmetic2gpu.cu`        | increasing arithmetic intensity in `CUDA` | `nvcc arithmetic2gpu.cu` in Linux or `nvcc -Xcompiler "/wd 4819" arithmetic2gpu.cu` in Windows |`./a.out` in Linux or `a` in Windows |
 
 
 ### Chapter 6: Memory organization in `CUDA`
 | file        | what to learn? | how to compile? | how to run? |
 |:------------|:---------------|:---------------|:---------------|
-| `global.cu`           | how to use static global memory? |
-| `device_query.cu`     | how to query some properties of your GPU? |
+| `global.cu`           | how to use static global memory? | `nvcc global.cu` in Linux or `nvcc -Xcompiler "/wd 4819" global.cu` in Windows |`./a.out` in Linux or `a` in Windows |
+| `device_query.cu`     | how to query some properties of your GPU? | `nvcc device_query.cu` in Linux or `nvcc -Xcompiler "/wd 4819" device_query.cu` in Windows |`./a.out` in Linux or `a` in Windows |
 
 
 
