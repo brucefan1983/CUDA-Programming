@@ -23,14 +23,14 @@ There is no source code for this chapter.
 
 
 ### Chapter 2: Thread organization in `CUDA`
-| file        | what to learn? |
-|:------------|:---------------|
-| `hello.cpp` | writing a Hello Word program in `C++` |
-| `hello1.cu` | a valid `C++` program is (usually) also a valid `CUDA` program |
-| `hello2.cu` | write a simple `CUDA` kernel and call `printf()` within it |
-| `hello3.cu` | using multiple threads in a block |
-| `hello4.cu` | using multiple blocks in a grid |
-| `hello5.cu` | using a 2D block |
+| file        | what to learn? | how to compile? | how to run? |
+|:------------|:---------------|:---------------|:---------------|
+| `hello.cpp` | writing a Hello Word program in `C++` |`g++ hello.cpp` |`./a.out` |
+| `hello1.cu` | a valid `C++` program is (usually) also a valid `CUDA` program | `nvcc hello1.cu` |`./a.out` |
+| `hello2.cu` | write a simple `CUDA` kernel and call `printf()` within it | `nvcc hello1.cu` |`./a.out` |
+| `hello3.cu` | using multiple threads in a block |`g++ hello.cpp` | `nvcc hello1.cu` |`./a.out` |
+| `hello4.cu` | using multiple blocks in a grid |`g++ hello.cpp` | `nvcc hello1.cu` |`./a.out` |
+| `hello5.cu` | using a 2D block |`g++ hello.cpp` | `nvcc hello1.cu` |`./a.out` |
 
 
 ### Chapter 3: The basic framework of a `CUDA` program
