@@ -40,13 +40,13 @@ There is no source code for this chapter.
 
 
 ### Chapter 3: The basic framework of a `CUDA` program
-| file           | what to learn ? |
-|:---------------|:----------------|
-| `add.cpp`      | adding up two arrays using `C++` |
-| `add1.cu`      | adding up two arrays using `CUDA` |
-| `add2wrong.cu` | what if the memory transfer direction is wrong? |
-| `add3if.cu`    | when do we need an if statement in the kernel? |
-| `add4device.cu`| how to define and call `__device__` functions? |
+| file        | what to learn? | how to compile? | how to run? |
+|:------------|:---------------|:---------------|:---------------|
+| `add.cpp`      | adding up two arrays using `C++` |`g++ add.cpp` in Linux or `cl add.cpp` in Windows |`./a.out` in Linux or `add` in Windows |
+| `add1.cu`      | adding up two arrays using `CUDA` | `nvcc add1.cu` in Linux or `nvcc -Xcompiler "/wd 4819 add1.cu` in Windows |`./a.out` in Linux or `a` in Windows |
+| `add2wrong.cu` | what if the memory transfer direction is wrong? | `nvcc add2wrong` in Linux or `nvcc -Xcompiler "/wd 4819 add2wrong.cu` in Windows |`./a.out` in Linux or `a` in Windows |
+| `add3if.cu`    | when do we need an if statement in the kernel? | `nvcc add3if.cu` in Linux or `nvcc -Xcompiler "/wd 4819 add3if.cu` in Windows |`./a.out` in Linux or `a` in Windows |
+| `add4device.cu`| how to define and call `__device__` functions? | `nvcc add4device.cu` in Linux or `nvcc -Xcompiler "/wd 4819 add4device.cu` in Windows |`./a.out` in Linux or `a` in Windows |
 
 
 ### Chapter 4: Error checking
