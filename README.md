@@ -32,29 +32,29 @@ There is no source code for this chapter.
 | file        | what to learn? | how to compile? | how to run? |
 |:------------|:---------------|:---------------|:---------------|
 | `hello.cpp` | writing a Hello Word program in `C++` |`g++ hello.cpp` in Linux or `cl hello.cpp` in Windows |`./a.out` in Linux or `hello` in Windows |
-| `hello1.cu` | a valid `C++` program is (usually) also a valid `CUDA` program | `nvcc hello1.cu` in Linux or `nvcc -Xcompiler "/wd 4819 hello1.cu` in Windows |`./a.out` in Linux or `a` in Windows |
-| `hello2.cu` | write a simple `CUDA` kernel and call `printf()` within it | `nvcc hello2.cu` in Linux or `nvcc -Xcompiler "/wd 4819 hello1.cu` in Windows |`./a.out` in Linux or `a` in Windows |
-| `hello3.cu` | using multiple threads in a block | `nvcc hello3.cu` in Linux or `nvcc -Xcompiler "/wd 4819 hello1.cu` in Windows |`./a.out` in Linux or `a` in Windows |
-| `hello4.cu` | using multiple blocks in a grid | `nvcc hello4.cu` in Linux or `nvcc -Xcompiler "/wd 4819 hello1.cu` in Windows |`./a.out` in Linux or `a` in Windows |
-| `hello5.cu` | using a 2D block | `nvcc hello5.cu` in Linux or `nvcc -Xcompiler "/wd 4819 hello1.cu` in Windows |`./a.out` in Linux or `a` in Windows |
+| `hello1.cu` | a valid `C++` program is (usually) also a valid `CUDA` program | `nvcc hello1.cu` in Linux or `nvcc -Xcompiler "/wd 4819" hello1.cu` in Windows |`./a.out` in Linux or `a` in Windows |
+| `hello2.cu` | write a simple `CUDA` kernel and call `printf()` within it | `nvcc hello2.cu` in Linux or `nvcc -Xcompiler "/wd 4819" hello1.cu` in Windows |`./a.out` in Linux or `a` in Windows |
+| `hello3.cu` | using multiple threads in a block | `nvcc hello3.cu` in Linux or `nvcc -Xcompiler "/wd 4819" hello1.cu` in Windows |`./a.out` in Linux or `a` in Windows |
+| `hello4.cu` | using multiple blocks in a grid | `nvcc hello4.cu` in Linux or `nvcc -Xcompiler "/wd 4819" hello1.cu` in Windows |`./a.out` in Linux or `a` in Windows |
+| `hello5.cu` | using a 2D block | `nvcc hello5.cu` in Linux or `nvcc -Xcompiler "/wd 4819" hello1.cu` in Windows |`./a.out` in Linux or `a` in Windows |
 
 
 ### Chapter 3: The basic framework of a `CUDA` program
 | file        | what to learn? | how to compile? | how to run? |
 |:------------|:---------------|:---------------|:---------------|
 | `add.cpp`      | adding up two arrays using `C++` |`g++ add.cpp` in Linux or `cl add.cpp` in Windows |`./a.out` in Linux or `add` in Windows |
-| `add1.cu`      | adding up two arrays using `CUDA` | `nvcc add1.cu` in Linux or `nvcc -Xcompiler "/wd 4819 add1.cu` in Windows |`./a.out` in Linux or `a` in Windows |
-| `add2wrong.cu` | what if the memory transfer direction is wrong? | `nvcc add2wrong` in Linux or `nvcc -Xcompiler "/wd 4819 add2wrong.cu` in Windows |`./a.out` in Linux or `a` in Windows |
-| `add3if.cu`    | when do we need an if statement in the kernel? | `nvcc add3if.cu` in Linux or `nvcc -Xcompiler "/wd 4819 add3if.cu` in Windows |`./a.out` in Linux or `a` in Windows |
-| `add4device.cu`| how to define and call `__device__` functions? | `nvcc add4device.cu` in Linux or `nvcc -Xcompiler "/wd 4819 add4device.cu` in Windows |`./a.out` in Linux or `a` in Windows |
+| `add1.cu`      | adding up two arrays using `CUDA` | `nvcc add1.cu` in Linux or `nvcc -Xcompiler "/wd 4819" add1.cu` in Windows |`./a.out` in Linux or `a` in Windows |
+| `add2wrong.cu` | what if the memory transfer direction is wrong? | `nvcc add2wrong` in Linux or `nvcc -Xcompiler "/wd 4819" add2wrong.cu` in Windows |`./a.out` in Linux or `a` in Windows |
+| `add3if.cu`    | when do we need an if statement in the kernel? | `nvcc add3if.cu` in Linux or `nvcc -Xcompiler "/wd 4819" add3if.cu` in Windows |`./a.out` in Linux or `a` in Windows |
+| `add4device.cu`| how to define and call `__device__` functions? | `nvcc add4device.cu` in Linux or `nvcc -Xcompiler "/wd 4819" add4device.cu` in Windows |`./a.out` in Linux or `a` in Windows |
 
 
 ### Chapter 4: Error checking
 | file        | what to learn? | how to compile? | how to run? |
 |:------------|:---------------|:---------------|:---------------|
-| `check1api.cu`    | how to check `CUDA` runtime API calls? | `nvcc check1api.cu` in Linux or `nvcc -Xcompiler "/wd 4819 check1api.cu` in Windows |`./a.out` in Linux or `a` in Windows |
-| `check2kernel.cu`    | how to check `CUDA` runtime API calls? | `nvcc check2kernel.cu` in Linux or `nvcc -Xcompiler "/wd 4819 check2kernel.cu` in Windows |`./a.out` in Linux or `a` in Windows |
-| `memcheck.cu`    | how to check `CUDA` runtime API calls? | `nvcc memcheck.cu` in Linux or `nvcc -Xcompiler "/wd 4819 memcheck.cu` in Windows |`cuda-memcheck ./a.out` in Linux or `cuda-memcheck a` in Windows |
+| `check1api.cu`    | how to check `CUDA` runtime API calls? | `nvcc check1api.cu` in Linux or `nvcc -Xcompiler "/wd 4819" check1api.cu` in Windows |`./a.out` in Linux or `a` in Windows |
+| `check2kernel.cu`    | how to check `CUDA` runtime API calls? | `nvcc check2kernel.cu` in Linux or `nvcc -Xcompiler "/wd 4819" check2kernel.cu` in Windows |`./a.out` in Linux or `a` in Windows |
+| `memcheck.cu`    | how to check `CUDA` runtime API calls? | `nvcc memcheck.cu` in Linux or `nvcc -Xcompiler "/wd 4819" memcheck.cu` in Windows |`cuda-memcheck ./a.out` in Linux or `cuda-memcheck a` in Windows |
 
 
 ### Chapter 5: The crucial ingredients for obtaining speedup
