@@ -52,8 +52,9 @@ There is no source code for this chapter.
 ### Chapter 4: Error checking
 | file                  | what to learn ? |
 |:----------------------|:----------------|
-| `add4check_api.cu`    | how to check `CUDA` runtime API calls? |
-| `add5check_kernel.cu` | how to check `CUDA` kernel calls? |
+| `check1api.cu`    | how to check `CUDA` runtime API calls? | `nvcc check1api.cu` in Linux or `nvcc -Xcompiler "/wd 4819 check1api.cu` in Windows |`./a.out` in Linux or `a` in Windows |
+| `check2kernel.cu`    | how to check `CUDA` runtime API calls? | `nvcc check2kernel.cu` in Linux or `nvcc -Xcompiler "/wd 4819 check2kernel.cu` in Windows |`./a.out` in Linux or `a` in Windows |
+| `memcheck.cu`    | how to check `CUDA` runtime API calls? | `nvcc memcheck.cu` in Linux or `nvcc -Xcompiler "/wd 4819 memcheck.cu` in Windows |`cuda-memcheck ./a.out` in Linux or `cuda-memcheck a` in Windows |
 
 
 ### Chapter 5: The crucial ingredients for obtaining speedup
