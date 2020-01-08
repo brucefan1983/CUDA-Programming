@@ -200,6 +200,7 @@ Type  Time(%)      Time     Calls       Avg       Min       Max  Name
 * CPU function (with an array length of 10^4) takes 320 ms and 450 ms using single and double precisions, respectively. 
 * GeForce RTX 2080ti (with an array length of 10^6) takes 15 ms and 450 ms using single and double precisions, respectively.
 * Tesla V100 (with an array length of 10^6) takes 11 ms and 28 ms using single and double precisions, respectively.
+* GeForce RTX 2070-laptop (with an array length of 10^6) takes 28 ms and 1000 ms using single and double precisions, respectively.
 
 ### 4.3. Matrix copy and transpose (chapters 7 and 8)
 
