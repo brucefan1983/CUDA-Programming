@@ -60,11 +60,11 @@ There is no source code for this chapter.
 ### Chapter 5: The crucial ingredients for obtaining speedup
 | file        | what to learn? | how to compile? | how to run? |
 |:------------|:---------------|:---------------|:---------------|
-| `add1cpu.cu`              | timing `C++` code | `nvcc add1cpu.cu` in Linux or `nvcc -Xcompiler "/wd 4819" add1cpu.cu` in Windows |`cuda-memcheck ./a.out` in Linux or `a` in Windows |
-| `add2gpu.cu`               | timing `CUDA` kernel using Events | `nvcc add2gpu.cu` in Linux or `nvcc -Xcompiler "/wd 4819" add2gpu.cu` in Windows |`./a.out` in Linux or `a` in Windows |
-| `add3memcpy.cu`               | timing `CUDA` code using Events and `nvprof` | `nvcc add3memcpy.cu` in Linux or `nvcc -Xcompiler "/wd 4819" add3memcpy.cu` in Windows |`./a.out` in Linux or `a` in Windows; can also add `nvprof` before the executable |
-| `arithmetic1cpu.cu`       | increasing arithmetic intensity in `C++` | `nvcc arithmetic1cpu.cu` in Linux or `nvcc -Xcompiler "/wd 4819" arithmetic1cpu.cu` in Windows |`./a.out` in Linux or `a` in Windows |
-| `arithmetic2gpu.cu`        | increasing arithmetic intensity in `CUDA` | `nvcc arithmetic2gpu.cu` in Linux or `nvcc -Xcompiler "/wd 4819" arithmetic2gpu.cu` in Windows |`./a.out` in Linux or `a` in Windows |
+| `add1cpu.cu`              | timing `C++` code | `nvcc -O3 [-DUSE_DP] add1cpu.cu` in Linux or `nvcc -O3 [-DUSE_DP] -Xcompiler "/wd 4819" add1cpu.cu` in Windows |`./a.out` in Linux or `a` in Windows |
+| `add2gpu.cu`               | timing `CUDA` kernel using Events | `nvcc -O3 [-DUSE_DP] add2gpu.cu` in Linux or `nvcc -O3 [-DUSE_DP] -Xcompiler "/wd 4819" add2gpu.cu` in Windows |`./a.out` in Linux or `a` in Windows |
+| `add3memcpy.cu`               | timing `CUDA` code using Events and `nvprof` | `nvcc -O3 [-DUSE_DP] add3memcpy.cu` in Linux or `nvcc -O3 [-DUSE_DP] -Xcompiler "/wd 4819" add3memcpy.cu` in Windows |`[nvprof] ./a.out` in Linux or `[nvprof] a` in Windows|
+| `arithmetic1cpu.cu`       | increasing arithmetic intensity in `C++` | `nvcc -O3 [-DUSE_DP] arithmetic1cpu.cu` in Linux or `nvcc -O3 [-DUSE_DP] -Xcompiler "/wd 4819" arithmetic1cpu.cu` in Windows |`./a.out` in Linux or `a` in Windows |
+| `arithmetic2gpu.cu`        | increasing arithmetic intensity in `CUDA` | `nvcc -O3 [-DUSE_DP] arithmetic2gpu.cu` in Linux or `nvcc -O3 [-DUSE_DP] -Xcompiler "/wd 4819" arithmetic2gpu.cu` in Windows |`./a.out` in Linux or `a` in Windows |
 
 
 ### Chapter 6: Memory organization in `CUDA`
