@@ -185,8 +185,14 @@ How to compile and run?
 
 * If we include cudaMemcpy, GeForce RTX 2080ti takes 130 ms and 250 ms using single and double precisions, respectively. Slower than the CPU!
 
-* If we include cudaMemcpy, GeForce RTX 2070-laptop takes 180 ms and 360 ms using single and double precisions, respectively. Slower than the CPU!
+* If we include cudaMemcpy, GeForce RTX 2070-laptop takes 180 ms and 360 ms using single and double precisions, respectively. Slower than the CPU! Results from using `nvprof`:
 
+`
+Type  Time(%)      Time     Calls       Avg       Min       Max  Name
+ GPU activities:   47.00%  134.38ms         2  67.191ms  62.854ms  71.527ms  [CUDA memcpy HtoD]
+                   40.13%  114.74ms         1  114.74ms  114.74ms  114.74ms  [CUDA memcpy DtoH]
+                   12.86%  36.778ms        11  3.3435ms  3.3424ms  3.3501ms  add(float const *, float const *, float*, int)
+`
 
 
 
