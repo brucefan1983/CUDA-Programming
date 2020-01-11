@@ -177,7 +177,7 @@ How to compile and run?
 ### 4.1. Vector addition (chapter 5)
 
 * Array length = 1.0e8.
-* CPU function takes 77 ms and 160 ms using single and double precisions, respectively. 
+* CPU (my laptop) function takes 60 ms and 120 ms using single and double precisions, respectively. 
 * Computation times using different GPUs are listed in the table below:
 
 |  V100 (S) | V100 (D) | 2080ti (S) | 2080ti (D) | P100 (S) | P100 (D) | laptop-2070 (S) | laptop-2070 (D) | K40 (S) | K40 (D) |
