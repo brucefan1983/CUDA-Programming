@@ -1,9 +1,6 @@
 #include "error.cuh"
 #include <math.h>
 #include <stdio.h>
-#include <iostream>
-#include <chrono>
-using namespace std;
 
 #ifdef USE_DP
     typedef double real;
