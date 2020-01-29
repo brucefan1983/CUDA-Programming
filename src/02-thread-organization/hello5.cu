@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-__global__ void hello_from_gpu(void)
+__global__ void hello_from_gpu()
 {
     const int b = blockIdx.x;
     const int tx = threadIdx.x;
