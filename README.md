@@ -7,15 +7,16 @@ Source codes for my `CUDA` programming book
 ## 2. About the book:
   * To be published by in 2020.
   * The language for the book is **Chinese**.
-  * Covers **from Kepler to Turing (compute capability 3.0-7.5)** and is based on `CUDA` 10.1.
+  * Covers **from Kepler to Turing (compute capability 3.0-7.5)**.
   * Tested in both **Windows** and **Linux**.
   * I assume that the readers
     * are familiar with `C++` (for the whole book)
     * have studied **physics** and **mathematics** at the undergraduate level (for some chapters)
     
-## 3. Testing systems
+## 3. My testing systems
 * Linux: the host compiler we used is `g++`.
-* Windows: We only use the command prompt `CMD` in Windows and the host compiler is `cl` from Visual Studio. When using `nvcc` to compile a CUDA code, we use the compiling flag `-Xcompiler "/wd 4819"` to suppress warnings related to unicode. This might not be needed for you.
+* Windows: We only use the command prompt `CMD` in Windows and the host compiler is `cl` from Visual Studio. When using `nvcc` to compile a CUDA code, you may (or may not) need to add the compiling flag `-Xcompiler "/wd 4819"` to suppress warnings related to unicode.
+* I installed `CUDA` 10.1 update2.
 
 
 ## 4. Table of contents and list of source codes:
@@ -28,11 +29,11 @@ There is no source code for this chapter.
 | file        | what to learn? | how to compile? | how to run? |
 |:------------|:---------------|:---------------|:---------------|
 | `hello.cpp` | writing a Hello Word program in `C++` |`g++ hello.cpp` in Linux or `cl hello.cpp` in Windows |`./a.out` in Linux or `hello` in Windows |
-| `hello1.cu` | a valid `C++` program is (usually) also a valid `CUDA` program | `nvcc hello1.cu` in Linux or `nvcc -Xcompiler "/wd 4819" hello1.cu` in Windows |`./a.out` in Linux or `a` in Windows |
-| `hello2.cu` | write a simple `CUDA` kernel and call `printf()` within it | `nvcc hello2.cu` in Linux or `nvcc -Xcompiler "/wd 4819" hello2.cu` in Windows |`./a.out` in Linux or `a` in Windows |
-| `hello3.cu` | using multiple threads in a block | `nvcc hello3.cu` in Linux or `nvcc -Xcompiler "/wd 4819" hello3.cu` in Windows |`./a.out` in Linux or `a` in Windows |
-| `hello4.cu` | using multiple blocks in a grid | `nvcc hello4.cu` in Linux or `nvcc -Xcompiler "/wd 4819" hello4.cu` in Windows |`./a.out` in Linux or `a` in Windows |
-| `hello5.cu` | using a 2D block | `nvcc hello5.cu` in Linux or `nvcc -Xcompiler "/wd 4819" hello5.cu` in Windows |`./a.out` in Linux or `a` in Windows |
+| `hello1.cu` | a valid `C++` program is (usually) also a valid `CUDA` program | `nvcc hello1.cu` |`./a.out` in Linux or `a` in Windows |
+| `hello2.cu` | write a simple `CUDA` kernel and call `printf()` within it | `nvcc hello2.cu` |`./a.out` in Linux or `a` in Windows |
+| `hello3.cu` | using multiple threads in a block | `nvcc hello3.cu` |`./a.out` in Linux or `a` in Windows |
+| `hello4.cu` | using multiple blocks in a grid | `nvcc hello4.cu` |`./a.out` in Linux or `a` in Windows |
+| `hello5.cu` | using a 2D block | `nvcc hello5.cu` |`./a.out` in Linux or `a` in Windows |
 
 
 ### Chapter 3: The basic framework of a `CUDA` program
