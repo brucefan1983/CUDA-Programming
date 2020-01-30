@@ -29,7 +29,7 @@ There is no source code for this chapter.
 | file        | what to learn? | how to compile? | how to run? |
 |:------------|:---------------|:---------------|:---------------|
 | `hello.cpp` | writing a Hello Word program in `C++` |`g++ hello.cpp` in Linux or `cl hello.cpp` in Windows |`./a.out` in Linux or `hello` in Windows |
-| `hello1.cu` | a valid `C++` program is (usually) also a valid `CUDA` program | `nvcc hello1.cu` |`./a.out` in Linux or `a` in Windows |
+| `hello1.cu` | a valid `C++` program is also a valid `CUDA` program | `nvcc hello1.cu` |`./a.out` in Linux or `a` in Windows |
 | `hello2.cu` | write a simple `CUDA` kernel and call `printf()` within it | `nvcc hello2.cu` |`./a.out` in Linux or `a` in Windows |
 | `hello3.cu` | using multiple threads in a block | `nvcc hello3.cu` |`./a.out` in Linux or `a` in Windows |
 | `hello4.cu` | using multiple blocks in a grid | `nvcc hello4.cu` |`./a.out` in Linux or `a` in Windows |
