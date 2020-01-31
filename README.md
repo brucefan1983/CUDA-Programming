@@ -191,6 +191,7 @@ How to compile and run?
 * Tesla V100 (with an array length of 10^6) takes 11 ms and 28 ms using single and double precisions, respectively.
 * GeForce RTX 2070-laptop (with an array length of 10^6) takes 28 ms and 1000 ms using single and double precisions, respectively.
 *  GeForce RTX 2070-laptop with single precision:
+
 | N    | time |
 |:-------|:-------|
 | 1000    | 0.91 ms | 
