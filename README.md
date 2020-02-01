@@ -21,6 +21,9 @@ Source codes for my `CUDA` programming book
 
 ## 4. Table of contents and list of source codes:
 
+### My previous student Qi You is rewriting the sample codes using pyCUDA:
+https://github.com/YouQixiaowu/CUDA-Programming-with-Python
+
 ### Chapter 1: Introduction to GPU hardware and `CUDA` programming tools
 There is no source code for this chapter.
 
