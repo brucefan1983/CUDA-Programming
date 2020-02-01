@@ -42,6 +42,7 @@ int main(int argc, char **argv)
         CHECK(cudaEventCreate(&start));
         CHECK(cudaEventCreate(&stop));
         CHECK(cudaEventRecord(start));
+        cudaEventQuery(start);
 
         arithmetic<<<grid_size, block_size>>>(d_x, x0, N);
 

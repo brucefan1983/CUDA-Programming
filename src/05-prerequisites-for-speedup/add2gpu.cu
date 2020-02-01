@@ -49,6 +49,7 @@ int main(void)
         CHECK(cudaEventCreate(&start));
         CHECK(cudaEventCreate(&stop));
         CHECK(cudaEventRecord(start));
+        cudaEventQuery(start);
 
         add<<<grid_size, block_size>>>(d_x, d_y, d_z, N);
 

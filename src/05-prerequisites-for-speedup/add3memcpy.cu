@@ -47,6 +47,7 @@ int main(void)
         CHECK(cudaEventCreate(&start));
         CHECK(cudaEventCreate(&stop));
         CHECK(cudaEventRecord(start));
+        cudaEventQuery(start);
 
         CHECK(cudaMemcpy(d_x, h_x, M, cudaMemcpyHostToDevice));
         CHECK(cudaMemcpy(d_y, h_y, M, cudaMemcpyHostToDevice));

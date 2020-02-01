@@ -31,6 +31,7 @@ int main(void)
         CHECK(cudaEventCreate(&start));
         CHECK(cudaEventCreate(&stop));
         CHECK(cudaEventRecord(start));
+        cudaEventQuery(start);
 
         arithmetic(x, x0, N);
 
