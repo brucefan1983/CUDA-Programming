@@ -70,10 +70,10 @@ https://github.com/YouQixiaowu/CUDA-Programming-with-Python
 
 ### 第 6 章： `CUDA` 中的内存组织
 
-| file        | what to learn? | how to compile? | how to run? |
-|:------------|:---------------|:---------------|:---------------|
-| `global.cu`           | how to use static global memory? | `nvcc global.cu` in Linux or `nvcc -Xcompiler "/wd 4819" global.cu` in Windows |`./a.out` in Linux or `a` in Windows |
-| `device_query.cu`     | how to query some properties of your GPU? | `nvcc device_query.cu` in Linux or `nvcc -Xcompiler "/wd 4819" device_query.cu` in Windows |`./a.out` in Linux or `a` in Windows |
+| 文件        | 知识点 | 
+|:------------|:---------------|
+| `static.cu`           | 如何使用静态全局内存 |
+| `query.cu`     | 如何在 CUDA 程序中查询所用 GPU 的相关技术指标 |
 
 
 ### 第 7 章：全局内存的合理使用
