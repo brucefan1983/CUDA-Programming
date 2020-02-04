@@ -1,4 +1,4 @@
-# `CUDA`-Programming
+# `CUDA` 编程
 Source codes for my `CUDA` programming book
 
 ## 1. Warning
