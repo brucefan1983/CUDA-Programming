@@ -79,6 +79,7 @@ void timing(const real *d_A, real *d_B, const int N, const int task)
         CHECK(cudaEventCreate(&start));
         CHECK(cudaEventCreate(&stop));
         CHECK(cudaEventRecord(start));
+        cudaEventQuery(start);
 
         switch (task)
         {
