@@ -1,22 +1,20 @@
-# `CUDA` 编程
-Source codes for my `CUDA` programming book
+# 《`CUDA` 编程：基础与实践》源代码
 
-## 1. Warning
-* The codes are still under development.
+## 1. 告读者：
+* 代码还在开发中。
 
-## 2. About the book:
-  * To be published by in 2020.
-  * The language for the book is **Chinese**.
-  * Covers **from Kepler to Turing (compute capability 3.0-7.5)**.
-  * Tested in both **Windows** and **Linux**.
-  * I assume that the readers
-    * are familiar with `C++` (for the whole book)
-    * have studied **physics** and **mathematics** at the undergraduate level (for some chapters)
+## 2. 关于本书：
+  * 将于 2020 年在清华大学出版社出版，语言为中文。
+  * 覆盖开普勒到图灵（计算能力从3.5到7.5）的所有GPU架构。
+  * 尽量同时照顾 Windows 和 Linux 用户。
+  * 假设读者有如下基础：
+    * 熟悉 `C++` (对全书来说)；
+    * 熟悉本科水平的物理和数学（对某些章节来说）。
     
-## 3. My testing systems
-* Linux: the host compiler we used is `g++`.
-* Windows: We only use the command prompt `CMD` in Windows and the host compiler is `cl` from Visual Studio. When using `nvcc` to compile a CUDA code, you may (or may not) need to add the compiling flag `-Xcompiler "/wd 4819"` to suppress warnings related to unicode.
-* I installed `CUDA` 10.1 update2.
+## 3. 我的测试系统
+* Linux: 主机编译器用的 `g++`。
+* Windows: 仅使用命令行解释器 `CMD`，主机编译器用 Visual Studio 中的 `cl`。在用 `nvcc` 编译 CUDA 程序时，可能需要添加 `-Xcompiler "/wd 4819"` 选线消除和 unicode 有关的警告。
+* 全书代码可在 `CUDA` 9-10.2 （包含）之间的版本运行。
 
 
 ## 4. Table of contents and list of source codes:
