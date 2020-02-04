@@ -1,11 +1,12 @@
 # 《`CUDA` 编程：基础与实践》源代码
 
 ## 1. 告读者：
-* 代码还在开发中。
+* 代码还在开发中。由琪同学为本书写了 Python 版本的代码（用 pyCUDA）:
+https://github.com/YouQixiaowu/CUDA-Programming-with-Python
 
 ## 2. 关于本书：
   * 将于 2020 年在清华大学出版社出版，语言为中文。
-  * 覆盖开普勒到图灵（计算能力从3.5到7.5）的所有GPU架构。
+  * 覆盖开普勒到图灵（计算能力从 3.5 到 7.5）的所有 GPU 架构。
   * 尽量同时照顾 Windows 和 Linux 用户。
   * 假设读者有如下基础：
     * 熟悉 `C++` (对全书来说)；
@@ -17,16 +18,15 @@
 * 全书代码可在 `CUDA` 9-10.2 （包含）之间的版本运行。
 
 
-## 4. Table of contents and list of source codes:
+## 4. 目录和源代码条目
 
-### My previous student Qi You is rewriting the sample codes using pyCUDA:
-https://github.com/YouQixiaowu/CUDA-Programming-with-Python
+### 第 1 章：GPU 硬件和 CUDA 工具
 
-### Chapter 1: Introduction to GPU hardware and `CUDA` programming tools
-There is no source code for this chapter.
+本章无源代码。
 
 
-### Chapter 2: Thread organization in `CUDA`
+### 第 2 章：`CUDA` 中的线程组织
+
 | file        | what to learn? | how to compile? | how to run? |
 |:------------|:---------------|:---------------|:---------------|
 | `hello.cpp` | writing a Hello Word program in `C++` |`g++ hello.cpp` in Linux or `cl hello.cpp` in Windows |`./a.out` in Linux or `hello` in Windows |
@@ -37,7 +37,8 @@ There is no source code for this chapter.
 | `hello5.cu` | using a 2D block | `nvcc hello5.cu` |`./a.out` in Linux or `a` in Windows |
 
 
-### Chapter 3: The basic framework of a `CUDA` program
+### 第 3 章：`CUDA` 程序的基本框架
+
 | file        | what to learn? | how to compile? | how to run? |
 |:------------|:---------------|:---------------|:---------------|
 | `add.cpp`      | adding up two arrays using `C++` |`g++ add.cpp` in Linux or `cl add.cpp` in Windows |`./a.out` in Linux or `add` in Windows |
@@ -47,7 +48,8 @@ There is no source code for this chapter.
 | `add4device.cu`| how to define and call `__device__` functions? | `nvcc add4device.cu` |`./a.out` in Linux or `a` in Windows |
 
 
-### Chapter 4: Error checking
+### 第 4 章：`CUDA` 程序的错误检测
+
 | file        | what to learn? | how to compile? | how to run? |
 |:------------|:---------------|:---------------|:---------------|
 | `check1api.cu`    | how to check `CUDA` runtime API calls? | `nvcc check1api.cu` |`./a.out` in Linux or `a` in Windows |
@@ -55,7 +57,8 @@ There is no source code for this chapter.
 | `memcheck.cu`    | how to check `CUDA` runtime API calls? | `nvcc memcheck.cu` |`cuda-memcheck ./a.out` in Linux or `cuda-memcheck a` in Windows |
 
 
-### Chapter 5: The crucial ingredients for obtaining speedup
+### 第 5 章：获得 GPU 加速的前提
+
 | file        | what to learn? | how to compile? | how to run? |
 |:------------|:---------------|:---------------|:---------------|
 | `add1cpu.cu`              | timing `C++` code | `nvcc -O3 [-DUSE_DP] add1cpu.cu` in Linux or `nvcc -O3 [-DUSE_DP] -Xcompiler "/wd 4819" add1cpu.cu` in Windows |`./a.out` in Linux or `a` in Windows |
@@ -65,20 +68,22 @@ There is no source code for this chapter.
 | `arithmetic2gpu.cu`        | increasing arithmetic intensity in `CUDA` | `nvcc -O3 [-DUSE_DP] arithmetic2gpu.cu` in Linux or `nvcc -O3 [-DUSE_DP] -Xcompiler "/wd 4819" arithmetic2gpu.cu` in Windows |`./a.out` in Linux or `a` in Windows |
 
 
-### Chapter 6: Memory organization in `CUDA`
+### 第 6 章： `CUDA` 中的内存组织
+
 | file        | what to learn? | how to compile? | how to run? |
 |:------------|:---------------|:---------------|:---------------|
 | `global.cu`           | how to use static global memory? | `nvcc global.cu` in Linux or `nvcc -Xcompiler "/wd 4819" global.cu` in Windows |`./a.out` in Linux or `a` in Windows |
 | `device_query.cu`     | how to query some properties of your GPU? | `nvcc device_query.cu` in Linux or `nvcc -Xcompiler "/wd 4819" device_query.cu` in Windows |`./a.out` in Linux or `a` in Windows |
 
 
+### 第 7 章：全局内存的合理使用
 
-### Chapter 7: Using global memory: matrix transpose
 | file        | what to learn? | how to compile? | how to run? |
 |:------------|:---------------|:---------------|:---------------|
 | `matrix.cu`           | effects of coalesced and uncoalesced memory accesses |
 
-### Chapter 8: Using shared memory: reduction and matrix transpose
+### 第 8 章：共享内存的合理使用
+
 | file        | what to learn? | how to compile? | how to run? |
 |:------------|:---------------|:---------------|:---------------|
 | `reduce_cpu.cu`              | reduction in `C++` |
@@ -86,7 +91,8 @@ There is no source code for this chapter.
 | `bank_conflict.cu`           | how to avoid shared memory bank conflict |
 
 
-### Chapter 9: Using atomic functions
+### 第 9 章：原子函数的合理使用
+
 | file        | what to learn? | how to compile? | how to run? |
 |:------------|:---------------|:---------------|:---------------|
 | `reduce.cu`        | using `atomicAdd` for reduction (good or bad?) |
@@ -94,7 +100,7 @@ There is no source code for this chapter.
 | `neighbor_gpu.cu`  | neighbor list construction using GPU, with and without using `atomicAdd` |
 
 
-### Chapter 10: Using warp-level functions
+### 第 10 章: 线程束内部函数
 | file        | what to learn? | how to compile? | how to run? |
 |:------------|:---------------|:---------------|:---------------|
 | `reduce7syncwarp.cu` | using the `__syncwarp()` function instead of the `__syncthreads()` function within warps |
@@ -102,7 +108,7 @@ There is no source code for this chapter.
 | `reduce9cp.cu`       | using the cooperative groups |
 
 
-### Chapter 11: `CUDA` streams 
+### 第 11 章： `CUDA` 流
 | file        | what to learn? | how to compile? | how to run? |
 |:------------|:---------------|:---------------|:---------------|
 | `host_kernel.cu`     | overlapping host and device computations |
@@ -170,9 +176,9 @@ How to compile and run?
   * type `plot_results` in Matlab command window to check the results
   
   
-## 5. Summary of my testing results
+## 5. 我的部分测试结果
 
-### 4.1. Vector addition (chapter 5)
+### 4.1. 矢量相加 (第 5 章)
 
 * Array length = 1.0e8.
 * CPU (my laptop) function takes 60 ms and 120 ms using single and double precisions, respectively. 
