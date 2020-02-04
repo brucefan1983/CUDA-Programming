@@ -5,7 +5,7 @@ const double EPSILON = 1.0e-15;
 const double a = 1.23;
 const double b = 2.34;
 const double c = 3.57;
-void __global__ add(const double *x, const double *y, double *z, const int N);
+void __global__ add(const double *x, const double *y, double *z);
 void check(const double *z, const int N);
 
 int main(void)
@@ -31,7 +31,7 @@ int main(void)
 
     const int block_size = 128;
     const int grid_size = N / block_size;
-    add<<<grid_size, block_size>>>(d_x, d_y, d_z, N);
+    add<<<grid_size, block_size>>>(d_x, d_y, d_z);
 
     cudaMemcpy(h_z, d_z, M, cudaMemcpyDeviceToHost);
     check(h_z, N);
@@ -45,7 +45,7 @@ int main(void)
     return 0;
 }
 
-void __global__ add(const double *x, const double *y, double *z, const int N)
+void __global__ add(const double *x, const double *y, double *z)
 {
     const int n = blockDim.x * blockIdx.x + threadIdx.x;
     z[n] = x[n] + y[n];
