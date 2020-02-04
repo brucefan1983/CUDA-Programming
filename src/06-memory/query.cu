@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
         prop.sharedMemPerMultiprocessor / 1024.0);
     printf("Maximum number of registers per block:     %d K\n",
         prop.regsPerBlock / 1024);
-    printf("Maximum number of registers SM:            %d K\n",
+    printf("Maximum number of registers per SM:        %d K\n",
         prop.regsPerMultiprocessor / 1024);
     printf("Maximum number of threads per block:       %d\n",
         prop.maxThreadsPerBlock);
