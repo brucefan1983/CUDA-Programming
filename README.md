@@ -78,9 +78,9 @@ https://github.com/YouQixiaowu/CUDA-Programming-with-Python
 
 ### 第 7 章：全局内存的合理使用
 
-| file        | what to learn? | how to compile? | how to run? |
-|:------------|:---------------|:---------------|:---------------|
-| `matrix.cu`           | effects of coalesced and uncoalesced memory accesses |
+| 文件        | 知识点 | 
+|:------------|:---------------|
+| `matrix.cu` | 合并与非合并读、写对程序性能的影响 |
 
 ### 第 8 章：共享内存的合理使用
 
