@@ -85,11 +85,11 @@ https://github.com/YouQixiaowu/CUDA-Programming-with-Python
 
 ### 第 8 章：共享内存的合理使用
 
-| file        | what to learn? | how to compile? | how to run? |
-|:------------|:---------------|:---------------|:---------------|
-| `reduce_cpu.cu`              | reduction in `C++` |
-| `reduce_gpu.cu`              | doing reduction in CUDA |
-| `bank_conflict.cu`           | how to avoid shared memory bank conflict |
+| 文件        | 知识点 |
+|:------------|:---------------|
+| `reduce1cpu.cu`     | `C++` 版本的规约函数 |
+| `reduce2gpu.cu`     | 仅使用全局内存和同时使用全局内存和共享内存的规约核函数|
+| `bank.cu`           | 使用共享内存实现矩阵转置并避免共享内存的 bank 冲突 |
 
 
 ### 第 9 章：原子函数的合理使用
