@@ -181,44 +181,47 @@ How to compile and run?
 
 ### 4.1. 矢量相加 (第 5 章)
 
-* Array length = 1.0e8.
-* CPU (my laptop) function takes 60 ms and 120 ms using single and double precisions, respectively. 
-* Computation times using different GPUs are listed in the table below:
+* 数组元素个数 = 1.0e8。
+* CPU (我的笔记本) 函数的执行时间是 60 ms （单精度）核 120 ms （双精度）。
+* GPU 执行时间见下表：
 
 |  V100 (S) | V100 (D) | 2080ti (S) | 2080ti (D) | P100 (S) | P100 (D) | laptop-2070 (S) | laptop-2070 (D) | K40 (S) | K40 (D) |
 |:---------|:---------|:---------|:---------|:---------|:---------|:---------|:---------|:---------|:---------|
 | 1.5 ms | 3.0 ms |  2.1 ms |  4.3 ms | 2.2 ms |  4.3 ms | 3.3 ms | 6.8 ms | 6.5 ms | 13 ms |
 
-* If we include cudaMemcpy, GeForce RTX 2080ti takes 130 ms and 250 ms using single and double precisions, respectively. Slower than the CPU!
+* 如果包含 cudaMemcpy 所花时间，GeForce RTX 2070-laptop 用时 180 ms （单精度）和 360 ms （双精度），是 CPU 版本的三倍慢！
 
-* If we include cudaMemcpy, GeForce RTX 2070-laptop takes 180 ms and 360 ms using single and double precisions, respectively. Slower than the CPU! 
+### 4.2. 一个高算术强度的函数（第 5 章）
+* CPU 函数（数组长度为 10^4）用时 320 ms （单精度）和 450 ms （双精度）。
+* GPU 函数（数组长度为 10^6）用时情况如下表：
 
-### 4.2. A function with high arithmetic intensity (chapter 5)
-* CPU function (with an array length of 10^4) takes 320 ms and 450 ms using single and double precisions, respectively. 
-* GeForce RTX 2080ti (with an array length of 10^6) takes 15 ms and 450 ms using single and double precisions, respectively.
-* Tesla V100 (with an array length of 10^6) takes 11 ms and 28 ms using single and double precisions, respectively.
-* GeForce RTX 2070-laptop (with an array length of 10^6) takes 28 ms and 1000 ms using single and double precisions, respectively.
-*  GeForce RTX 2070-laptop with single precision:
+|  V100 (S) | V100 (D) | 2080ti (S) | 2080ti (D) | laptop-2070 (S) | laptop-2070 (D) |
+|:---------|:---------|:---------|:---------|:---------|:---------|:---------|:---------|:---------|:---------|
+| 11 ms | 28 ms |  15 ms |  450 ms | 28 ms |  1000 ms |
 
-| N    | time |
+* 用 GeForce RTX 2070-laptop 时核函数执行时间与数组元素个数 N 的关系见下表（单精度）：
+
+| N    | 时间 |
 |:-------|:-------|
 | 1000    | 0.91 ms | 
 | 10000   | 0.99 ms | 
 | 100000  | 3.8 ms | 
-| 1000000       | 28 ms |
+| 1000000 | 28 ms |
 | 10000000   | 250 ms | 
 | 100000000  | 2500 ms |
 
-### 4.3. Matrix copy and transpose (chapters 7 and 8)
+### 4.3. 矩阵复制和转置 (第 7-8 章)
+* 矩阵维度为 10000 乘 10000。
+* 核函数执行时间见下表：
 
-| computation     | V100 (S) | V100 (D) | 2080ti (S) | 2080ti (D) | K40 (S) |
+| 计算     | V100 (S) | V100 (D) | 2080ti (S) | 2080ti (D) | K40 (S) |
 |:---------------------------------|:-------|:-------|:-------|:-------|:-------|
-| matrix copy                      | 1.1 ms | 2.0 ms | 1.6 ms | 2.9 ms |  | 
-| transpose with coalesced read    | 4.5 ms | 6.2 ms | 5.3 ms | 5.4 ms | 12 ms | 
-| transpose with coalesced write   | 1.6 ms | 2.2 ms | 2.8 ms | 3.7 ms | 23 ms | 
-| transpose with ldg read          | 1.6 ms | 2.2 ms | 2.8 ms | 3.7 ms | 8 ms |
-| transpose with bank conflict     | 1.8 ms | 2.6 ms | 3.5 ms | 4.3 ms |  | 
-| transpose without bank conflict  | 1.4 ms | 2.5 ms | 2.3 ms | 4.2 ms |  |
+| 矩阵复制                             | 1.1 ms | 2.0 ms | 1.6 ms | 2.9 ms |  | 
+| 读取为合并、写入为非合并的矩阵转置     | 4.5 ms | 6.2 ms | 5.3 ms | 5.4 ms | 12 ms | 
+| 写入为合并、读取为非合并的矩阵转置     | 1.6 ms | 2.2 ms | 2.8 ms | 3.7 ms | 23 ms | 
+| 在上一个版本的基础上使用 `__ldg` 函数 | 1.6 ms | 2.2 ms | 2.8 ms | 3.7 ms | 8 ms |
+| 利用共享内存转置，但有 bank 冲突      | 1.8 ms | 2.6 ms | 3.5 ms | 4.3 ms |  | 
+| 利用共享内存转置，且无 bank 冲突      | 1.4 ms | 2.5 ms | 2.3 ms | 4.2 ms |  |
 
 
 ### 4.4. Reduction (chapters 8-10 and 14)
