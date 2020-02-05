@@ -27,25 +27,25 @@ https://github.com/YouQixiaowu/CUDA-Programming-with-Python
 
 ### 第 2 章：`CUDA` 中的线程组织
 
-| file        | what to learn? | how to compile? | how to run? |
-|:------------|:---------------|:---------------|:---------------|
-| `hello.cpp` | writing a Hello Word program in `C++` |`g++ hello.cpp` in Linux or `cl hello.cpp` in Windows |`./a.out` in Linux or `hello` in Windows |
-| `hello1.cu` | a valid `C++` program is also a valid `CUDA` program | `nvcc hello1.cu` |`./a.out` in Linux or `a` in Windows |
-| `hello2.cu` | write a simple `CUDA` kernel and call `printf()` within it | `nvcc hello2.cu` |`./a.out` in Linux or `a` in Windows |
-| `hello3.cu` | using multiple threads in a block | `nvcc hello3.cu` |`./a.out` in Linux or `a` in Windows |
-| `hello4.cu` | using multiple blocks in a grid | `nvcc hello4.cu` |`./a.out` in Linux or `a` in Windows |
-| `hello5.cu` | using a 2D block | `nvcc hello5.cu` |`./a.out` in Linux or `a` in Windows |
+| 文件       | 知识点 |
+|:------------|:---------------|
+| `hello.cpp` | 用 `C++` 写一个 Hello World 程序 |
+| `hello1.cu` | 一个正确的 `C++` 程序也是一个正确的 `CUDA` 程序 | 
+| `hello2.cu` | 写一个打印字符串的 `CUDA` 核函数并调用 | 
+| `hello3.cu` | 使用含有多个线程的线程块 |
+| `hello4.cu` | 使用多个网格 |
+| `hello5.cu` | 使用两维线程块 |
 
 
 ### 第 3 章：`CUDA` 程序的基本框架
 
-| file        | what to learn? | how to compile? | how to run? |
-|:------------|:---------------|:---------------|:---------------|
-| `add.cpp`      | adding up two arrays using `C++` |`g++ add.cpp` in Linux or `cl add.cpp` in Windows |`./a.out` in Linux or `add` in Windows |
-| `add1.cu`      | adding up two arrays using `CUDA` | `nvcc add1.cu` |`./a.out` in Linux or `a` in Windows |
-| `add2wrong.cu` | what if the memory transfer direction is wrong? | `nvcc add2wrong` |`./a.out` in Linux or `a` in Windows |
-| `add3if.cu`    | when do we need an if statement in the kernel? | `nvcc add3if.cu`  |`./a.out` in Linux or `a` in Windows |
-| `add4device.cu`| how to define and call `__device__` functions? | `nvcc add4device.cu` |`./a.out` in Linux or `a` in Windows |
+| 文件        | 知识点 |
+|:------------|:---------------|
+| `add.cpp`      | 数组相加的 `C++` 版本 |
+| `add1.cu`      | 数组相加的 `CUDA` 版本 |
+| `add2wrong.cu` | 如果数据传输方向搞错了会怎样？ |
+| `add3if.cu`    | 什么时候必须在核函数使用 if 语句？ |
+| `add4device.cu`| 定义与使用 `__device__` 函数 |
 
 
 ### 第 4 章：`CUDA` 程序的错误检测
