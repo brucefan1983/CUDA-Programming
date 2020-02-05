@@ -50,29 +50,30 @@ https://github.com/YouQixiaowu/CUDA-Programming-with-Python
 
 ### 第 4 章：`CUDA` 程序的错误检测
 
-| file        | what to learn? | how to compile? | how to run? |
-|:------------|:---------------|:---------------|:---------------|
-| `check1api.cu`    | how to check `CUDA` runtime API calls? | `nvcc check1api.cu` |`./a.out` in Linux or `a` in Windows |
-| `check2kernel.cu`    | how to check `CUDA` runtime API calls? | `nvcc check2kernel.cu` |`./a.out` in Linux or `a` in Windows |
-| `memcheck.cu`    | how to check `CUDA` runtime API calls? | `nvcc memcheck.cu` |`cuda-memcheck ./a.out` in Linux or `cuda-memcheck a` in Windows |
+| 文件       | 知识点 |
+|:------------|:---------------|
+| `check1api.cu`    | 检测 `CUDA` 运行时 API 函数的调用 |
+| `check2kernel.cu` | 检测 `CUDA` 核函数的调用 | 
+| `memcheck.cu`     | 用 `cuda-memcheck` 检测内存方面的错误 |
+| `error.cuh`       | 本书常用的用于检测错误的宏函数 |
 
 
 ### 第 5 章：获得 GPU 加速的前提
 
-| file        | what to learn? | how to compile? | how to run? |
-|:------------|:---------------|:---------------|:---------------|
-| `add1cpu.cu`              | timing `C++` code | `nvcc -O3 [-DUSE_DP] add1cpu.cu` in Linux or `nvcc -O3 [-DUSE_DP] -Xcompiler "/wd 4819" add1cpu.cu` in Windows |`./a.out` in Linux or `a` in Windows |
-| `add2gpu.cu`               | timing `CUDA` kernel using Events | `nvcc -O3 [-DUSE_DP] add2gpu.cu` in Linux or `nvcc -O3 [-DUSE_DP] -Xcompiler "/wd 4819" add2gpu.cu` in Windows |`./a.out` in Linux or `a` in Windows |
-| `add3memcpy.cu`               | timing `CUDA` code using Events and `nvprof` | `nvcc -O3 [-DUSE_DP] add3memcpy.cu` in Linux or `nvcc -O3 [-DUSE_DP] -Xcompiler "/wd 4819" add3memcpy.cu` in Windows |`[nvprof] ./a.out` in Linux or `[nvprof] a` in Windows|
-| `arithmetic1cpu.cu`       | increasing arithmetic intensity in `C++` | `nvcc -O3 [-DUSE_DP] arithmetic1cpu.cu` in Linux or `nvcc -O3 [-DUSE_DP] -Xcompiler "/wd 4819" arithmetic1cpu.cu` in Windows |`./a.out` in Linux or `a` in Windows |
-| `arithmetic2gpu.cu`        | increasing arithmetic intensity in `CUDA` | `nvcc -O3 [-DUSE_DP] arithmetic2gpu.cu` in Linux or `nvcc -O3 [-DUSE_DP] -Xcompiler "/wd 4819" arithmetic2gpu.cu` in Windows |`./a.out` in Linux or `a` in Windows |
+| 文件       | 知识点 |
+|:------------|:---------------|
+| `add1cpu.cu`    | 为 `C++` 版的数组相加函数计时 |
+| `add2gpu.cu`    | 为数组相加核函数计时 |
+| `add3memcpy.cu` | 如果把数据传输的时间也包含进来，还有加速吗？|
+| `arithmetic1cpu.cu`       | 提高算术强度的 `C++` 函数 | 
+| `arithmetic2gpu.cu`       | 提高算术强度的核函数；GPU/CPU 加速比是不是很高？ |
 
 
 ### 第 6 章： `CUDA` 中的内存组织
 
 | 文件        | 知识点 | 
 |:------------|:---------------|
-| `static.cu`           | 如何使用静态全局内存 |
+| `static.cu`    | 如何使用静态全局内存 |
 | `query.cu`     | 如何在 CUDA 程序中查询所用 GPU 的相关技术指标 |
 
 
