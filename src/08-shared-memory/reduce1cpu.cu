@@ -38,6 +38,7 @@ void timing(const real *x, const int N)
         CHECK(cudaEventCreate(&start));
         CHECK(cudaEventCreate(&stop));
         CHECK(cudaEventRecord(start));
+        cudaEventQuery(start);
 
         sum = reduce(x, N);
 
