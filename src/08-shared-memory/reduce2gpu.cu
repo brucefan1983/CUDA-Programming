@@ -40,7 +40,6 @@ void __global__ reduce_global(real *d_x, real *d_y)
 {
     const int tid = threadIdx.x;
     real *x = d_x + blockDim.x * blockIdx.x;
-    __syncthreads();
 
     for (int offset = blockDim.x >> 1; offset > 0; offset >>= 1)
     {
