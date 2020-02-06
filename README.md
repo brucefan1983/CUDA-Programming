@@ -94,87 +94,87 @@ https://github.com/YouQixiaowu/CUDA-Programming-with-Python
 
 ### 第 9 章：原子函数的合理使用
 
-| file        | what to learn? | how to compile? | how to run? |
-|:------------|:---------------|:---------------|:---------------|
-| `reduce.cu`        | using `atomicAdd` for reduction (good or bad?) |
-| `neighbor_cpu.cu`  | neighbor list construction using CPU |
-| `neighbor_gpu.cu`  | neighbor list construction using GPU, with and without using `atomicAdd` |
+| 文件        | 知识点 |
+|:------------|:---------------|
+| `reduce.cu`        | 在规约核函数中使用原子函数 `atomicAdd` |
+| `neighbor1cpu.cu`  | CPU 版本的邻居列表构建函数 |
+| `neighbor2gpu.cu`  | GPU 版本的邻居列表构建函数，分使用和不使用原子函数的情况 |
 
 
 ### 第 10 章: 线程束内部函数
-| file        | what to learn? | how to compile? | how to run? |
-|:------------|:---------------|:---------------|:---------------|
-| `reduce7syncwarp.cu` | using the `__syncwarp()` function instead of the `__syncthreads()` function within warps |
-| `reduce8shfl.cu`     | using the `__shfl_down_sync()` or the `__shfl_xor_sync()` function for warp reduction |
-| `reduce9cp.cu`       | using the cooperative groups |
+| 文件        | 知识点 |
+|:------------|:---------------|
+| `reduce1syncwarp.cu` | 在线程束内部可以用 `__syncwarp()` 函数替换 `__syncthreads()` 函数 |
+| `reduce2shfl.cu`     | 适当地使用洗牌函数进行规约 |
+| `reduce3cp.cu`       | 协作组的使用 |
 
 
 ### 第 11 章： `CUDA` 流
-| file        | what to learn? | how to compile? | how to run? |
-|:------------|:---------------|:---------------|:---------------|
-| `host_kernel.cu`     | overlapping host and device computations |
-| `kernel_kernel.cu`   | overlaping multiple kernels |
-| `kernel_transfer.cu` | overlaping kernel execution and memory transfer |
+| 文件        | 知识点 |
+|:------------|:---------------|
+| `host_kernel.cu`     | 重叠主机与设备计算 |
+| `kernel_kernel.cu`   | 重叠核函数之间的计算 |
+| `kernel_transfer.cu` | 重叠核函数执行与数据传输 |
 
 
-### Chapter 12: Using `CUDA` libraries
-| file        | what to learn? | how to compile? | how to run? |
-|:------------|:---------------|:---------------|:---------------|
-| `thrust_scan_vector.cu`  | using the device vector in `thrust` |
-| `thrust_scan_pointer.cu` | using the device pointer in `thrust` |
-| `cublas_gemm.cu`         | matrix multiplication in `cuBLAS` |
-| `cusolver.cu`            | matrix eigenvalues in `cuSolver` |
-| `curand_host1.cu`        | uniform random numbers in `cuRAND` |
-| `curand_host2.cu`        | Gaussian random numbers in `cuRAND` |
+### 第 12 章：统一内存
+| 文件       | 知识点 | 
+|:------------|:---------------|
+| `add_unified.cu` | 使用统一内存的简单程序 |
 
 
-### Chapter 13: Unified memory programming 
-| file        | what to learn? | how to compile? | how to run? |
-|:------------|:---------------|:---------------|:---------------|
-| `add_unified.cu` | using unified memory |
-
-
-### Chapter 14: Summary for developing and optimizing `CUDA` programs 
+### 第 13 章：总结与其它优化技巧
 There is no source code for this chapter.
 
 
-### Chapter 15: Introduction to molecular dynamics simulation
-There is no source code for this chapter.
+### 第 14 章：分子动力学模拟（MD）简介
+本章无源代码。
 
 
-### Chapter 16: A `C++` program for molecular dynamics simulation
+### 第 15 章：C++ 版本的 MD 程序
 How to compile and run?
   * type `make` to compile
   * type `./ljmd 8 10000` to run
   * type `plot_results` in Matlab command window to check the results
 
 
-### Chapter 17: MD code: only accelerating the force-evaluation part
+### 第 16 章：仅加速求力的部分
 How to compile and run?
   * type `make` to compile
   * type `./ljmd 40 10000` to run
   * type `plot_results` in Matlab command window to check the results
 
 
-### Chapter 18: MD code: accelerating the whole code
+### 第 17 章：加速全部程序
 How to compile and run?
   * type `make` to compile
   * type `./ljmd 40 10000` to run
   * type `plot_results` in Matlab command window to check the results
 
 
-### Chapter 19: MD code: various optimizations
+### 第 18 章：内存和其它优化
 How to compile and run?
   * type `make` or `make -f makefile.ldg` or `make -f makefile.fast_math` to compile
   * type `./ljmd 40 10000` to run
   * type `plot_results` in Matlab command window to check the results
 
 
-### Chapter 20: MD code: using unified memory
+### 第 19 章：用统一内存的 MD 程序
 How to compile and run?
   * type `make` or `make -f makefile.pascal` to compile
   * type `./ljmd 40 10000` to run
   * type `plot_results` in Matlab command window to check the results
+  
+  
+### 第 20 章：CUDA 库
+| 文件        | 知识点 |
+|:------------|:---------------|
+| `thrust_scan_vector.cu`  | 使用 `thrust` 中的设备矢量 |
+| `thrust_scan_pointer.cu` | 使用 `thrust` 中的设备指针 |
+| `cublas_gemm.cu`         | 用 `cuBLAS` 实现矩阵相乘 |
+| `cusolver.cu`            | 用 `cuSolver` 求矩阵本征值 |
+| `curand_host1.cu`        | 用 `cuRAND` 产生均匀分布的随机数 |
+| `curand_host2.cu`        | 用 `cuRAND` 产生高斯分布的随机数 |
   
   
 ## 5. 我的部分测试结果
