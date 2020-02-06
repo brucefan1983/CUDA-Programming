@@ -233,7 +233,7 @@ How to compile and run?
 | computation & machine                         | K40 (S)   | GeForce RTX 2070 (S)  |   result  |
 |:----------------------------------------------|:--------|:----------|:----------|
 | CPU with naive summation                      | 100 ms   | 100 ms | 33554432  | 
-| global memory only                            | 16.3 ms | 6.0 ms  | 123633392 | 
+| global memory only                            | 16.3 ms | 5.8 ms  | 123633392 | 
 | static shared memory                          | 10.8 ms | 5.8 ms | 123633392 | 
 | dynamic shared memory                         | 10.8 ms | 5.8 ms | 123633392 |  
 | atomicAdd                                     | 9.8 ms  | |123633392 | 
