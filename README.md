@@ -230,18 +230,18 @@ How to compile and run?
 * The correct summation should be 123000000.
 * Using single precision with both CPU and GPU (Tesla K40).
 
-| computation & machine                         | time    |   result  |
-|:----------------------------------------------|:--------|:----------|
-| CPU with naive summation                      | 85 ms   | 33554432  | 
-| global memory only                            | 16.3 ms | 123633392 | 
-| static shared memory                          | 10.8 ms | 123633392 | 
-| dynamic shared memory                         | 10.8 ms | 123633392 |  
-| atomicAdd                                     | 9.8 ms  | 123633392 | 
-| atomicAdd and syncwarp                        | 8.1 ms  | 123633392 | 
-| atomicAdd and shfl                            | 6.3 ms  | 123633392 | 
-| atomicAdd and CP                              | 6.3 ms  | 123633392 | 
-| two kernels and less blocks                   | 2.8 ms  | 122999920 | 
-| two kernels and less blocks and no cudaMalloc | 2.6 ms  | 122999920 |
+| computation & machine                         | K40 (S)   | GeForce RTX 2070 (S)  |   result  |
+|:----------------------------------------------|:--------|:----------|:----------|
+| CPU with naive summation                      | 100 ms   | 100 ms | 33554432  | 
+| global memory only                            | 16.3 ms | 6.0 ms  | 123633392 | 
+| static shared memory                          | 10.8 ms | 5.8 ms | 123633392 | 
+| dynamic shared memory                         | 10.8 ms | 5.8 ms | 123633392 |  
+| atomicAdd                                     | 9.8 ms  | |123633392 | 
+| atomicAdd and syncwarp                        | 8.1 ms  | |123633392 | 
+| atomicAdd and shfl                            | 6.3 ms  | |123633392 | 
+| atomicAdd and CP                              | 6.3 ms  | |123633392 | 
+| two kernels and less blocks                   | 2.8 ms  | |122999920 | 
+| two kernels and less blocks and no cudaMalloc | 2.6 ms  | |122999920 |
 
 
 ### 4.5. Neighbor list construction (chapter 9)
