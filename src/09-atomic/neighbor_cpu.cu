@@ -1,6 +1,10 @@
 #include "error.cuh"
-#include <math.h>
-#include <stdio.h>
+#include <cmath>
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <string>
+#include <vector>
 
 #ifdef USE_DP
     typedef double real;
@@ -8,81 +12,64 @@
     typedef float real;
 #endif
 
+int N; // number of atoms
 const int NUM_REPEATS = 10; // number of timings
-const int N = 22464; // number of atoms
 const int MN = 10; // maximum number of neighbors for each atom
 const real cutoff = 1.9; // in units of Angstrom
 const real cutoff_square = cutoff * cutoff;
 
-void read_xy(real *x, real *y);
-void timing(int *NN, int *NL, const real *x, const real *y);
+void read_xy(std::vector<real>& x, std::vector<real>& y);
+void timing(int *NN, int *NL, std::vector<real> x, std::vector<real> y);
 void print_neighbor(const int *NN, const int *NL);
 
 int main(void)
 {
+    std::vector<real> x, y;
+    read_xy(x, y);
+    N = x.size();
     int *NN = (int*) malloc(N * sizeof(int));
     int *NL = (int*) malloc(N * MN * sizeof(int));
-    real *x  = (real*) malloc(N * sizeof(real));
-    real *y  = (real*) malloc(N * sizeof(real));
-
-    read_xy(x, y);
+    
     timing(NN, NL, x, y);
     print_neighbor(NN, NL);
 
     free(NN);
     free(NL);
-    free(x);
-    free(y);
     return 0;
 }
 
-void read_xy(real *x, real *y)
+void read_xy(std::vector<real>& v_x, std::vector<real>& v_y)
 {
-    FILE *fid = fopen("xy.txt", "r");
-    if (NULL == fid)
+    std::ifstream infile("xy.txt");
+    std::string line, word;
+    if(!infile)
     {
-        printf("Cannot open xy.in\n");
-        exit(1); 
-    }
-
-    int N_read;
-    int count = fscanf(fid, "%d", &N_read);
-    if (count != 1)
-    {
-        printf("Error for reading xy.in\n");
+        std::cout << "Cannot open xy.txt" << std::endl;
         exit(1);
     }
-    if (N_read != N)
-    {
-        printf("Error: The N read in is not the N in the code.\n");
-        exit(1);
-    }  
-
-    double Lx, Ly;
-    count = fscanf(fid, "%lf%lf", &Lx, &Ly);
-    if (count != 2)
-    {
-        printf("Error for reading xy.in\n");
-        exit(1);
-    }
-
-    for (int n = 0; n < N; ++n)
-    {
-        double x_read, y_read;
-        count = fscanf(fid, "%lf%lf", &x_read, &y_read);
-        if (count != 2)
-        {
-            printf("Error for reading xy.in");
-            exit(1);
+    while(std::getline(infile, line)){
+        std::istringstream words(line);
+        if(line.length()==0){
+            continue;
         }
-        x[n] = x_read;
-        y[n] = y_read;
+        for(int i=0;i<2;i++){
+            if(words >> word){
+                if(i==0){
+                    v_x.push_back(std::stod(word));
+                }
+                if(i==1){
+                    v_y.push_back(std::stod(word));
+                }
+            }else{
+                std::cout << "Error for reading xy.in" << std::endl;
+                exit(1);
+            }
+        }
     }
-
-    fclose(fid);
+    infile.close();
 }
 
-void find_neighbor(int *NN, int *NL, const real *x, const real *y)
+void find_neighbor(int *NN, int *NL, std::vector<real> x, std::vector<real> y)
 {
     for (int n = 0; n < N; n++)
     {
@@ -107,25 +94,24 @@ void find_neighbor(int *NN, int *NL, const real *x, const real *y)
     }
 }
 
-void timing(int *NN, int *NL, const real *x, const real *y)
+void timing(int *NN, int *NL, std::vector<real> x, std::vector<real> y)
 {
     float t_sum = 0;
     float t2_sum = 0;
-
     for (int repeat = 0; repeat <= NUM_REPEATS; ++repeat)
     {
         cudaEvent_t start, stop;
         CHECK(cudaEventCreate(&start));
         CHECK(cudaEventCreate(&stop));
         CHECK(cudaEventRecord(start));
-
+        while(cudaEventQuery(start)!=cudaSuccess){}
         find_neighbor(NN, NL, x, y);
 
         CHECK(cudaEventRecord(stop));
         CHECK(cudaEventSynchronize(stop));
         float elapsed_time;
         CHECK(cudaEventElapsedTime(&elapsed_time, start, stop));
-        printf("Time = %g ms.\n", elapsed_time);
+        std::cout << "Time = " << elapsed_time << "ms." << std::endl;
 
         if (repeat > 0)
         {
@@ -138,29 +124,36 @@ void timing(int *NN, int *NL, const real *x, const real *y)
     }
 
     const float t_ave = t_sum / NUM_REPEATS;
-    const float t_err = sqrt(t2_sum / NUM_REPEATS - t_ave * t_ave);
-    printf("Time = %g +- %g ms.\n", t_ave, t_err);
+    const float t_err = std::sqrt(t2_sum / NUM_REPEATS - t_ave * t_ave);
+    std::cout << "Time = " << t_ave << " +- " << t_err << "ms." << std::endl;
 }
 
 void print_neighbor(const int *NN, const int *NL)
 {
-    FILE *fid = fopen("neighbor.txt", "w");
-    for (int n = 0; n < N; ++n)
+    std::ofstream outfile("neighbor.txt");
+    if(!outfile)
+    {
+        std::cout << "Cannot open neighbor.txt" << std::endl;
+    }
+    for(int n = 0; n < N; ++n)
     {
         if (NN[n] > MN)
         {
-            printf("Error: MN is too small.\n");
+            std::cout << "Error: MN is too small." << std::endl;
             exit(1);
         }
-
-        fprintf(fid, "%d", NN[n]);
-        for (int k = 0; k < NN[n]; ++k)
+        outfile << NN[n];
+        for (int k = 0; k < MN; ++k)
         {
-            fprintf(fid, " %d", NL[n * MN + k]);
-        }
-        fprintf(fid, "\n");
-    }
-    fclose(fid);
-}
+            if(k < NN[n]){
+                outfile << " " << NL[n * MN + k];
+            }else{
+                outfile << " NaN";
+            }
 
+        }
+        outfile << std::endl;
+    }
+    outfile.close();
+}
 
