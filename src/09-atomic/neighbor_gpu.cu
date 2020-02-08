@@ -1,6 +1,10 @@
 #include "error.cuh"
-#include <math.h>
-#include <stdio.h>
+#include <cmath>
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <string>
+#include <vector>
 
 #ifdef USE_DP
     typedef double real;
@@ -8,40 +12,39 @@
     typedef float real;
 #endif
 
+int N; // number of atoms
 const int NUM_REPEATS = 10; // number of timings
-const int N = 22464; // number of atoms
 const int MN = 10; // maximum number of neighbors for each atom
-const int mem1 = sizeof(int) * N;
-const int mem2 = sizeof(int) * N * MN;
-const int mem3 = sizeof(real) * N;
+
 const real cutoff = 1.9; // in units of Angstrom
 const real cutoff_square = cutoff * cutoff;
 
-void read_xy(real *, real *);
+void read_xy(std::vector<real>& , std::vector<real>& );
 void timing(int *, int *, const real *, const real *, const bool);
 void print_neighbor(const int *, const int *, const bool);
 
 int main(void)
 {
+    std::vector<real> v_x, v_y;
+    read_xy(v_x, v_y);
+    N = v_x.size();
+    int mem1 = sizeof(int) * N;
+    int mem2 = sizeof(int) * N * MN;
+    int mem3 = sizeof(real) * N;
     int *h_NN = (int*) malloc(mem1);
     int *h_NL = (int*) malloc(mem2);
-    real *h_x  = (real*) malloc(mem3);
-    real *h_y  = (real*) malloc(mem3);
-
-    read_xy(h_x, h_y);
-
     int *d_NN, *d_NL;
     real *d_x, *d_y;
     CHECK(cudaMalloc(&d_NN, mem1));
     CHECK(cudaMalloc(&d_NL, mem2));
     CHECK(cudaMalloc(&d_x, mem3));
     CHECK(cudaMalloc(&d_y, mem3));
-    CHECK(cudaMemcpy(d_x, h_x, mem3, cudaMemcpyHostToDevice));
-    CHECK(cudaMemcpy(d_y, h_y, mem3, cudaMemcpyHostToDevice));
+    CHECK(cudaMemcpy(d_x, &v_x[0], mem3, cudaMemcpyHostToDevice));
+    CHECK(cudaMemcpy(d_y, &v_y[0], mem3, cudaMemcpyHostToDevice));
 
-    printf("\nnot using atomicAdd:\n");
+    std::cout << std::endl << "not using atomicAdd:" << std::endl;
     timing(d_NN, d_NL, d_x, d_y, false);
-    printf("\nusing atomicAdd:\n");
+    std::cout << std::endl << "using atomicAdd:" << std::endl;
     timing(d_NN, d_NL, d_x, d_y, true);
 
     CHECK(cudaMemcpy(h_NN, d_NN, mem1, cudaMemcpyDeviceToHost));
@@ -55,59 +58,44 @@ int main(void)
     CHECK(cudaFree(d_y));
     free(h_NN);
     free(h_NL);
-    free(h_x);
-    free(h_y);
     return 0;
 }
 
-void read_xy(real *x, real *y)
+void read_xy(std::vector<real>& v_x, std::vector<real>& v_y)
 {
-    FILE *fid = fopen("xy.txt", "r");
-    if (NULL == fid)
+    std::ifstream infile("xy.txt");
+    std::string line, word;
+    if(!infile)
     {
-        printf("Cannot open xy.in\n");
-        exit(1); 
-    }
-
-    int N_read;
-    int count = fscanf(fid, "%d", &N_read);
-    if (count != 1)
-    {
-        printf("Error for reading xy.in\n");
+        std::cout << "Cannot open xy.txt" << std::endl;
         exit(1);
     }
-    if (N_read != N)
-    {
-        printf("Error: The N read in is not the N in the code.\n");
-        exit(1);
-    }  
-
-    double Lx, Ly;
-    count = fscanf(fid, "%lf%lf", &Lx, &Ly);
-    if (count != 2)
-    {
-        printf("Error for reading xy.in\n");
-        exit(1);
-    }
-
-    for (int n = 0; n < N; ++n)
-    {
-        double x_read, y_read;
-        count = fscanf(fid, "%lf%lf", &x_read, &y_read);
-        if (count != 2)
-        {
-            printf("Error for reading xy.in");
-            exit(1);
+    while(std::getline(infile, line)){
+        std::istringstream words(line);
+        if(line.length()==0){
+            continue;
         }
-        x[n] = x_read;
-        y[n] = y_read;
+        for(int i=0;i<2;i++){
+            if(words >> word){
+                if(i==0){
+                    v_x.push_back(std::stod(word));
+                }
+                if(i==1){
+                    v_y.push_back(std::stod(word));
+                }
+            }else{
+                std::cout << "Error for reading xy.in" << std::endl;
+                exit(1);
+            }
+        }
     }
-
-    fclose(fid);
+    infile.close();
 }
 
 void __global__ find_neighbor_atomic
-(int *d_NN, int *d_NL, const real *d_x, const real *d_y)
+(int *d_NN, int *d_NL, const real *d_x, const real *d_y,
+const int N, const int MN, const real cutoff_square
+)
 {
     const int n1 = blockIdx.x * blockDim.x + threadIdx.x;
     if (n1 < N)
@@ -130,7 +118,8 @@ void __global__ find_neighbor_atomic
 }
 
 void __global__ find_neighbor_no_atomic
-(int *d_NN, int *d_NL, const real *d_x, const real *d_y)
+(int *d_NN, int *d_NL, const real *d_x, const real *d_y,
+const int N, const real cutoff_square)
 {
     const int n1 = blockIdx.x * blockDim.x + threadIdx.x;
     if (n1 < N)
@@ -174,19 +163,22 @@ void timing
         if (atomic)
         {
             find_neighbor_atomic<<<grid_size, block_size>>>
-            (d_NN, d_NL, d_x, d_y); 
+            (d_NN, d_NL, d_x, d_y,
+            N, MN, cutoff_square
+            ); 
         }
         else
         {
             find_neighbor_no_atomic<<<grid_size, block_size>>>
-            (d_NN, d_NL, d_x, d_y);
+            (d_NN, d_NL, d_x, d_y,
+            N,cutoff_square);
         }
 
         CHECK(cudaEventRecord(stop));
         CHECK(cudaEventSynchronize(stop));
         float elapsed_time;
         CHECK(cudaEventElapsedTime(&elapsed_time, start, stop));
-        printf("Time = %g ms.\n", elapsed_time);
+        std::cout << "Time = " << elapsed_time << "ms." << std::endl;
 
         if (repeat > 0)
         {
@@ -199,30 +191,38 @@ void timing
     }
 
     const float t_ave = t_sum / NUM_REPEATS;
-    const float t_err = sqrt(t2_sum / NUM_REPEATS - t_ave * t_ave);
-    printf("Time = %g +- %g ms.\n", t_ave, t_err);
+    const float t_err = std::sqrt(t2_sum / NUM_REPEATS - t_ave * t_ave);
+    std::cout << "Time = " << t_ave << " +- " << t_err << "ms." << std::endl;
 }
 
 void print_neighbor(const int *NN, const int *NL, const bool atomic)
 {
-    FILE *fid = fopen("neighbor.txt", "w");
-    for (int n = 0; n < N; ++n)
+    std::ofstream outfile("neighbor.txt");
+    if(!outfile)
+    {
+        std::cout << "Cannot open neighbor.txt" << std::endl;
+    }
+    for(int n = 0; n < N; ++n)
     {
         if (NN[n] > MN)
         {
-            printf("Error: MN is too small.\n");
+            std::cout << "Error: MN is too small." << std::endl;
             exit(1);
         }
-
-        fprintf(fid, "%d", NN[n]);
-        for (int k = 0; k < NN[n]; ++k)
+        outfile << NN[n];
+        for (int k = 0; k < MN; ++k)
         {
-            int tmp = atomic ? NL[n * MN + k] : NL[k * N + n];
-            fprintf(fid, " %d", tmp);
+            if(k < NN[n]){
+                int tmp = atomic ? NL[n * MN + k] : NL[k * N + n];
+                outfile << " " << tmp;
+            }else{
+                outfile << " NaN";
+            }
+
         }
-        fprintf(fid, "\n");
+        outfile << std::endl;
     }
-    fclose(fid);
+    outfile.close();
 }
 
 
