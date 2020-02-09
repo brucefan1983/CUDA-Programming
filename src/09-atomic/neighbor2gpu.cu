@@ -70,20 +70,28 @@ void read_xy(std::vector<real>& v_x, std::vector<real>& v_y)
         std::cout << "Cannot open xy.txt" << std::endl;
         exit(1);
     }
-    while(std::getline(infile, line)){
+    while(std::getline(infile, line))
+    {
         std::istringstream words(line);
-        if(line.length()==0){
+        if(line.length()==0)
+        {
             continue;
         }
-        for(int i=0;i<2;i++){
-            if(words >> word){
-                if(i==0){
+        for(int i=0;i<2;i++)
+        {
+            if(words >> word)
+            {
+                if(i==0)
+                {
                     v_x.push_back(std::stod(word));
                 }
-                if(i==1){
+                if(i==1)
+                {
                     v_y.push_back(std::stod(word));
                 }
-            }else{
+            }
+            else
+            {
                 std::cout << "Error for reading xy.in" << std::endl;
                 exit(1);
             }
@@ -93,8 +101,9 @@ void read_xy(std::vector<real>& v_x, std::vector<real>& v_y)
 }
 
 void __global__ find_neighbor_atomic
-(int *d_NN, int *d_NL, const real *d_x, const real *d_y,
-const int N, const int MN, const real cutoff_square
+(
+    int *d_NN, int *d_NL, const real *d_x, const real *d_y,
+    const int N, const int MN, const real cutoff_square
 )
 {
     const int n1 = blockIdx.x * blockDim.x + threadIdx.x;
@@ -118,8 +127,10 @@ const int N, const int MN, const real cutoff_square
 }
 
 void __global__ find_neighbor_no_atomic
-(int *d_NN, int *d_NL, const real *d_x, const real *d_y,
-const int N, const real cutoff_square)
+(
+    int *d_NN, int *d_NL, const real *d_x, const real *d_y,
+    const int N, const real cutoff_square
+)
 {
     const int n1 = blockIdx.x * blockDim.x + threadIdx.x;
     if (n1 < N)
@@ -212,10 +223,13 @@ void print_neighbor(const int *NN, const int *NL, const bool atomic)
         outfile << NN[n];
         for (int k = 0; k < MN; ++k)
         {
-            if(k < NN[n]){
+            if(k < NN[n])
+            {
                 int tmp = atomic ? NL[n * MN + k] : NL[k * N + n];
                 outfile << " " << tmp;
-            }else{
+            }
+            else
+            {
                 outfile << " NaN";
             }
 
