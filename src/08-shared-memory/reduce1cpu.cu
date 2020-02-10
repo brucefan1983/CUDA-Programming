@@ -7,7 +7,7 @@
     typedef float real;
 #endif
 
-const int NUM_REPEATS = 10;
+const int NUM_REPEATS = 20;
 void timing(const real *x, const int N);
 real reduce(const real *x, const int N);
 
@@ -30,9 +30,8 @@ int main(void)
 void timing(const real *x, const int N)
 {
     real sum = 0;
-    float t_sum = 0;
-    float t2_sum = 0;
-    for (int repeat = 0; repeat <= NUM_REPEATS; ++repeat)
+
+    for (int repeat = 0; repeat < NUM_REPEATS; ++repeat)
     {
         cudaEvent_t start, stop;
         CHECK(cudaEventCreate(&start));
@@ -48,19 +47,9 @@ void timing(const real *x, const int N)
         CHECK(cudaEventElapsedTime(&elapsed_time, start, stop));
         printf("Time = %g ms.\n", elapsed_time);
 
-        if (repeat > 0)
-        {
-            t_sum += elapsed_time;
-            t2_sum += elapsed_time * elapsed_time;
-        }
-
         CHECK(cudaEventDestroy(start));
         CHECK(cudaEventDestroy(stop));
     }
-
-    const float t_ave = t_sum / NUM_REPEATS;
-    const float t_err = sqrt(t2_sum / NUM_REPEATS - t_ave * t_ave);
-    printf("Time = %g +- %g ms.\n", t_ave, t_err);
 
     printf("sum = %f.\n", sum);
 }
