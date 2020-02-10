@@ -39,8 +39,8 @@ int main(void)
     CHECK(cudaMalloc(&d_NL, mem2));
     CHECK(cudaMalloc(&d_x, mem3));
     CHECK(cudaMalloc(&d_y, mem3));
-    CHECK(cudaMemcpy(d_x, &v_x[0], mem3, cudaMemcpyHostToDevice));
-    CHECK(cudaMemcpy(d_y, &v_y[0], mem3, cudaMemcpyHostToDevice));
+    CHECK(cudaMemcpy(d_x, v_x.data(), mem3, cudaMemcpyHostToDevice));
+    CHECK(cudaMemcpy(d_y, v_y.data(), mem3, cudaMemcpyHostToDevice));
 
     std::cout << std::endl << "not using atomicAdd:" << std::endl;
     timing(d_NN, d_NL, d_x, d_y, false);
@@ -92,7 +92,7 @@ void read_xy(std::vector<real>& v_x, std::vector<real>& v_y)
             }
             else
             {
-                std::cout << "Error for reading xy.in" << std::endl;
+                std::cout << "Error for reading xy.txt" << std::endl;
                 exit(1);
             }
         }
@@ -103,7 +103,7 @@ void read_xy(std::vector<real>& v_x, std::vector<real>& v_y)
 void __global__ find_neighbor_atomic
 (
     int *d_NN, int *d_NL, const real *d_x, const real *d_y,
-    const int N, const int MN, const real cutoff_square
+    const int N, const real cutoff_square
 )
 {
     const int n1 = blockIdx.x * blockDim.x + threadIdx.x;
@@ -174,22 +174,19 @@ void timing
         if (atomic)
         {
             find_neighbor_atomic<<<grid_size, block_size>>>
-            (d_NN, d_NL, d_x, d_y,
-            N, MN, cutoff_square
-            ); 
+            (d_NN, d_NL, d_x, d_y, N, cutoff_square);
         }
         else
         {
             find_neighbor_no_atomic<<<grid_size, block_size>>>
-            (d_NN, d_NL, d_x, d_y,
-            N,cutoff_square);
+            (d_NN, d_NL, d_x, d_y, N, cutoff_square);
         }
 
         CHECK(cudaEventRecord(stop));
         CHECK(cudaEventSynchronize(stop));
         float elapsed_time;
         CHECK(cudaEventElapsedTime(&elapsed_time, start, stop));
-        std::cout << "Time = " << elapsed_time << "ms." << std::endl;
+        std::cout << "Time = " << elapsed_time << " ms." << std::endl;
 
         if (repeat > 0)
         {
@@ -203,17 +200,17 @@ void timing
 
     const float t_ave = t_sum / NUM_REPEATS;
     const float t_err = std::sqrt(t2_sum / NUM_REPEATS - t_ave * t_ave);
-    std::cout << "Time = " << t_ave << " +- " << t_err << "ms." << std::endl;
+    std::cout << "Time = " << t_ave << " +- " << t_err << " ms." << std::endl;
 }
 
 void print_neighbor(const int *NN, const int *NL, const bool atomic)
 {
     std::ofstream outfile("neighbor.txt");
-    if(!outfile)
+    if (!outfile)
     {
         std::cout << "Cannot open neighbor.txt" << std::endl;
     }
-    for(int n = 0; n < N; ++n)
+    for (int n = 0; n < N; ++n)
     {
         if (NN[n] > MN)
         {
@@ -232,7 +229,6 @@ void print_neighbor(const int *NN, const int *NL, const bool atomic)
             {
                 outfile << " NaN";
             }
-
         }
         outfile << std::endl;
     }
