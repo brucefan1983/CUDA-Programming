@@ -13,7 +13,7 @@
 #endif
 
 int N; // number of atoms
-const int NUM_REPEATS = 10; // number of timings
+const int NUM_REPEATS = 20; // number of timings
 const int MN = 10; // maximum number of neighbors for each atom
 
 const real cutoff = 1.9; // in units of Angstrom
@@ -42,15 +42,16 @@ int main(void)
     CHECK(cudaMemcpy(d_x, v_x.data(), mem3, cudaMemcpyHostToDevice));
     CHECK(cudaMemcpy(d_y, v_y.data(), mem3, cudaMemcpyHostToDevice));
 
-    std::cout << std::endl << "not using atomicAdd:" << std::endl;
-    timing(d_NN, d_NL, d_x, d_y, false);
     std::cout << std::endl << "using atomicAdd:" << std::endl;
     timing(d_NN, d_NL, d_x, d_y, true);
+    std::cout << std::endl << "not using atomicAdd:" << std::endl;
+    timing(d_NN, d_NL, d_x, d_y, false);
+
 
     CHECK(cudaMemcpy(h_NN, d_NN, mem1, cudaMemcpyDeviceToHost));
     CHECK(cudaMemcpy(h_NL, d_NL, mem2, cudaMemcpyDeviceToHost));
 
-    print_neighbor(h_NN, h_NL, true);
+    print_neighbor(h_NN, h_NL, false);
 
     CHECK(cudaFree(d_NN));
     CHECK(cudaFree(d_NL));
@@ -158,10 +159,7 @@ void timing
     const bool atomic
 )
 {
-    float t_sum = 0;
-    float t2_sum = 0;
-
-    for (int repeat = 0; repeat <= NUM_REPEATS; ++repeat)
+    for (int repeat = 0; repeat < NUM_REPEATS; ++repeat)
     {
         cudaEvent_t start, stop;
         CHECK(cudaEventCreate(&start));
@@ -188,19 +186,9 @@ void timing
         CHECK(cudaEventElapsedTime(&elapsed_time, start, stop));
         std::cout << "Time = " << elapsed_time << " ms." << std::endl;
 
-        if (repeat > 0)
-        {
-            t_sum += elapsed_time;
-            t2_sum += elapsed_time * elapsed_time;
-        }
-
         CHECK(cudaEventDestroy(start));
         CHECK(cudaEventDestroy(stop));
     }
-
-    const float t_ave = t_sum / NUM_REPEATS;
-    const float t_err = std::sqrt(t2_sum / NUM_REPEATS - t_ave * t_ave);
-    std::cout << "Time = " << t_ave << " +- " << t_err << " ms." << std::endl;
 }
 
 void print_neighbor(const int *NN, const int *NL, const bool atomic)
