@@ -79,7 +79,7 @@ void timing(const real *d_x)
 {
     real sum = 0;
 
-    for (int repeat = 0; repeat <= NUM_REPEATS; ++repeat)
+    for (int repeat = 0; repeat < NUM_REPEATS; ++repeat)
     {
         cudaEvent_t start, stop;
         CHECK(cudaEventCreate(&start));
