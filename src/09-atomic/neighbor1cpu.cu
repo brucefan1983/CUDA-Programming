@@ -47,18 +47,18 @@ void read_xy(std::vector<real>& v_x, std::vector<real>& v_y)
         std::cout << "Cannot open xy.txt" << std::endl;
         exit(1);
     }
-    while(std::getline(infile, line))
+    while (std::getline(infile, line))
     {
         std::istringstream words(line);
-        if(line.length()==0)
+        if(line.length() == 0)
         {
             continue;
         }
-        for(int i=0;i<2;i++)
+        for (int i = 0; i < 2; i++)
         {
             if(words >> word)
             {
-                if(i==0)
+                if(i == 0)
                 {
                     v_x.push_back(std::stod(word));
                 }
@@ -69,7 +69,7 @@ void read_xy(std::vector<real>& v_x, std::vector<real>& v_y)
             }
             else
             {
-                std::cout << "Error for reading xy.in" << std::endl;
+                std::cout << "Error for reading xy.txt" << std::endl;
                 exit(1);
             }
         }
@@ -77,7 +77,7 @@ void read_xy(std::vector<real>& v_x, std::vector<real>& v_y)
     infile.close();
 }
 
-void find_neighbor(int *NN, int *NL, std::vector<real> x, std::vector<real> y)
+void find_neighbor(int *NN, int *NL, const real* x, const real* y)
 {
     for (int n = 0; n < N; n++)
     {
@@ -113,13 +113,13 @@ void timing(int *NN, int *NL, std::vector<real> x, std::vector<real> y)
         CHECK(cudaEventCreate(&stop));
         CHECK(cudaEventRecord(start));
         while(cudaEventQuery(start)!=cudaSuccess){}
-        find_neighbor(NN, NL, x, y);
+        find_neighbor(NN, NL, x.data(), y.data());
 
         CHECK(cudaEventRecord(stop));
         CHECK(cudaEventSynchronize(stop));
         float elapsed_time;
         CHECK(cudaEventElapsedTime(&elapsed_time, start, stop));
-        std::cout << "Time = " << elapsed_time << "ms." << std::endl;
+        std::cout << "Time = " << elapsed_time << " ms." << std::endl;
 
         if (repeat > 0)
         {
@@ -133,17 +133,17 @@ void timing(int *NN, int *NL, std::vector<real> x, std::vector<real> y)
 
     const float t_ave = t_sum / NUM_REPEATS;
     const float t_err = std::sqrt(t2_sum / NUM_REPEATS - t_ave * t_ave);
-    std::cout << "Time = " << t_ave << " +- " << t_err << "ms." << std::endl;
+    std::cout << "Time = " << t_ave << " +- " << t_err << " ms." << std::endl;
 }
 
 void print_neighbor(const int *NN, const int *NL)
 {
     std::ofstream outfile("neighbor.txt");
-    if(!outfile)
+    if (!outfile)
     {
         std::cout << "Cannot open neighbor.txt" << std::endl;
     }
-    for(int n = 0; n < N; ++n)
+    for (int n = 0; n < N; ++n)
     {
         if (NN[n] > MN)
         {
