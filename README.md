@@ -1,10 +1,10 @@
 # 《`CUDA` 编程：基础与实践》源代码
 
-## 1. 告读者：
+## 告读者：
 * 代码还在开发中。由琪同学为本书写了 Python 版本的代码（用 pyCUDA）:
 https://github.com/YouQixiaowu/CUDA-Programming-with-Python
 
-## 2. 关于本书：
+## 关于本书：
   * 将于 2020 年由清华大学出版社出版，语言为中文。
   * 覆盖开普勒到图灵（计算能力从 3.5 到 7.5）的所有 GPU 架构。
   * 尽量同时照顾 Windows 和 Linux 用户。
@@ -12,13 +12,13 @@ https://github.com/YouQixiaowu/CUDA-Programming-with-Python
     * 熟悉 `C++` (对全书来说)；
     * 熟悉本科水平的物理和数学（对某些章节来说）。
     
-## 3. 我的测试系统
+## 我的测试系统
 * Linux: 主机编译器用的 `g++`。
 * Windows: 仅使用命令行解释器 `CMD`，主机编译器用 Visual Studio 中的 `cl`。在用 `nvcc` 编译 CUDA 程序时，可能需要添加 `-Xcompiler "/wd 4819"` 选项消除和 unicode 有关的警告。
 * 全书代码可在 `CUDA` 9-10.2 （包含）之间的版本运行。
 
 
-## 4. 目录和源代码条目
+## 目录和源代码条目
 
 ### 第 1 章：GPU 硬件和 CUDA 工具
 
