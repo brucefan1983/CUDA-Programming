@@ -5,7 +5,7 @@
 https://github.com/YouQixiaowu/CUDA-Programming-with-Python
 
 ## 2. 关于本书：
-  * 将于 2020 年在清华大学出版社出版，语言为中文。
+  * 将于 2020 年由清华大学出版社出版，语言为中文。
   * 覆盖开普勒到图灵（计算能力从 3.5 到 7.5）的所有 GPU 架构。
   * 尽量同时照顾 Windows 和 Linux 用户。
   * 假设读者有如下基础：
@@ -14,7 +14,7 @@ https://github.com/YouQixiaowu/CUDA-Programming-with-Python
     
 ## 3. 我的测试系统
 * Linux: 主机编译器用的 `g++`。
-* Windows: 仅使用命令行解释器 `CMD`，主机编译器用 Visual Studio 中的 `cl`。在用 `nvcc` 编译 CUDA 程序时，可能需要添加 `-Xcompiler "/wd 4819"` 选线消除和 unicode 有关的警告。
+* Windows: 仅使用命令行解释器 `CMD`，主机编译器用 Visual Studio 中的 `cl`。在用 `nvcc` 编译 CUDA 程序时，可能需要添加 `-Xcompiler "/wd 4819"` 选项消除和 unicode 有关的警告。
 * 全书代码可在 `CUDA` 9-10.2 （包含）之间的版本运行。
 
 
@@ -33,7 +33,7 @@ https://github.com/YouQixiaowu/CUDA-Programming-with-Python
 | `hello1.cu` | 一个正确的 `C++` 程序也是一个正确的 `CUDA` 程序 | 
 | `hello2.cu` | 写一个打印字符串的 `CUDA` 核函数并调用 | 
 | `hello3.cu` | 使用含有多个线程的线程块 |
-| `hello4.cu` | 使用多个网格 |
+| `hello4.cu` | 使用多个线程块 |
 | `hello5.cu` | 使用两维线程块 |
 
 
@@ -177,9 +177,9 @@ How to compile and run?
 | `curand_host2.cu`        | 用 `cuRAND` 产生高斯分布的随机数 |
   
   
-## 5. 我的部分测试结果
+## 我的部分测试结果
 
-### 4.1. 矢量相加 (第 5 章)
+### 矢量相加 (第 5 章)
 
 * 数组元素个数 = 1.0e8。
 * CPU (我的笔记本) 函数的执行时间是 60 ms （单精度）核 120 ms （双精度）。
@@ -191,7 +191,7 @@ How to compile and run?
 
 * 如果包含 cudaMemcpy 所花时间，GeForce RTX 2070-laptop 用时 180 ms （单精度）和 360 ms （双精度），是 CPU 版本的三倍慢！
 
-### 4.2. 一个高算术强度的函数（第 5 章）
+### 一个高算术强度的函数（第 5 章）
 * CPU 函数（数组长度为 10^4）用时 320 ms （单精度）和 450 ms （双精度）。
 * GPU 函数（数组长度为 10^6）用时情况如下表：
 
@@ -210,7 +210,7 @@ How to compile and run?
 | 10000000   | 250 ms | 
 | 100000000  | 2500 ms |
 
-### 4.3. 矩阵复制和转置 (第 7-8 章)
+### 矩阵复制和转置 (第 7-8 章)
 * 矩阵维度为 10000 乘 10000。
 * 核函数执行时间见下表：
 
@@ -224,19 +224,19 @@ How to compile and run?
 | 利用共享内存转置，且无 bank 冲突      | 1.4 ms | 2.5 ms | 2.3 ms | 4.2 ms |  |
 
 
-### 4.4. Reduction (chapters 8-10 and 14)
+### 数组规约（第 8-10 章以及第 13 章）
 
-* Array length = 1.0e8 and each element has a value of 1.23.
-* The correct summation should be 123000000.
-* Using single precision with both CPU and GPU (Tesla K40).
+* 数组长度为 1.0e8，每个元素为 1.23。
+* 规约的精确结果为 123000000。
+* 下面是用单精度浮点数测试的结果：
 
-| computation & machine                         | K40 (S)   | GeForce RTX 2070 (S)  |   result  |
+| 计算方法与机器                         | K40 (S)   | GeForce RTX 2070 (S)  |   结果  |
 |:----------------------------------------------|:--------|:----------|:----------|
 | CPU with naive summation                      | 100 ms   | 100 ms | 33554432  | 
 | global memory only                            | 16.3 ms | 5.8 ms  | 123633392 | 
 | static shared memory                          | 10.8 ms | 5.8 ms | 123633392 | 
 | dynamic shared memory                         | 10.8 ms | 5.8 ms | 123633392 |  
-| atomicAdd                                     | 9.8 ms  | |123633392 | 
+| atomicAdd                                     | 9.8 ms  | 3.6 ms |123633392 | 
 | atomicAdd and syncwarp                        | 8.1 ms  | |123633392 | 
 | atomicAdd and shfl                            | 6.3 ms  | |123633392 | 
 | atomicAdd and CP                              | 6.3 ms  | |123633392 | 
@@ -244,16 +244,16 @@ How to compile and run?
 | two kernels and less blocks and no cudaMalloc | 2.6 ms  | |122999920 |
 
 
-### 4.5. Neighbor list construction (chapter 9)
+### 邻居列表（第 9 章）
 
-* Number of atoms = 22464.
-* CPU function takes 230 ms for both single and double precisions.
-* GPU timing results are list in the following table:
+* 原子数为 22464。
+* 使用单精度或双精度时，CPU 都用时约 250 毫秒。
+* GPU 测试结果见下表：
 
-| computation     | V100 (S) | V100 (D) | K40 (S) | K40 (D) | 
+| 是否使用原子函数     | V100 (S) | V100 (D) | K40 (S) | K40 (D) | 
 |:----------------|:---------|:---------|:-----------|:-----------|
-| neighbor without atomicAdd | 1.9 ms | 2.6  ms | 10.1 ms | 10.9 ms |
-| neighbor with atomicAdd    | 1.8 ms | 2.6  ms | 10.5 ms | 14.5 ms |
+| 否 | 1.9 ms | 2.6  ms | 10.1 ms | 10.9 ms |
+| 是    | 1.8 ms | 2.6  ms | 10.5 ms | 14.5 ms |
 
 
 
