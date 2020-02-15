@@ -94,6 +94,7 @@ void timing
         CHECK(cudaEventCreate(&start));
         CHECK(cudaEventCreate(&stop));
         CHECK(cudaEventRecord(start));
+        cudaEventQuery(start);
 
         for (int i = 0; i < num; i++)
         {

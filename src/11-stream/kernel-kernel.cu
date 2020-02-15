@@ -82,6 +82,7 @@ void timing(const real *d_x, const real *d_y, real *d_z, const int num)
         CHECK(cudaEventCreate(&start));
         CHECK(cudaEventCreate(&stop));
         CHECK(cudaEventRecord(start));
+        cudaEventQuery(start);
 
         for (int n = 0; n < num; ++n)
         {

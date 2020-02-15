@@ -97,6 +97,7 @@ void timing
         CHECK(cudaEventCreate(&start));
         CHECK(cudaEventCreate(&stop));
         CHECK(cudaEventRecord(start));
+        cudaEventQuery(start);
 
         if (!overlap)
         {
