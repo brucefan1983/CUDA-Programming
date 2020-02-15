@@ -118,7 +118,11 @@ https://github.com/YouQixiaowu/CUDA-Programming-with-Python
 ### 第 12 章：统一内存
 | 文件       | 知识点 | 
 |:------------|:---------------|
-| `add_unified.cu` | 使用统一内存的简单程序 |
+| `add.cu` | 使用统一内存可以简化代码 |
+| `oversubscription1.cu` | 统一内存在初始化时才被分配  |
+| `oversubscription2.cu` | 用 GPU 先访问统一内存时可以超过显存的容量 |
+| `oversubscription3.cu` | 用 CPU 先访问统一内存时不可超过主机内存容量 |
+
 
 
 ### 第 13 章：总结与其它优化技巧
