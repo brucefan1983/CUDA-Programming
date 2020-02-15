@@ -165,6 +165,7 @@ void timing
         CHECK(cudaEventCreate(&start));
         CHECK(cudaEventCreate(&stop));
         CHECK(cudaEventRecord(start));
+        cudaEventQuery(start);
 
         int block_size = 128;
         int grid_size = (N + block_size - 1) / block_size;
