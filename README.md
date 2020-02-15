@@ -236,10 +236,10 @@ How to compile and run?
 | global memory only                            | 16.3 ms | 5.8 ms  | 123633392 | 
 | static shared memory                          | 10.8 ms | 5.8 ms | 123633392 | 
 | dynamic shared memory                         | 10.8 ms | 5.8 ms | 123633392 |  
-| atomicAdd                                     | 9.8 ms  | 3.6 ms |123633392 | 
-| atomicAdd and syncwarp                        | 8.1 ms  | 3.0 ms |123633392 | 
-| atomicAdd and shfl                            | 6.3 ms  | 2.5 ms |123633392 | 
-| atomicAdd and CP                              | 6.3 ms  | 2.5 ms |123633392 | 
+| atomicAdd                                     | 9.8 ms  | 3.8 ms |123633392 | 
+| atomicAdd and syncwarp                        | 8.1 ms  | 3.4 ms |123633392 | 
+| atomicAdd and shfl                            | 6.3 ms  | 2.8 ms |123633392 | 
+| atomicAdd and CP                              | 6.3 ms  | 2.8 ms |123633392 | 
 | two kernels and less blocks                   | 2.8 ms  | |122999920 | 
 | two kernels and less blocks and no cudaMalloc | 2.6 ms  | |122999920 |
 
