@@ -104,17 +104,15 @@ https://github.com/YouQixiaowu/CUDA-Programming-with-Python
 ### 第 10 章: 线程束内部函数
 | 文件        | 知识点 |
 |:------------|:---------------|
-| `reduce1syncwarp.cu` | 在线程束内部可以用 `__syncwarp()` 函数替换 `__syncthreads()` 函数 |
-| `reduce2shfl.cu`     | 适当地使用洗牌函数进行规约 |
-| `reduce3cp.cu`       | 协作组的使用 |
+| `reduce.cu` | 线程束同步函数、线程束洗牌函数以及协作组的使用 |
 
 
 ### 第 11 章： `CUDA` 流
 | 文件        | 知识点 |
 |:------------|:---------------|
-| `host_kernel.cu`     | 重叠主机与设备计算 |
-| `kernel_kernel.cu`   | 重叠核函数之间的计算 |
-| `kernel_transfer.cu` | 重叠核函数执行与数据传输 |
+| `host-kernel.cu`     | 重叠主机与设备计算 |
+| `kernel-kernel.cu`   | 重叠核函数之间的计算 |
+| `kernel-transfer.cu` | 重叠核函数执行与数据传输 |
 
 
 ### 第 12 章：统一内存
