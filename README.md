@@ -154,6 +154,11 @@ How to compile and run?
 | `curand_host2.cu`        | 用 `cuRAND` 产生高斯分布的随机数 |
   
   
+### 第 18 章: pyCUDA 使用
+
+由琪同学贡献了本章的代码:
+https://github.com/YouQixiaowu/CUDA-Programming-with-Python
+
 
 
 ## 我的部分测试结果
