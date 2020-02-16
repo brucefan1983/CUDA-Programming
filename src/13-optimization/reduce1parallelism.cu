@@ -41,7 +41,7 @@ void __global__ reduce_cp(const real *d_x, real *d_y, const int N)
     const int bid = blockIdx.x;
     extern __shared__ real s_y[];
 
-    real y = 0.0f;
+    real y = 0.0;
     const int stride = blockDim.x * gridDim.x;
     for (int n = bid * blockDim.x + tid; n < N; n += stride)
     {
