@@ -19,7 +19,6 @@ void timing(const real *h_x);
 
 int main(void)
 {
-
     real *h_x = (real *) malloc(M);
     for (int n = 0; n < N; ++n)
     {

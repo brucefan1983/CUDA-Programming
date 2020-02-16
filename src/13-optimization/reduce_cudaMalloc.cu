@@ -15,7 +15,7 @@ const int M = sizeof(real) * N;
 const int BLOCK_SIZE = 128;
 const int GRID_SIZE = 10240;
 
-void timing(const real *d_x, real *d_y);
+void timing(const real *d_x);
 
 int main(void)
 {
@@ -28,14 +28,10 @@ int main(void)
     CHECK(cudaMalloc(&d_x, M));
     CHECK(cudaMemcpy(d_x, h_x, M, cudaMemcpyHostToDevice));
 
-    real *d_y;
-    CHECK(cudaMalloc(&d_y, sizeof(real) * GRID_SIZE));
-
-    timing(d_x, d_y);
+    timing(d_x);
 
     free(h_x);
     CHECK(cudaFree(d_x));
-    CHECK(cudaFree(d_y));
     return 0;
 }
 
@@ -77,8 +73,13 @@ void __global__ reduce_cp(const real *d_x, real *d_y, const int N)
     }
 }
 
-real reduce(const real *d_x, real *d_y)
+__device__ real static_y[GRID_SIZE]; 
+
+real reduce(const real *d_x)
 {
+    real *d_y;
+    CHECK(cudaGetSymbolAddress((void**)&d_y, static_y));
+    
     const int smem = sizeof(real) * BLOCK_SIZE;
 
     reduce_cp<<<GRID_SIZE, BLOCK_SIZE, smem>>>(d_x, d_y, N);
@@ -86,11 +87,12 @@ real reduce(const real *d_x, real *d_y)
 
     real h_y[1] = {0};
     CHECK(cudaMemcpy(h_y, d_y, sizeof(real), cudaMemcpyDeviceToHost));
+    // CHECK(cudaMemcpyFromSymbol(h_y, static_y, sizeof(real)); // also ok
 
     return h_y[0];
 }
 
-void timing(const real *d_x, real *d_y)
+void timing(const real *d_x)
 {
     real sum = 0;
 
@@ -102,7 +104,7 @@ void timing(const real *d_x, real *d_y)
         CHECK(cudaEventRecord(start));
         cudaEventQuery(start);
 
-        sum = reduce(d_x, d_y); 
+        sum = reduce(d_x); 
 
         CHECK(cudaEventRecord(stop));
         CHECK(cudaEventSynchronize(stop));
