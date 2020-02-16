@@ -140,35 +140,10 @@ How to compile and run?
   * type `plot_results` in Matlab command window to check the results
 
 
-### 第 16 章：仅加速求力的部分
-How to compile and run?
-  * type `make` to compile
-  * type `./ljmd 40 10000` to run
-  * type `plot_results` in Matlab command window to check the results
-
-
-### 第 17 章：加速全部程序
-How to compile and run?
-  * type `make` to compile
-  * type `./ljmd 40 10000` to run
-  * type `plot_results` in Matlab command window to check the results
-
-
-### 第 18 章：内存和其它优化
-How to compile and run?
-  * type `make` or `make -f makefile.ldg` or `make -f makefile.fast_math` to compile
-  * type `./ljmd 40 10000` to run
-  * type `plot_results` in Matlab command window to check the results
-
-
-### 第 19 章：用统一内存的 MD 程序
-How to compile and run?
-  * type `make` or `make -f makefile.pascal` to compile
-  * type `./ljmd 40 10000` to run
-  * type `plot_results` in Matlab command window to check the results
+### 第 16 章：CUDA 版本的 MD 程序
   
   
-### 第 20 章：CUDA 库
+### 第 17 章：CUDA 库
 | 文件        | 知识点 |
 |:------------|:---------------|
 | `thrust_scan_vector.cu`  | 使用 `thrust` 中的设备矢量 |
@@ -179,6 +154,8 @@ How to compile and run?
 | `curand_host2.cu`        | 用 `cuRAND` 产生高斯分布的随机数 |
   
   
+
+
 ## 我的部分测试结果
 
 ### 矢量相加 (第 5 章)
