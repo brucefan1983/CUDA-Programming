@@ -214,18 +214,18 @@ https://github.com/YouQixiaowu/CUDA-Programming-with-Python
 * 规约的精确结果为 123000000。
 * 下面是用单精度浮点数测试的结果：
 
-| 计算方法与机器                         | K40 (S)   | GeForce RTX 2070 (S)  |   结果  |
-|:----------------------------------------------|:--------|:----------|:----------|
-| CPU with naive summation                      | 100 ms   | 100 ms | 33554432  | 
-| global memory only                            | 16.3 ms | 5.8 ms  | 123633392 | 
-| static shared memory                          | 10.8 ms | 5.8 ms | 123633392 | 
-| dynamic shared memory                         | 10.8 ms | 5.8 ms | 123633392 |  
-| atomicAdd                                     | 9.8 ms  | 3.8 ms |123633392 | 
-| atomicAdd and syncwarp                        | 8.1 ms  | 3.4 ms |123633392 | 
-| atomicAdd and shfl                            | 6.3 ms  | 2.8 ms |123633392 | 
-| atomicAdd and CP                              | 6.3 ms  | 2.8 ms |123633392 | 
-| two kernels and less blocks                   | 2.8 ms  | |122999920 | 
-| two kernels and less blocks and no cudaMalloc | 2.6 ms  | |122999920 |
+| 计算方法与机器                         | GeForce RTX 2070 (S)  |   结果  |
+|:----------------------------------------------|:----------|:----------|
+| CPU with naive summation                      | 100 ms | 33554432  | 
+| global memory only                            | 5.8 ms  | 123633392 | 
+| static shared memory                          | 5.8 ms | 123633392 | 
+| dynamic shared memory                         | 5.8 ms | 123633392 |  
+| atomicAdd                                     | 3.8 ms |123633392 | 
+| atomicAdd and syncwarp                        | 3.4 ms |123633392 | 
+| atomicAdd and shfl                            | 2.8 ms |123633392 | 
+| atomicAdd and CP                              | 2.8 ms |123633392 | 
+| two kernels and less blocks                   | 2.0 ms |122999920 | 
+| two kernels and less blocks and no cudaMalloc | 1.5 ms |122999920 |
 
 
 ### 邻居列表（第 9 章）
