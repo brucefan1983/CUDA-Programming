@@ -11,6 +11,9 @@ void check(const double *z, const int N);
 
 int main(void)
 {
+	  int device_id = 0;
+	  CHECK(cudaGetDevice(&device_id));
+	  
     const int N = 100000000;
     const int M = sizeof(double) * N;
     double *x, *y, *z;
@@ -26,7 +29,14 @@ int main(void)
 
     const int block_size = 128;
     const int grid_size = N / block_size;
+    
+    CHECK(cudaMemPrefetchAsync(x, M, device_id, NULL));
+    CHECK(cudaMemPrefetchAsync(y, M, device_id, NULL));
+    CHECK(cudaMemPrefetchAsync(z, M, device_id, NULL));
+    
     add<<<grid_size, block_size>>>(x, y, z);
+    
+    CHECK(cudaMemPrefetchAsync(z, M, cudaCpuDeviceId, NULL));
 
     CHECK(cudaDeviceSynchronize());
     check(z, N);
