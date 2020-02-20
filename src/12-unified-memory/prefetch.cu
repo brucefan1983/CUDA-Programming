@@ -11,8 +11,8 @@ void check(const double *z, const int N);
 
 int main(void)
 {
-	  int device_id = 0;
-	  CHECK(cudaGetDevice(&device_id));
+    int device_id = 0;
+    CHECK(cudaGetDevice(&device_id));
 	  
     const int N = 100000000;
     const int M = sizeof(double) * N;
