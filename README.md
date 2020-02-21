@@ -215,16 +215,16 @@ https://github.com/YouQixiaowu/CUDA-Programming-with-Python
 
 | 计算方法与机器                         | GeForce RTX 2070 (S)  |   结果  |
 |:----------------------------------------------|:----------|:----------|
-| CPU with naive summation                      | 100 ms | 33554432  | 
-| global memory only                            | 5.8 ms  | 123633392 | 
-| static shared memory                          | 5.8 ms | 123633392 | 
-| dynamic shared memory                         | 5.8 ms | 123633392 |  
-| atomicAdd                                     | 3.8 ms |123633392 | 
-| atomicAdd and syncwarp                        | 3.4 ms |123633392 | 
-| atomicAdd and shfl                            | 2.8 ms |123633392 | 
-| atomicAdd and CP                              | 2.8 ms |123633392 | 
-| two kernels and less blocks                   | 2.0 ms |122999920 | 
-| two kernels and less blocks and no cudaMalloc | 1.5 ms |122999920 |
+| CPU 中循环累加                      | 100 ms | 33554432 （完全错误） | 
+| 仅用全局内存                            | 5.8 ms  | 123633392 | 
+| 使用静态共享内存                          | 5.8 ms | 123633392 | 
+| 使用动态共享内存                         | 5.8 ms | 123633392 |  
+| 进一步使用原子函数                         | 3.8 ms |123633392 | 
+| 进一步使用 syncwarp                        | 3.4 ms |123633392 | 
+| 进一步使用 shfl                            | 2.8 ms |123633392 | 
+| 进一步使用协作组                              | 2.8 ms |123633392 | 
+| 共享内存、协作组、两个核函数                   | 2.0 ms |122999920 | 
+| 共享内存、协作组、两个核函数、静态全局内存 | 1.5 ms |122999920 |
 
 
 ### 邻居列表（第 9 章）
