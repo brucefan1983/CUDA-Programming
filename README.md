@@ -1,9 +1,5 @@
 # 《`CUDA` 编程：基础与实践》源代码
 
-## 告读者：
-* 代码还在开发中。由琪同学为本书写了 Python 版本的代码（用 pyCUDA）:
-https://github.com/YouQixiaowu/CUDA-Programming-with-Python
-
 ## 关于本书：
   * 将于 2020 年由清华大学出版社出版，语言为中文。
   * 覆盖开普勒到图灵（计算能力从 3.5 到 7.5）的所有 GPU 架构。
@@ -122,12 +118,15 @@ https://github.com/YouQixiaowu/CUDA-Programming-with-Python
 | `oversubscription1.cu` | 统一内存在初始化时才被分配  |
 | `oversubscription2.cu` | 用 GPU 先访问统一内存时可以超过显存的容量 |
 | `oversubscription3.cu` | 用 CPU 先访问统一内存时不可超过主机内存容量 |
+| `prefetch.cu` | 使用 cudaMemPrefetchAsync 函数 |
 
 
 
 ### 第 13 章：总结与其它优化技巧
-There is no source code for this chapter.
-
+| 文件       | 知识点 | 
+|:------------|:---------------|
+| `reduce1parallelism.cu` | 提高线程利用率 |
+| `reduce2static.cu` | 利用静态全局内存加速  |
 
 ### 第 14 章：分子动力学模拟（MD）简介
 本章无源代码。
