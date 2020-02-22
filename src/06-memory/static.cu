@@ -13,12 +13,12 @@ void __global__ my_kernel(void)
 int main(void)
 {
     int h_y[2] = {10, 20};
-    cudaMemcpyToSymbol(d_y, h_y, sizeof(int) * 2);
+    CHECK(cudaMemcpyToSymbol(d_y, h_y, sizeof(int) * 2));
     
     my_kernel<<<1, 1>>>();
     CHECK(cudaDeviceSynchronize());
     
-    cudaMemcpyFromSymbol(h_y, d_y, sizeof(int) * 2);
+    CHECK(cudaMemcpyFromSymbol(h_y, d_y, sizeof(int) * 2));
     printf("h_y[0] = %d, h_y[1] = %d.\n", h_y[0], h_y[1]);
     
     return 0;
