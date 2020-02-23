@@ -101,6 +101,8 @@
 | 文件        | 知识点 |
 |:------------|:---------------|
 | `reduce.cu` | 线程束同步函数、线程束洗牌函数以及协作组的使用 |
+| `reduce1parallelism.cu` | 提高线程利用率 |
+| `reduce2static.cu` | 利用静态全局内存加速  |
 
 
 ### 第 11 章： `CUDA` 流
@@ -120,29 +122,15 @@
 | `oversubscription3.cu` | 用 CPU 先访问统一内存时不可超过主机内存容量 |
 | `prefetch.cu` | 使用 cudaMemPrefetchAsync 函数 |
 
-
-
-### 第 13 章：总结与其它优化技巧
-| 文件       | 知识点 | 
+### 第 13 章：分子动力学模拟（MD）
+| 文件夹        | 知识点 |
 |:------------|:---------------|
-| `reduce1parallelism.cu` | 提高线程利用率 |
-| `reduce2static.cu` | 利用静态全局内存加速  |
-
-### 第 14 章：分子动力学模拟（MD）简介
-本章无源代码。
-
-
-### 第 15 章：C++ 版本的 MD 程序
-How to compile and run?
-  * type `make` to compile
-  * type `./ljmd 8 10000` to run
-  * type `plot_results` in Matlab command window to check the results
-
-
-### 第 16 章：CUDA 版本的 MD 程序
+| `cpp`     | C++ 版本的 MD 程序 |
+| `force-only`   | 仅将求力的函数移植到 CUDA |
+| `whole-code` | 全部移植到 CUDA |
+| `optimization` | 内存访问优化 |
   
-  
-### 第 17 章：CUDA 库
+### 第 14 章：CUDA 库
 | 文件        | 知识点 |
 |:------------|:---------------|
 | `thrust_scan_vector.cu`  | 使用 `thrust` 中的设备矢量 |
@@ -153,7 +141,7 @@ How to compile and run?
 | `curand_host2.cu`        | 用 `cuRAND` 产生高斯分布的随机数 |
   
   
-### 第 18 章: pyCUDA 使用
+### 第 15 章: pyCUDA 使用
 
 由琪同学贡献了本章的代码:
 https://github.com/YouQixiaowu/CUDA-Programming-with-Python
@@ -207,7 +195,7 @@ https://github.com/YouQixiaowu/CUDA-Programming-with-Python
 | 利用共享内存转置，且无 bank 冲突      | 1.4 ms | 2.5 ms | 2.3 ms | 4.2 ms |  |
 
 
-### 数组规约（第 8-10 章以及第 13 章）
+### 数组规约（第 8-10 章）
 
 * 数组长度为 1.0e8，每个元素为 1.23。
 * 规约的精确结果为 123000000。
