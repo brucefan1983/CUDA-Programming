@@ -153,7 +153,7 @@ https://github.com/YouQixiaowu/CUDA-Programming-with-Python
 ### 矢量相加 (第 5 章)
 
 * 数组元素个数 = 1.0e8。
-* CPU (我的笔记本) 函数的执行时间是 60 ms （单精度）核 120 ms （双精度）。
+* CPU (我的笔记本) 函数的执行时间是 60 ms （单精度）和 120 ms （双精度）。
 * GPU 执行时间见下表：
 
 |  V100 (S) | V100 (D) | 2080ti (S) | 2080ti (D) | P100 (S) | P100 (D) | laptop-2070 (S) | laptop-2070 (D) | K40 (S) | K40 (D) |
