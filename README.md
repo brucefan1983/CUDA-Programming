@@ -1,5 +1,11 @@
 # 《`CUDA` 编程：基础与实践》源代码
 
+  
+## 相关仓库
+* 由琪同学正在用 pyCUDA 实现本书中的范例，见如下仓库：
+https://github.com/YouQixiaowu/CUDA-Programming-with-Python
+
+
 ## 关于本书：
   * 将于 2020 年由清华大学出版社出版，语言为中文。 **前 8 章书稿已经公开，见本仓库的 PDF 文件。如果您想尽早阅读余下的章节，请在前 8 章书稿中找出 8 个错误（包括知识性错误、错别字、前后不一致等），然后私下联系我。邮箱：brucenju(at)gmail.com。**
   * 覆盖开普勒到图灵（计算能力从 3.0 到 7.5）的所有 GPU 架构。
@@ -8,9 +14,6 @@
     * 熟悉 `C++` (对全书来说)；
     * 熟悉本科水平的物理（对第 13 章来说）；
     * 熟悉本科水平的数学（对第 14 章来说）；
-    * 熟悉 `Python` 和 `NumPy`（对第 15 章来说）。
-
-
     
 ## 我的测试系统
 * Linux: 主机编译器用的 `g++`。
@@ -143,14 +146,6 @@
 | `cusolver.cu`            | 用 `cuSolver` 求矩阵本征值 |
 | `curand_host1.cu`        | 用 `cuRAND` 产生均匀分布的随机数 |
 | `curand_host2.cu`        | 用 `cuRAND` 产生高斯分布的随机数 |
-  
-  
-### 第 15 章: pyCUDA 使用
-
-由琪同学贡献了本章的代码:
-https://github.com/YouQixiaowu/CUDA-Programming-with-Python
-
-
 
 ## 我的部分测试结果
 
