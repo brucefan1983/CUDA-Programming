@@ -11,9 +11,9 @@ https://github.com/YouQixiaowu/CUDA-Programming-with-Python
   * 覆盖开普勒到图灵（计算能力从 3.0 到 7.5）的所有 GPU 架构。
   * 尽量同时照顾 Windows 和 Linux 用户。
   * 假设读者有如下基础：
-    * 熟悉 `C++` (对全书来说)；
-    * 熟悉本科水平的物理（对第 13 章来说）；
-    * 熟悉本科水平的数学（对第 14 章来说）；
+    * 熟悉 `C++` (对全书来说)
+    * 熟悉本科水平的物理（对第 13 章来说；本章可选读）
+    * 熟悉本科水平的数学（对第 14 章来说；本章可选读）
     
 ## 我的测试系统
 * Linux: 主机编译器用的 `g++`。
@@ -135,7 +135,6 @@ https://github.com/YouQixiaowu/CUDA-Programming-with-Python
 | `cpp`     | C++ 版本的 MD 程序 |
 | `force-only`   | 仅将求力的函数移植到 CUDA |
 | `whole-code` | 全部移植到 CUDA |
-| `optimization` | 内存访问优化 |
   
 ### 第 14 章：CUDA 库
 | 文件        | 知识点 |
