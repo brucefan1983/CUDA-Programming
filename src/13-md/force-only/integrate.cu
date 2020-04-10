@@ -88,30 +88,23 @@ void production
 )
 {
     float t_force = 0.0f;
-    cudaEvent_t start_total, stop_total, start_force, stop_force;
-    CHECK(cudaEventCreate(&start_total));
-    CHECK(cudaEventCreate(&stop_total));
-    CHECK(cudaEventCreate(&start_force));
-    CHECK(cudaEventCreate(&stop_force));
-
-    CHECK(cudaEventRecord(start_total));
-    cudaEventQuery(start_total);
+    CHECK(cudaDeviceSynchronize());
+    clock_t t_total_start = clock();
 
     FILE *fid = fopen("energy.txt", "w");
     for (int step = 0; step < Np; ++step)
     {
         integrate(N, time_step, atom, 1);
 
-        CHECK(cudaEventRecord(start_force));
-        cudaEventQuery(start_force);
+        CHECK(cudaDeviceSynchronize());
+        clock_t t_force_start = clock();
 
         find_force(N, MN, atom);
 
-        CHECK(cudaEventRecord(stop_force));
-        CHECK(cudaEventSynchronize(stop_force));
-        float t_tmp;
-        CHECK(cudaEventElapsedTime(&t_tmp, start_force, stop_force));
-        t_force += t_tmp;
+        CHECK(cudaDeviceSynchronize());
+        clock_t t_force_stop = clock();
+
+        t_force += float(t_force_stop - t_force_start) / CLOCKS_PER_SEC;
 
         integrate(N, time_step, atom, 2);
 
@@ -122,17 +115,13 @@ void production
     }
     fclose(fid);
 
-    CHECK(cudaEventRecord(stop_total));
-    CHECK(cudaEventSynchronize(stop_total));
-    float t_total;
-    CHECK(cudaEventElapsedTime(&t_total, start_total, stop_total));
-    printf("Time used for production = %g s\n", t_total * 0.001);
-    printf("Time used for force part = %g s\n", t_force * 0.001);
+    CHECK(cudaDeviceSynchronize());
+    clock_t t_total_stop = clock();
 
-    CHECK(cudaEventDestroy(start_total));
-    CHECK(cudaEventDestroy(stop_total));
-    CHECK(cudaEventDestroy(start_force));
-    CHECK(cudaEventDestroy(stop_force));
+    float t_total = float(t_total_stop - t_total_start) / CLOCKS_PER_SEC;
+    printf("Time used for production = %g s\n", t_total);
+    printf("Time used for force part = %g s\n", t_force);
 }
+
 
 
