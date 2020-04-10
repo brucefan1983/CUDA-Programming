@@ -95,6 +95,7 @@ void production
     CHECK(cudaEventCreate(&stop_force));
 
     CHECK(cudaEventRecord(start_total));
+    cudaEventQuery(start_total);
 
     FILE *fid = fopen("energy.txt", "w");
     for (int step = 0; step < Np; ++step)
@@ -102,6 +103,7 @@ void production
         integrate(N, time_step, atom, 1);
 
         CHECK(cudaEventRecord(start_force));
+        cudaEventQuery(start_force);
         find_force(N, MN, atom);
         CHECK(cudaEventRecord(stop_force));
         CHECK(cudaEventSynchronize(stop_force));
