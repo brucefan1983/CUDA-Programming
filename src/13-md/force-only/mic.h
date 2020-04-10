@@ -2,15 +2,15 @@
 
 static void __device__ apply_mic
 (
-    real *box, real *x12, real *y12, real *z12
+    Box box, real *x12, real *y12, real *z12
 )
 {
-    if      (*x12 < - box[3]) { *x12 += box[0]; } 
-    else if (*x12 > + box[3]) { *x12 -= box[0]; }
-    if      (*y12 < - box[4]) { *y12 += box[1]; } 
-    else if (*y12 > + box[4]) { *y12 -= box[1]; }
-    if      (*z12 < - box[5]) { *z12 += box[2]; } 
-    else if (*z12 > + box[5]) { *z12 -= box[2]; }
+    if      (*x12 < - box.lx2) { *x12 += box.lx; }
+    else if (*x12 > + box.lx2) { *x12 -= box.lx; }
+    if      (*y12 < - box.ly2) { *y12 += box.ly; }
+    else if (*y12 > + box.ly2) { *y12 -= box.ly; }
+    if      (*z12 < - box.lz2) { *z12 += box.lz; }
+    else if (*z12 > + box.lz2) { *z12 -= box.lz; }
 }
 
 

@@ -18,16 +18,15 @@ void allocate_memory(int N, int MN, Atom *atom)
     atom->ke = (real*) malloc(N * sizeof(real));
     atom->box = (real*) malloc(6 * sizeof(real));
 
-    CHECK(cudaMalloc((void**)&atom->g_NN, sizeof(int) * N))
-    CHECK(cudaMalloc((void**)&atom->g_NL, sizeof(int) * N * MN))
-    CHECK(cudaMalloc((void**)&atom->g_x, sizeof(real) * N))
-    CHECK(cudaMalloc((void**)&atom->g_y, sizeof(real) * N))
-    CHECK(cudaMalloc((void**)&atom->g_z, sizeof(real) * N))
-    CHECK(cudaMalloc((void**)&atom->g_fx, sizeof(real) * N))
-    CHECK(cudaMalloc((void**)&atom->g_fy, sizeof(real) * N))
-    CHECK(cudaMalloc((void**)&atom->g_fz, sizeof(real) * N))
-    CHECK(cudaMalloc((void**)&atom->g_pe, sizeof(real) * N))
-    CHECK(cudaMalloc((void**)&atom->g_box, sizeof(real) * 6))
+    CHECK(cudaMalloc((void**)&atom->g_NN, sizeof(int) * N));
+    CHECK(cudaMalloc((void**)&atom->g_NL, sizeof(int) * N * MN));
+    CHECK(cudaMalloc((void**)&atom->g_x, sizeof(real) * N));
+    CHECK(cudaMalloc((void**)&atom->g_y, sizeof(real) * N));
+    CHECK(cudaMalloc((void**)&atom->g_z, sizeof(real) * N));
+    CHECK(cudaMalloc((void**)&atom->g_fx, sizeof(real) * N));
+    CHECK(cudaMalloc((void**)&atom->g_fy, sizeof(real) * N));
+    CHECK(cudaMalloc((void**)&atom->g_fz, sizeof(real) * N));
+    CHECK(cudaMalloc((void**)&atom->g_pe, sizeof(real) * N));
 }
 
 void deallocate_memory(Atom *atom)
@@ -46,15 +45,14 @@ void deallocate_memory(Atom *atom)
     free(atom->ke);
     free(atom->box);
 
-    CHECK(cudaFree(atom->g_NN)) 
-    CHECK(cudaFree(atom->g_NL))
-    CHECK(cudaFree(atom->g_x))
-    CHECK(cudaFree(atom->g_y))
-    CHECK(cudaFree(atom->g_z))
-    CHECK(cudaFree(atom->g_fx))
-    CHECK(cudaFree(atom->g_fy))
-    CHECK(cudaFree(atom->g_fz))
-    CHECK(cudaFree(atom->g_pe))
-    CHECK(cudaFree(atom->g_box))
+    CHECK(cudaFree(atom->g_NN));
+    CHECK(cudaFree(atom->g_NL));
+    CHECK(cudaFree(atom->g_x));
+    CHECK(cudaFree(atom->g_y));
+    CHECK(cudaFree(atom->g_z));
+    CHECK(cudaFree(atom->g_fx));
+    CHECK(cudaFree(atom->g_fy));
+    CHECK(cudaFree(atom->g_fz));
+    CHECK(cudaFree(atom->g_pe));
 }
 

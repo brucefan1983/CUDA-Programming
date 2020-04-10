@@ -2,6 +2,7 @@
 #include <stdio.h>
 
 #define CHECK(call)                                   \
+do                                                    \
 {                                                     \
     const cudaError_t error_code = call;              \
     if (error_code != cudaSuccess)                    \
@@ -14,5 +15,5 @@
             cudaGetErrorString(error_code));          \
         exit(1);                                      \
     }                                                 \
-}
+} while (0)
 

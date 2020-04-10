@@ -34,5 +34,14 @@ struct Atom
     real *g_fy;
     real *g_fz;
     real *g_pe;
-    real *g_box;
+};
+
+struct Box
+{
+    real lx;
+    real ly;
+    real lz;
+    real lx2;
+    real ly2;
+    real lz2;
 };

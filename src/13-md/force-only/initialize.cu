@@ -58,15 +58,9 @@ void initialize_position(int nx, real ax, Atom *atom)
     }
 
     int m1 = sizeof(real) * 4 * nx * nx * nx;
-    int m2 = sizeof(real) * 6;
-    CHECK(cudaMemcpy(atom->g_x, atom->x, m1, 
-        cudaMemcpyHostToDevice))
-    CHECK(cudaMemcpy(atom->g_y, atom->y, m1, 
-        cudaMemcpyHostToDevice))
-    CHECK(cudaMemcpy(atom->g_z, atom->z, m1, 
-        cudaMemcpyHostToDevice))
-    CHECK(cudaMemcpy(atom->g_box, atom->box, m2, 
-        cudaMemcpyHostToDevice))
+    CHECK(cudaMemcpy(atom->g_x, atom->x, m1, cudaMemcpyHostToDevice));
+    CHECK(cudaMemcpy(atom->g_y, atom->y, m1, cudaMemcpyHostToDevice));
+    CHECK(cudaMemcpy(atom->g_z, atom->z, m1, cudaMemcpyHostToDevice));
 }
   
 void initialize_velocity(int N, real T_0, Atom *atom)
