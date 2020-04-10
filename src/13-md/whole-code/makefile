@@ -1,16 +1,11 @@
 all: ljmd
 
 CC = nvcc
-CFLAGS = -O3 \
-	-gencode arch=compute_35,code=sm_35 \
-	-gencode arch=compute_37,code=sm_37 \
-	-gencode arch=compute_60,code=sm_60
+CFLAGS = -O3 -arch=sm_75
 
-ljmd: initialize.o integrate.o neighbor.o \
-	force.o memory.o main.o
+ljmd: initialize.o integrate.o neighbor.o force.o memory.o reduce.o main.o
 	$(CC) -o ljmd \
-	initialize.o integrate.o neighbor.o \
-	force.o memory.o main.o
+	initialize.o integrate.o neighbor.o force.o memory.o reduce.o main.o
 
 initialize.o: initialize.cu
 	$(CC) $(CFLAGS) -c initialize.cu
@@ -22,8 +17,11 @@ neighbor.o: neighbor.cu
 	$(CC) $(CFLAGS) -c neighbor.cu
 force.o: force.cu
 	$(CC) $(CFLAGS) -c force.cu
+reduce.o: reduce.cu
+	$(CC) $(CFLAGS) -c reduce.cu
 main.o: main.cu
 	$(CC) $(CFLAGS) -c main.cu
 
 clean:
 	rm *o ljmd
+	

@@ -1,0 +1,28 @@
+all: ljmd
+
+CC = nvcc
+CFLAGS = -O3 -arch=sm_75 -Xcompiler "/wd 4819"
+
+ljmd: initialize.obj integrate.obj neighbor.obj force.obj memory.obj reduce.obj main.obj
+	$(CC) -o ljmd \
+	initialize.obj integrate.obj neighbor.obj force.obj memory.obj reduce.obj main.obj
+
+initialize.obj: initialize.cu
+	$(CC) $(CFLAGS) -c initialize.cu
+integrate.obj: integrate.cu
+	$(CC) $(CFLAGS) -c integrate.cu
+memory.obj: memory.cu
+	$(CC) $(CFLAGS) -c memory.cu
+neighbor.obj: neighbor.cu
+	$(CC) $(CFLAGS) -c neighbor.cu
+force.obj: force.cu
+	$(CC) $(CFLAGS) -c force.cu
+reduce.obj: reduce.cu
+	$(CC) $(CFLAGS) -c reduce.cu
+main.obj: main.cu
+	$(CC) $(CFLAGS) -c main.cu
+
+clean:
+	del *obj ljmd*
+
+

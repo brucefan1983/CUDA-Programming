@@ -14,7 +14,7 @@ int main(int argc, char **argv)
 
     if (argc != 3) 
     { 
-        printf("Error: ljmd requires one argument\n");
+        printf("Usage: %s nx Ne\n", argv[0]);
         exit(1);
     }
     else

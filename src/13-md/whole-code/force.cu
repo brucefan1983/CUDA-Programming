@@ -13,8 +13,10 @@ struct LJ
 
 static void __global__ gpu_find_force
 (
-    LJ lj, int N, int *g_NN, int *g_NL, real *g_box,
-    real *g_x, real *g_y, real *g_z,
+    LJ lj, int N, int *g_NN, int *g_NL, Box box,
+    real *g_x, 
+    real *g_y, 
+    real *g_z,
     real *g_fx, real *g_fy, real *g_fz, real *g_pe
 )
 {
@@ -35,9 +37,10 @@ static void __global__ gpu_find_force
             real x_ij  = g_x[j] - x_i;
             real y_ij  = g_y[j] - y_i;
             real z_ij  = g_z[j] - z_i;
-            apply_mic(g_box, &x_ij, &y_ij, &z_ij);
+            apply_mic(box, &x_ij, &y_ij, &z_ij);
             real r2 = x_ij*x_ij + y_ij*y_ij + z_ij*z_ij;
             if (r2 > lj.cutoff2) { continue; }
+
             real r2inv = 1.0 / r2;
             real r4inv = r2inv * r2inv;
             real r6inv = r2inv * r4inv;
@@ -77,11 +80,19 @@ void find_force(int N, int MN, Atom *atom)
     lj.e4s6 = e4s6;
     lj.e4s12 = e4s12;
 
+    Box box;
+    box.lx = atom->box[0];
+    box.ly = atom->box[1];
+    box.lz = atom->box[2];
+    box.lx2 = atom->box[3];
+    box.ly2 = atom->box[4];
+    box.lz2 = atom->box[5];
+
     int block_size = 128;
     int grid_size = (N - 1) / block_size + 1;
     gpu_find_force<<<grid_size, block_size>>>
     (
-        lj, N, atom->g_NN, atom->g_NL, atom->g_box,
+        lj, N,  atom->g_NN, atom->g_NL, box,
         atom->g_x, atom->g_y, atom->g_z,
         atom->g_fx, atom->g_fy, atom->g_fz, atom->g_pe
     );

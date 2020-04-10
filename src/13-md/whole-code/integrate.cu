@@ -1,62 +1,10 @@
 #include "integrate.h"
 #include "error.cuh"
 #include "force.h"
+#include "reduce.h"
 #include <stdio.h>
 #include <math.h>
 #include <time.h>
-
-void __global__ gpu_sum
-(int N, int number_of_rounds, real *g_x, real *g_y)
-{
-    int tid = threadIdx.x;
-    int bid = blockIdx.x;
-    __shared__ real s_y[128];
-
-    real y = 0.0;
-    int offset = tid + bid * blockDim.x * number_of_rounds;
-    for (int round = 0; round < number_of_rounds; ++round)
-    {
-        int n = round * blockDim.x + offset;
-        if (n < N) { y += g_x[n]; }
-    }
-    s_y[tid] = y;
-    __syncthreads();
-
-    for (int offset = blockDim.x >> 1; offset > 32; offset >>= 1)
-    {
-        if (tid < offset) { s_y[tid] += s_y[tid + offset]; }
-        __syncthreads();
-    }
-    for (int offset = 32; offset > 0; offset >>= 1)
-    {
-        if (tid < offset) { s_y[tid] += s_y[tid + offset]; }
-        __syncwarp();
-    }
-    if (tid == 0) { atomicAdd(g_y, s_y[0]); }
-}
-
-static real sum(int N, real *g_x)
-{
-    int block_size = 128;
-    int M = (N - 1) / 25600 + 1;
-    int grid_size = (N - 1) / (block_size * M) + 1;
-
-    real *h_sum = (real*) malloc(sizeof(real));
-    h_sum[0] = 0.0;
-    real *g_sum;
-    CHECK(cudaMalloc((void**)&g_sum, sizeof(real)))
-    CHECK(cudaMemcpy(g_sum, h_sum, sizeof(real), 
-        cudaMemcpyHostToDevice))
-
-    gpu_sum<<<grid_size, block_size>>>(N, M, g_x, g_sum);
-
-    CHECK(cudaMemcpy(h_sum, g_sum, sizeof(real), 
-        cudaMemcpyDeviceToHost))
-    real result = h_sum[0];
-    CHECK(cudaFree(g_sum))
-    free(h_sum);
-    return result;
-}
 
 static void __global__ gpu_scale_velocity
 (
@@ -125,8 +73,7 @@ static void __global__ gpu_integrate
     }
 }
 
-static void integrate
-(int N, real time_step, Atom *atom, int flag)
+static void integrate(int N, real time_step, Atom *atom, int flag)
 {
     real time_step_half = time_step * 0.5;
 
@@ -149,8 +96,6 @@ void equilibration
 )
 {
     find_force(N, MN, atom);
-    cudaDeviceSynchronize();
-    clock_t time_begin = clock();
     for (int step = 0; step < Ne; ++step)
     { 
         integrate(N, time_step, atom, 1);
@@ -158,11 +103,6 @@ void equilibration
         integrate(N, time_step, atom, 2);
         scale_velocity(N, T_0, atom);
     } 
-    cudaDeviceSynchronize();
-    clock_t time_finish = clock();
-    real time_used = (time_finish - time_begin) 
-                     / (real) CLOCKS_PER_SEC;
-    printf("time used for equilibration = %g s\n", time_used);
 }
 
 void production
@@ -171,27 +111,52 @@ void production
     real time_step, Atom *atom
 )
 {
-    cudaDeviceSynchronize();
-    clock_t time_begin = clock();
+    float t_force = 0.0f;
+    cudaEvent_t start_total, stop_total, start_force, stop_force;
+    CHECK(cudaEventCreate(&start_total));
+    CHECK(cudaEventCreate(&stop_total));
+    CHECK(cudaEventCreate(&start_force));
+    CHECK(cudaEventCreate(&stop_force));
+
+    CHECK(cudaEventRecord(start_total));
+    cudaEventQuery(start_total);
+
     FILE *fid_e = fopen("energy.txt", "w");
     for (int step = 0; step < Np; ++step)
     {  
         integrate(N, time_step, atom, 1);
+
+        CHECK(cudaEventRecord(start_force));
+        cudaEventQuery(start_force);
+
         find_force(N, MN, atom);
+
+        CHECK(cudaEventRecord(stop_force));
+        CHECK(cudaEventSynchronize(stop_force));
+        float t_tmp;
+        CHECK(cudaEventElapsedTime(&t_tmp, start_force, stop_force));
+        t_force += t_tmp;
+
         integrate(N, time_step, atom, 2);
+
         if (0 == step % Ns)
         {
-            fprintf
-            (
-                fid_e, "%g %g\n",
-                sum(N, atom->g_ke), sum(N, atom->g_pe)
-            );
+            fprintf(fid_e, "%g %g\n", sum(N, atom->g_ke), sum(N, atom->g_pe));
         }
     }
     fclose(fid_e);
-    cudaDeviceSynchronize();
-    clock_t time_finish = clock();
-    real time_used = (time_finish - time_begin) 
-                     / (real) CLOCKS_PER_SEC;
-    printf("time used for production = %g s\n", time_used);
+
+    CHECK(cudaEventRecord(stop_total));
+    CHECK(cudaEventSynchronize(stop_total));
+    float t_total;
+    CHECK(cudaEventElapsedTime(&t_total, start_total, stop_total));
+    printf("Time used for production = %g s\n", t_total * 0.001);
+    printf("Time used for force part = %g s\n", t_force * 0.001);
+
+    CHECK(cudaEventDestroy(start_total));
+    CHECK(cudaEventDestroy(stop_total));
+    CHECK(cudaEventDestroy(start_force));
+    CHECK(cudaEventDestroy(stop_force));
 }
+
+
