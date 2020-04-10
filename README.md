@@ -230,7 +230,8 @@ https://github.com/YouQixiaowu/CUDA-Programming-with-Python
 ### 分子动力学模拟（第 13 章）
 
 * 模拟体系为固态氩
-* GPU 为笔记本中的 RTX 2070
+* GPU 为笔记本中的 RTX 2070，使用单精度浮点数
+* CPU 为 Intel i7-8750H 处理器
 
 #### CPU 版本计算速度测试
 * 原子数 N = 10^3 * 4 = 4000
