@@ -261,3 +261,7 @@ https://github.com/YouQixiaowu/CUDA-Programming-with-Python
 | 256000 | 2000 | 2.2 s | 0.4 s  |  2.6 s  | 2.0e8 原子步每秒|
 
 
+
+
+## 初稿中的错误（将在校稿时改正）
+* 很多地方“归约”写成了“规约”。
