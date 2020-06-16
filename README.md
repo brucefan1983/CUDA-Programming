@@ -90,8 +90,8 @@ https://github.com/YouQixiaowu/CUDA-Programming-with-Python
 
 | 文件        | 知识点 |
 |:------------|:---------------|
-| `reduce1cpu.cu`     | `C++` 版本的规约函数 |
-| `reduce2gpu.cu`     | 仅使用全局内存和同时使用全局内存和共享内存的规约核函数|
+| `reduce1cpu.cu`     | `C++` 版本的归约函数 |
+| `reduce2gpu.cu`     | 仅使用全局内存和同时使用全局内存和共享内存的归约核函数|
 | `bank.cu`           | 使用共享内存实现矩阵转置并避免共享内存的 bank 冲突 |
 
 
@@ -99,7 +99,7 @@ https://github.com/YouQixiaowu/CUDA-Programming-with-Python
 
 | 文件        | 知识点 |
 |:------------|:---------------|
-| `reduce.cu`        | 在规约核函数中使用原子函数 `atomicAdd` |
+| `reduce.cu`        | 在归约核函数中使用原子函数 `atomicAdd` |
 | `neighbor1cpu.cu`  | CPU 版本的邻居列表构建函数 |
 | `neighbor2gpu.cu`  | GPU 版本的邻居列表构建函数，分使用和不使用原子函数的情况 |
 
@@ -193,10 +193,10 @@ https://github.com/YouQixiaowu/CUDA-Programming-with-Python
 | 利用共享内存转置，且无 bank 冲突      | 1.4 ms | 2.5 ms | 2.3 ms | 4.2 ms |  |
 
 
-### 数组规约（第 8-10 章）
+### 数组归约（第 8-10 章）
 
 * 数组长度为 1.0e8，每个元素为 1.23。
-* 规约的精确结果为 123000000。
+* 归约的精确结果为 123000000。
 * GPU 为笔记本版本的 GeForce RTX 2070。
 * 下面是用**单精度**浮点数测试的结果：
 
@@ -266,4 +266,3 @@ https://github.com/YouQixiaowu/CUDA-Programming-with-Python
 ## 初稿中的错误（将在校稿时改正）
 * 很多地方“归约”写成了“规约”。
 * 第64页，“将中M 字节的数据从主机复制到设备”和“将中M 字节的数据从设备复制到主机”。这里两个“中”字都是多余的。
-。
