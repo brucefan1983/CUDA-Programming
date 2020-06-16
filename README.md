@@ -265,3 +265,5 @@ https://github.com/YouQixiaowu/CUDA-Programming-with-Python
 
 ## 初稿中的错误（将在校稿时改正）
 * 很多地方“归约”写成了“规约”。
+* 第64页，“将中M 字节的数据从主机复制到设备”和“将中M 字节的数据从设备复制到主机”。这里两个“中”字都是多余的。
+。
