@@ -2,11 +2,9 @@ Note: I am writing a simplified English version based on the Chinese version of 
 
 # Chapter 2: Thread Organization CUDA
 
-我们以最简单的CUDA程序：从GPU中输出 Hello World! 字符串开始CUDA编程的学习。经典的Hello World程序几乎是学习任何一门新编程语言的出发点。学会了Hello World程序的开发过程，就对一个新的编程语言有了一个初步的认识。
+We start with the simplest CUDA program: printing a `Hello World` string from the GPU.
 
-本书的所有范例都是基于Linux操作系统开发的，但大部分也在Windows操作系统中使用Command Prompt命令行通过测试。因此，读者需要掌握基本的Linux或Windows命令行操作知识。
-
-\section{C++语言中的Hello World程序}
+## A `Hello World` Program in C++
 
 学习CUDA C++编程需要读者比较熟练地掌握C++编程的基础。虽然CUDA支持很多C++的特征，但作者写的C++程序有很多C 程序的痕迹，而且本书基本上不涉及C++中的类和模板等编程特征。
 
@@ -54,12 +52,11 @@ int main(void)
 \end{verbatim}
 这将产生一个名为\verb"hello.exe"的可执行文件。
 
-\section{CUDA中的Hello World程序}
+## A `Hello World` Program in CUDA
 
 在复习了C++语言中的Hello World程序之后，我们接着介绍CUDA中的Hello World程序。
 
-
-\subsection{只有主机函数的CUDA程序}
+### A CUDA program containing host functions only
 
 其实，我们已经写好了一个CUDA中的Hello World程序。这是因为，CUDA 程序的编译器驱动（compiler driver）\verb"nvcc"支持编译纯粹的C++代码。一般来说，一个标准的CUDA程序中既有纯粹的C++代码，也有不属于C++的真正的CUDA代码。CUDA程序的编译器驱动\verb"nvcc"在编译一个CUDA程序时，会将纯粹的C++代码交给C++的编译器（如前面提到的\verb"g++"或\verb"cl"）去处理，它自己则负责编译剩下的部分。CUDA程序源文件的后缀名默认是\verb".cu"，所以我们可以将上面写好的源文件更名为\verb"hello1.cu"，然后用\verb"nvcc"编译：
 \begin{verbatim}
@@ -67,7 +64,7 @@ int main(void)
 \end{verbatim}
 编译好之后即可运行。运行结果与C++程序的运行结果一样。关于CUDA程序的编译过程，将在本章最后一节及后续的某些章节详细讨论，现在只要知道可以用\verb"nvcc"编译CUDA程序即可。
 
-\subsection{使用核函数的CUDA程序}
+### A CUDA program containing a CUDA kernel
 
 虽然上面的第一个版本是由CUDA的编译器编译的，但程序中根本没有使用GPU。下面来介绍一个使用GPU的Hello World程序。
 
@@ -141,9 +138,9 @@ int main(void)
 这行语句调用了一个CUDA的运行时API函数。去掉这个函数就打印不出字符串了（请读者亲自尝试）。这是因为调用输出函数时，输出流是先存放在缓冲区的，而缓冲区不会自动刷新。只有程序遇到某种同步操作时缓冲区才会刷新。函数\verb"cudaDeviceSynchronize"的作用是同步主机与设备，所以能够促使缓冲区刷新。读者现在不需要弄明白这个函数到底是什么，因为我们这里的主要目的是介绍CUDA中的线程组织。
 \end{itemize}
 
-\section{CUDA中的线程组织}
+## Thread organization in CUDA 
 
-\subsection{使用多个线程的核函数}
+## A CUDA kernel using multiple threads
 
 核函数中允许指派很多线程，这是一个必然的特征。这是因为，一个GPU往往有几千个计算核心，而总的线程数必须至少等于计算核心数时才有可能充分利用GPU中的全部计算资源。实际上，总的线程数大于计算核心数时才能更充分地利用GPU中的计算资源，因为这会让计算和内存访问之间及不同的计算之间合理地重叠，从而减小计算核心空闲的时间。
 
@@ -173,7 +170,7 @@ int main(void)
 \end{verbatim}
 其中，每一行对应一个指派的线程。读者也许要问，每一行分别是哪一个线程输出的呢？下面就来讨论这个问题。
 
-\subsection{使用线程索引}
+## Using thread indices in a CUDA kernel
 
 通过前面的介绍，我们知道，可以为一个核 函数指派多个线程，而这些线程的组织结构是由执行配置（execution configuration）
 \begin{verbatim}
@@ -240,8 +237,7 @@ int main(void)
 \end{verbatim}
 也就是说，有时是第0个线程块先完成计算，有时是第1个线程块先完成计算。这反映了CUDA程序执行时的一个很重要的特征，即每个线程块的计算是相互独立的。不管完成计算的次序如何，每个线程块中的每个线程都进行一次计算。
 
-
-\subsection{推广至多维网格}
+### Generalization to multi-dimensional grid
 
 细心的读者可能注意到，前面介绍的4个内建变量都用了C++中的结构体（struct）或者类（class）的成员变量的语法。其中：
 \begin{itemize}
@@ -367,13 +363,13 @@ int main(void)
 CUDA中对能够定义的网格大小和线程块大小做了限制。对任何从开普勒到图灵架构的GPU来说，网格大小在x、y和z这3个方向的最大允许值分别为$2^{31}-1$、$65535$和$65535$；线程块大小在x、y和z这3个方向的最大允许值分别为$1024$、$1024$和$64$。另外还要求线程块总的大小，即\verb"blockDim.x"、\verb"blockDim.y"和\verb"blockDim.z"的乘积不能大于$1024$。也就是说，不管如何定义，一个线程块最多只能有$1024$个线程。这些限制是必须牢记的。
 
 
-\section{CUDA中的头文件}
+## Headers in CUDA
 
 我们知道，在编写C++程序时，往往需要在源文件中包含一些标准的头文件。读者也许注意到了，本章程序包含了C++的头文件\verb"<stdio.h>"，但并没有包含任何CUDA相关的头文件。CUDA中也有一些头文件，但是在使用nvcc编译器驱动编译\verb".cu"文件时，将自动包含必要的CUDA头文件，如\verb"<cuda.h>" 和\verb"<cuda_runtime.h>"。因为\verb"<cuda.h>"包含了\verb"<stdlib.h>"，故用nvcc编译CUDA程序时甚至不需要在\verb".cu"文件中包含\verb"<stdlib.h>"。当然，用户依然可以在\verb".cu"文件中包含\verb"<stdlib.h>"，因为（正确编写的）头文件不会在一个编译单元内被包含多次。本书会从第\ref{chapter:error-check}章开始使用一个用户自定义头文件。
 
 在本书第\ref{chapter:lib}章我们将看到，在使用一些利用CUDA进行加速的应用程序库时，需要包含一些必要的头文件，并有可能还需要指定链接选项。
 
-\section{用nvcc编译CUDA程序}
+## Using `nvcc` to compile CUDA programs
 
 CUDA的编译器驱动（compiler driver）nvcc先将全部源代码分离为主机代码和设备代码。主机代码完整地支持C++语法，但设备代码只部分地支持C++。nvcc先将设备代码编译为PTX（Parallel Thread eXecution）伪汇编代码，再将PTX代码编译为二进制的cubin目标代码。在将源代码编译为PTX代码时，需要用选项\verb"-arch=compute_XY"指定一个虚拟架构的计算能力，用以确定代码中能够使用的CUDA功能。在将PTX代码编译为cubin代码时，需要用选项\verb"-code=sm_ZW"指定一个真实架构的计算能力，用以确定可执行文件能够使用的GPU。真实架构的计算能力必须等于或者大于虚拟架构的计算能力。例如，可以用选项
 \begin{verbatim}
