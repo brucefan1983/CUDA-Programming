@@ -20,6 +20,8 @@ https://github.com/YouQixiaowu/CUDA-Programming-with-Python
 * Windows: 仅使用命令行解释器 `CMD`，主机编译器用 Visual Studio 中的 `cl`。在用 `nvcc` 编译 CUDA 程序时，可能需要添加 `-Xcompiler "/wd 4819"` 选项消除和 unicode 有关的警告。
 * 全书代码可在 `CUDA` 9.0-10.2 （包含）之间的版本运行。
 
+## English Version
+https://github.com/brucefan1983/CUDA-Programming/blob/master/src/01-introduction/text.md
 
 ## 目录和源代码条目
 
