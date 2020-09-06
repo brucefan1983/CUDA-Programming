@@ -83,9 +83,12 @@ In some cases, we need to have administrator rights, which can be achived by rig
 
 # Using the `nvidia-smi` program
 
-可以通过~\verb"nvidia-smi"（Nvidia's system management interface）程序检查与设置设备。它包含在~CUDA~开发工具套装内。该程序最基本的用法就是在命令行解释器中使用不带任何参数的命令~\verb"nvidia-smi"。在作者的计算机中使用该命令，得到如下文本形式的输出：
-\begin{small}
-\begin{verbatim}
+After installing CUDA, one should be able to use the program (an executable) `nvidia-smi`（Nvidia's system management interface）from the command line. Simply type the name of this program:
+```
+$ nvidia-smi
+```
+it will show the information regarding the GPU(s) in the system. Here is an example from my laptop:
+```
     +-----------------------------------------------------------------------------+
     | NVIDIA-SMI 426.00       Driver Version: 426.00       CUDA Version: 10.1     |
     |-------------------------------+----------------------+----------------------+
@@ -102,8 +105,7 @@ In some cases, we need to have administrator rights, which can be achived by rig
     |=============================================================================|
     |  No running processes found                                                 |
     +-----------------------------------------------------------------------------+
-\end{verbatim}
-\end{small}
+```
 
 从中可以看出一些比较有用的信息：
 \begin{itemize}
