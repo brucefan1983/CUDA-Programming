@@ -1,7 +1,7 @@
 # 《`CUDA` 编程：基础与实践》源代码
 
 
-## I am writing a simplified English Version
+## I am writing a simplified English version of the book
 * Chapter 1 (finished): https://github.com/brucefan1983/CUDA-Programming/blob/master/src/01-introduction/readme.md
 * Chapter 2 (unfinished): https://github.com/brucefan1983/CUDA-Programming/blob/master/src/02-thread-organization/readme.md
   
