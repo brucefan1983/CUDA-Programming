@@ -1,4 +1,4 @@
-Note: I am writing a simplified English version based on the Chinese version of the book. This is chapter 2.
+**Unfinished...**
 
 # Chapter 2: Thread Organization CUDA
 
