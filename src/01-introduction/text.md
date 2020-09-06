@@ -109,33 +109,22 @@ it will show the information regarding the GPU(s) in the system. Here is an exam
 
 Here are some useful information from the above outputs:
 * From line 1 we can see the Nvidia driver version (426.00) and the CUDA version (10.1).
+* There is only one GPU in the system, which is a GeForce RTX 2070. It has a device ID of 0。If there are more GPUs, they will be labelled starting from 0. You can use the following command in the command line to select to use device 1 before running a CUDA program:
+```
+$ export CUDA_VISIBLE_DEVICES=1        
+```
+* This GPU is on the WDDM（windows display driver model）mode. Another possible mode is TCC（tesla compute cluster), but it is only avaible for the GPUs in the Tesla, Quadro, and Titan series. One can use the following commands to choose the mode（In Windows, one needs to have administator rights and `sudo` below should be removed):
+```
+$ sudo nvidia-smi -g GPU_ID -dm 0 # set device GPU_ID to the WDDM mode
+$ sudo nvidia-smi -g GPU_ID -dm 1 # set device GPU_ID to the TCC mode
+```
+* `Compute M`. refers tocompute mode。Here the compute mode is `Default`, which means that multiple computing process are allowed to be run with the GPU. Another possible mode is `E. Process`，which means exclusive process mode. The `E. Process` mode is not possible for GPUs in the WDDM mode。One can use the following commands to choose the mode（In Windows, one needs to have administator rights and `sudo` below should be removed):
+```
+$ sudo nvidia-smi -i GPU_ID -c 0 # set device GPU_ID to Default mode
+$ sudo nvidia-smi -i GPU_ID -c 1 # set device GPU_ID to E. Process mode
+```
 
-
-\item 作者所用计算机中有一型号为~GeForce RTX 2070~的~GPU。该~GPU~的设备号是~0。该计算机仅有一个~GPU。如果有多个~GPU，会将各个~GPU~从~0~开始编号。如果读者的系统中有多个~GPU，而且只需要使用某个特定的~GPU（比如两个之中更强大的那个），则可以通过设置环境变量~\verb"CUDA_VISIBLE_DEVICES" ~的值在运行~CUDA~程序之前选定一个~GPU。假如读者的系统中有编号为~0~和~1~的两个~GPU，而读者想在~1~号~GPU~运行~CUDA~程序，则可以用如下命令设置环境变量：
-\begin{verbatim}
-    $ export CUDA_VISIBLE_DEVICES=1        
-\end{verbatim}
-这样设置的环境变量在当前~shell session~及其子进程中有效。
-\item 该~GPU~处于~WDDM（windows display driver model ）模式。另一个可能的模式是~TCC（tesla compute cluster），但它仅在~Tesla、Quadro~和~Titan~系列的~GPU~中可选。可用如下方式选择（在~Windows~中需要用管理员身份打开~Command Prompt~并去掉命令中的~sudo）：
-\begin{verbatim}
-    $ sudo nvidia-smi -g GPU_ID -dm 0 # 设置为 WDDM 模式
-    $ sudo nvidia-smi -g GPU_ID -dm 1 # 设置为 TCC 模式
-\end{verbatim}
-这里，\verb"GPU_ID"~是~GPU~的编号。
-\item 该~GPU~当前的温度为~38~摄氏度。GPU~在满负荷运行时，温度会高一些。
-\item 这是~GeForce~系列的~GPU，没有~ECC~内存，故~Uncorr. ECC~为~N/A，代表不适用（not applicable）或者不存在（not available）。
-\item Compute M.~指计算模式（compute mode）。该~GPU~的计算模式是~Default。在默认模式中，同一个~GPU~中允许存在多个计算进程，但每个计算进程对应程序的运行速度一般来说会降低。还有一种模式为~E. Process，指的是独占进程模式（exclusive process mode），但不适用于处于~WDDM~模式的~GPU。在独占进程模式下，只能运行一个计算进程独占该~GPU。可以用如下命令设置计算模式（在~Windows~中需要用管理员身份打开~Command Prompt~并去掉命令中的~sudo）：
-\begin{verbatim}
-    $ sudo nvidia-smi -i GPU_ID -c 0 # 默认模式
-    $ sudo nvidia-smi -i GPU_ID -c 1 # 独占进程模式
-\end{verbatim}
-这里，\verb"-i GPU_ID" 的意思是希望该设置仅仅作用于编号为~\verb"GPU_ID"~的~GPU；如果去掉该选项，该设置将会作用于系统中所有的~GPU。
-\end{itemize}
-
-关于~\verb"nvidia-smi"~程序更多的介绍，请参考如下官方文档：
-\url{https://developer.nvidia.com/nvidia-system-management-interface}。
-
-
+For more details of the `nvidia-smi` program, see the following official manual: https://developer.nvidia.com/nvidia-system-management-interface
 
 
 # Other learning resources
