@@ -41,7 +41,6 @@ One can also specify a name for the executable, e.g.,
 $ g++ hello.cpp -o hello
 ```
 This will generat an executable named `hello` in the current directory. One can run this executable by typing
-将得到一个名为\verb"hello"的可执行文件，可以用如下命令运行它：
 ```
 $ ./hello
 ```
