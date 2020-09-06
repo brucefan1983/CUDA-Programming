@@ -29,14 +29,14 @@ Every GPU has a version number `X.Y` to indicate its **compute capability**. Her
 
 GPUs older than Pascal will become deprecated soon. We will focus on GPUs no older than Pascal.
 
-The computate capability of a GPU is not directly related to its performance. The following table lists the major metrics regarding performance for a few selected GPUs.
+The compute capability of a GPU is not directly related to its performance. The following table lists the major metrics regarding performance for a few selected GPUs.
 
 | GPU  | compute capability |  memory capacity  |  memory bandwidth  |  double-precision peak FLOPs | single-precision peak FLOPs |
 |:------------|:---------------|:--------------|:-----------------|:------------|:------------------|
-| Tesla P100         | 6.0 | 16 GB | 732 GB/s | 4.7 FLOPs | 9.3 FLOPs|
-| Tesla V100         | 7.0 | 32 GB | 900 GB/s | 7 FLOPs  | 14 FLOPs |
-| GeForce RTX 2070   | 7.5 | 8 GB  | 448 GB/s | 0.2 FLOPs| 6.5 FLOPs|
-| GeForce RTX 2080ti | 7.5 | 11 GB | 732 GB/s | 0.4 FLOPs| 13 FLOPs|
+| Tesla P100         | 6.0 | 16 GB | 732 GB/s | 4.7 TFLOPs | 9.3 TFLOPs|
+| Tesla V100         | 7.0 | 32 GB | 900 GB/s | 7 TFLOPs  | 14 TFLOPs |
+| GeForce RTX 2070   | 7.5 | 8 GB  | 448 GB/s | 0.2 TFLOPs| 6.5 TFLOPs|
+| GeForce RTX 2080ti | 7.5 | 11 GB | 732 GB/s | 0.4 TFLOPs| 13 TFLOPs|
 
 We notice that the double precision performane of a GeForce GPU is only 1/32 of its single-precision performance.
 
@@ -45,7 +45,7 @@ We notice that the double precision performane of a GeForce GPU is only 1/32 of 
 
 There are a few tools for GPU computing, including CUDA, OpenCL, and OpenACC, but we only consider CUDA in this book. We also only consider CUDA based on C++, which is called CUDA C++ for short. We will not consider CUDA Fortran.
 
-CUDA provides two APIs Application Programming Interfaces) for devolopers: the CUDA driver API and the CUDA runtime API. The CUDA driver API is more fundamental (low-level) and more flexible. The CUDA runtime API is constructed based on top of the CUDA driver API and is easier to use. We only consider the CUDA runtime API.
+CUDA provides two APIs (Application Programming Interfaces) for devolopers: the CUDA driver API and the CUDA runtime API. The CUDA driver API is more fundamental (low-level) and more flexible. The CUDA runtime API is constructed based on top of the CUDA driver API and is easier to use. We only consider the CUDA runtime API.
 
 There are also many CUDA versions, which can also be represented as `X.Y`. The following table lists the recent CUDA versions and the  the supported compute capabilites.
 
