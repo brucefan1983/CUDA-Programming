@@ -33,10 +33,10 @@ The computate capability of a GPU is not directly related to its performance. Th
 
 | GPU  | compute capability |  memory capacity  |  memory bandwidth  |  double-precision peak FLOPs | single-precision peak FLOPs |
 |:------------|:---------------|:--------------|:-----------------|:------------|:------------------|
-| Tesla P100         | 6.0 | 16 GB | 732 GB/s | 4.7 | 9.3 |
-| Tesla V100         | 7.0 | 32 GB | 900 GB/s | 7   | 14  |
-| GeForce RTX 2070   | 7.5 | 8 GB  | 448 GB/s | 0.2 | 6.5 |
-| GeForce RTX 2080ti | 7.5 | 11 GB | 732 GB/s | 0.4 | 13  |
+| Tesla P100         | 6.0 | 16 GB | 732 GB/s | 4.7 FLOPs | 9.3 FLOPs|
+| Tesla V100         | 7.0 | 32 GB | 900 GB/s | 7 FLOPs  | 14 FLOPs |
+| GeForce RTX 2070   | 7.5 | 8 GB  | 448 GB/s | 0.2 FLOPs| 6.5 FLOPs|
+| GeForce RTX 2080ti | 7.5 | 11 GB | 732 GB/s | 0.4 FLOPs| 13 FLOPs|
 
 We notice that the double precision performane of a GeForce GPU is only 1/32 of its single-precision performance.
 
@@ -51,10 +51,10 @@ There are also many CUDA versions, which can also be represented as `X.Y`. The f
 
 | CUDA versions | supported GPUs |
 |:------------|:---------------|
-|CUDA 11.0 |  3.5-8.0 (Kepler to Ampere) |
-|CUDA 10.0-10.2 |  3.0-7.5 (Kepler to Turing) |
-|CUDA 9.0-9.2 |  3.0-7.2  (Kepler to Volta) | 
-|CUDA 8.0     |  2.0-6.2  (Fermi to Pascal) | 
+|CUDA 11.0 |  Compute capability 3.5-8.0 (Kepler to Ampere) |
+|CUDA 10.0-10.2 | Compute capability 3.0-7.5 (Kepler to Turing) |
+|CUDA 9.0-9.2 | Compute capability 3.0-7.2  (Kepler to Volta) | 
+|CUDA 8.0     | Compute capability 2.0-6.2  (Fermi to Pascal) | 
 
 \section{CUDA~开发环境搭建示例}
 
@@ -130,57 +130,11 @@ There are also many CUDA versions, which can also be represented as `X.Y`. The f
 
 
 
-\section{其他学习资料}
 
-本书将循序渐进地带领读者学习~CUDA C++~编程的基础知识。虽然本书力求自给自足，但读者在阅读本书的过程中同时参考一些其他的学习资料也是有好处的。
+# Other learning resources
 
-任何关于~CUDA 编程的书籍都不可能替代官方提供的手册等资料。以下是几个重要的官方文档，请读者在有一定的基础之后务必查阅。限于作者水平，本书难免存在谬误。当读者觉得本书中的个别论断与官方资料有冲突时，当以官方资料为标准（官方手册的网址为~\url{https://docs.nvidia.com/cuda}）。在这个网站，包括但不限于以下几个方面的文档：
-\begin{itemize}
-\item 安装指南（installation guides）。读者遇到与~CUDA~安装有关的问题时，应该仔细阅读此处的文档。
-\item 编程指南（programming guides）。该部分有很多重要的文档：
-\begin{itemize}
-    \item 最重要的文档是《CUDA C++ Programming Guide》，见以下网址：
-    \url{https://docs.nvidia.com/cuda/cuda-c-programming-guide}。
-    \item 另一个值得一看的文档是《CUDA C++ Best Practices Guide》，见以下网址：
-    \url{https://docs.nvidia.com/cuda/cuda-c-best-practices-guide}。
-    \item 针对最近的几个~GPU~架构进行优化的指南，包括以下网址：
-    \begin{itemize}
-        \item \url{https://docs.nvidia.com/cuda/kepler-tuning-guide}。
-        \item \url{https://docs.nvidia.com/cuda/maxwell-tuning-guide}。
-        \item \url{https://docs.nvidia.com/cuda/pascal-tuning-guide}。
-        \item \url{https://docs.nvidia.com/cuda/volta-tuning-guide}。
-        \item \url{https://docs.nvidia.com/cuda/turing-tuning-guide}。
-    \end{itemize}
-    这几个简短的文档可以帮助有经验的用户迅速了解一个新的架构。
-\end{itemize}
-\item CUDA API 手册（CUDA API references）。这里有：
-\begin{itemize}
-\item CUDA~运行时~API~的手册：\url{https://docs.nvidia.com/cuda/cuda-runtime-api}。
-\item CUDA~驱动~API~的手册：\url{https://docs.nvidia.com/cuda/cuda-driver-api}。
-\item CUDA~数学函数库~API~的手册：\url{https://docs.nvidia.com/cuda/cuda-math-api}
-\item 其他若干~CUDA~库的手册。
-\end{itemize}
-
-\end{itemize}
-
-为明确起见，在撰写本书时，作者参考的是与~CUDA 10.2~对应的官方手册。
-
-在学习~CUDA~编程的过程中如果遇到了某些难以解决的问题，可以考虑去论坛或者交流群求助。以下是几个比较有用的学习资源：
-
-\begin{itemize}
-\item 国内方面，作者推荐如下网站与交流群：
-\begin{itemize}
-    \item 《GPU~世界》论坛： \url{https://bbs.gpuworld.cn}。
-    \item 《GPU~编程开发技术》QQ~群：62833093。
-    \item 《CUDA 100\%》QQ~群：195055206。
-    \item 《CUDA Professional》QQ~群：45157483。
-\end{itemize}
-\item 国际方面，作者推荐如下网站：
-\begin{itemize}
-    \item 英伟达官方的开发者博客： \url{https://devblogs.nvidia.com}。
-    \item Stack Overflow 问答网站：
-    \url{https://stackoverflow.com}。
-\end{itemize}
-\end{itemize}
+* The official documentation: https://docs.nvidia.com/cuda
+* https://devblogs.nvidia.com
+* https://stackoverflow.com
 
 
