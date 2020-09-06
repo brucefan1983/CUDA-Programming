@@ -1,4 +1,4 @@
-Note: I am writing a simplified version of my Chinese CUDA book in English. This is the first chapter.
+Note: I am writing a simplified English version based on the Chinese version. This is the first chapter.
 
 # Chapter 1: GPU and CUDA 
 
@@ -74,13 +74,16 @@ Check this manual: https://docs.nvidia.com/cuda/cuda-installation-guide-linux
 ```
     C:\ProgramData\NVIDIA Corporation\CUDA Samples\v10.1\1_Utilities\deviceQuery  
 ```
-and use Visual Studio to open the solution `deviceQuery_vs2019.sln`. Then build the solution and run the executable. If you see `Result = PASS` at the end of the output, congratulations! If you encounter problems, you can check the manual carefully: https://docs.nvidia.com/cuda/cuda-installation-guide-microsoft-windows.
+and use Visual Studio to open the solution `deviceQuery_vs2019.sln`. Then build the solution and run the executable. If you see `Result = PASS` at the end of the output, congratulations! If you encountered problems, you can check the manual carefully: https://docs.nvidia.com/cuda/cuda-installation-guide-microsoft-windows.
 
-在上面的测试中，我们是直接用~Visual Studio~打开一个已有的解决方案（solution），然后直接构建并运行。本书不介绍~Visual Studio~的使用，而是选择用命令行解释器编译与运行程序。这里的命令行解释器指的是~Linux~中的~terminal~或者~Windows~中的~command prompt~程序。在~Windows~中使用~MSVC~作为~C++~程序的编译器时，需要单独设置相应的环境变量，或者从~Windows~的开始（start）菜单中找到~Visual Studio 2019~文件夹，然后单击其中的“x64 Native Tools Command Prompt for VS 2019”，而从打开一个加载了~MSVC~环境变量的命令行解释器。在本书的某些章节，需要有管理员的权限来使用~nvprof~性能分析器。此时，可以右击“x64 Native Tools Command Prompt for VS 2019”，然后选择“更多”，接着选择“以管理员身份运行”。
+In this book, we will not use the Visual Studio IDE to develop CUDA programs. Instead, we use the command line (called **terminal** in Linux and **command prompt** in Windows) and, if needed, the `make` program. In Windows, to make the MSVC (Microsoft Visual C++ Compiler) `cl.exe` available, one can follow the following steps to open a command prompt:
+```
+Windows start -> Visual Studio 2019 -> x64 Native Tools Command Prompt for VS 2019
+```
+In some cases, we need to have administrator rights, which can be achived by right clicking `x64 Native Tools Command Prompt for VS 2019` and choosing `more` and then `run as administrator`.
 
-用命令行解释器编译与运行~CUDA~程序的方式在~Windows~和~Linux~系统几乎没有区别，但为了简洁起见，本书后面主要以~Linux~开发环境为例进行讲解。虽然如此，Windows~和~Linux~中的~CUDA~编程功能还是稍有差别。我们将在后续章节中适当的地方指出这些差别。
 
-\section{用~nvidia-smi~检查与设置设备}
+# Using the `nvidia-smi` program
 
 可以通过~\verb"nvidia-smi"（Nvidia's system management interface）程序检查与设置设备。它包含在~CUDA~开发工具套装内。该程序最基本的用法就是在命令行解释器中使用不带任何参数的命令~\verb"nvidia-smi"。在作者的计算机中使用该命令，得到如下文本形式的输出：
 \begin{small}
