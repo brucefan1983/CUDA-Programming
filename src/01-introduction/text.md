@@ -2,7 +2,7 @@ Note: I am writing a simplified English version based on the Chinese version. Th
 
 # Chapter 1: Introduction to GPU and CUDA 
 
-## Introduction to GPU 
+## 1.1 Introduction to GPU 
 
 GPU means graphics processing unit, which is usually compared to CPU (central processing unit). While a typical CPU has a few relatively fast cores, a typical GPU has hundreds or thousands of relatively slow cores. In a CPU, more transistors are devoted to cache and control; in a GPU, more transistors are devoted to data processing. 
 
@@ -41,7 +41,7 @@ The computate capability of a GPU is not directly related to its performance. Th
 We notice that the double precision performane of a GeForce GPU is only 1/32 of its single-precision performance.
 
 
-## Introduction to CUDA 
+## 1.2 Introduction to CUDA 
 
 There are a few tools for GPU computing, including CUDA, OpenCL, and OpenACC, but we only consider CUDA in this book. We also only consider CUDA based on C++, which is called CUDA C++ for short. We will not consider CUDA Fortran.
 
@@ -56,13 +56,11 @@ There are also many CUDA versions, which can also be represented as `X.Y`. The f
 |CUDA 9.0-9.2 | Compute capability 3.0-7.2  (Kepler to Volta) | 
 |CUDA 8.0     | Compute capability 2.0-6.2  (Fermi to Pascal) | 
 
-# Installing a CUDA devolopment envirionment
+## 1.3 Installing a CUDA devolopment envirionment
 
-## Linux
+For Linux, check this manual: https://docs.nvidia.com/cuda/cuda-installation-guide-linux
 
-Check this manual: https://docs.nvidia.com/cuda/cuda-installation-guide-linux
-
-## Windows 10
+For Windows, one needs to install both CUDA and Visual Studio:
 
 * Installing Visual Studio. Go to https://visualstudio.microsoft.com/free-developer-offers/ and download a free Visual Studio (Community version). For our purpose, you only need to install `Desktop development with C++` within the many components of Visual Studio. Of course, you can install more compoents too.
 
@@ -81,7 +79,7 @@ Windows start -> Visual Studio 2019 -> x64 Native Tools Command Prompt for VS 20
 In some cases, we need to have administrator rights, which can be achived by right clicking `x64 Native Tools Command Prompt for VS 2019` and choosing `more` and then `run as administrator`.
 
 
-# Using the `nvidia-smi` program
+# 1.4 Using the `nvidia-smi` program
 
 After installing CUDA, one should be able to use the program (an executable) `nvidia-smi`（Nvidia's system management interface）from the command line. Simply type the name of this program:
 ```
@@ -125,12 +123,4 @@ $ sudo nvidia-smi -i GPU_ID -c 1 # set device GPU_ID to E. Process mode
 ```
 
 For more details of the `nvidia-smi` program, see the following official manual: https://developer.nvidia.com/nvidia-system-management-interface
-
-
-# Other learning resources
-
-* The official documentation: https://docs.nvidia.com/cuda
-* https://devblogs.nvidia.com
-* https://stackoverflow.com
-
 
