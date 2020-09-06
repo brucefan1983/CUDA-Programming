@@ -56,6 +56,8 @@ hello
 
 ## A `Hello World` Program in CUDA
 
+**I am up to here...**
+
 在复习了C++语言中的Hello World程序之后，我们接着介绍CUDA中的Hello World程序。
 
 ### A CUDA program containing host functions only
