@@ -1,19 +1,10 @@
 
-\chapter{GPU~硬件与~CUDA~程序开发工具\label{chapter:GPU-and-CUDA}}
+# GPU and CUDA 
 
-\section{GPU~硬件简介}
+## Introduction to GPU 
 
-GPU~是英文~graphics processing unit~的首字母缩写，意为图形处理器。GPU~也常被称为显卡（graphics card）。与它对应的一个概念是~CPU，即~central processing unit（中央处理器）的首字母缩写。
+GPU means graphics processing unit, which is usually compared to a CPU (central processing unit). While a typical CPU has a few relatively fast cores, a typical GPU has hundreds or thousands of relatively slow cores. In a CPU, more transistors are devoted to cache and control; in a GPU, more transistors are devoted to data processing. 
 
-从十多年前起，GPU~的浮点数运算峰值就比同时期的~CPU~高一个量级；GPU~的内存带宽峰值也比同时期的~CPU~高一个量级。CPU~和~GPU~的显著区别是：一个典型的~CPU~拥有少数几个快速的计算核心，而一个典型的~GPU~拥有几百到几千个不那么快速的计算核心。CPU~中有更多的晶体管用于数据缓存和流程控制，但~GPU~中有更多的晶体管用于算术逻辑单元。所以，GPU~是靠众多的计算核心来获得相对较高的计算性能的。图~\ref{figure:cpu_vs_gpu}~形象地说明了（非集成）~GPU~和~CPU~在硬件架构上的显著区别。
-
-\begin{figure}[ht]
-  \captionsetup{font=small}
-  \centering
-  \includegraphics[width=\columnwidth]{CPU-GPU.jpg}\\
-  \caption{CPU（左）和~非集成~GPU（右）的硬件架构示意图。}
-  \label{figure:cpu_vs_gpu}
-\end{figure}
 
 GPU~计算不是指单独的~GPU~计算，而是指~CPU + GPU~的异构（heterogeneous）计算。一块单独的~GPU ~是无法独立地完成所有计算任务的，它必须在~CPU ~的调度下才能完成特定任务。在由~CPU~和~GPU~ 构成的异构计算平台中，通常将起控制作用的~CPU~ 称为主机（host），将起加速作用的~GPU~ 称为设备（device）。主机和（非集成）设备都有自己的~DRAM（dynamic random-access memory，动态随机存取内存），它们之间一般由~PCIe~总线（peripheral component interconnect express bus）连接，如图~\ref{figure:cpu_vs_gpu}~所示。
 
