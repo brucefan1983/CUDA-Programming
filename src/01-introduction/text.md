@@ -107,9 +107,10 @@ it will show the information regarding the GPU(s) in the system. Here is an exam
     +-----------------------------------------------------------------------------+
 ```
 
-从中可以看出一些比较有用的信息：
-\begin{itemize}
-\item 第一行可以看到~Nvidia driver~的版本及~CUDA~工具箱的版本。
+Here are some useful information from the above outputs:
+* From line 1 we can see the Nvidia driver version (426.00) and the CUDA version (10.1).
+
+
 \item 作者所用计算机中有一型号为~GeForce RTX 2070~的~GPU。该~GPU~的设备号是~0。该计算机仅有一个~GPU。如果有多个~GPU，会将各个~GPU~从~0~开始编号。如果读者的系统中有多个~GPU，而且只需要使用某个特定的~GPU（比如两个之中更强大的那个），则可以通过设置环境变量~\verb"CUDA_VISIBLE_DEVICES" ~的值在运行~CUDA~程序之前选定一个~GPU。假如读者的系统中有编号为~0~和~1~的两个~GPU，而读者想在~1~号~GPU~运行~CUDA~程序，则可以用如下命令设置环境变量：
 \begin{verbatim}
     $ export CUDA_VISIBLE_DEVICES=1        
