@@ -29,7 +29,7 @@ Every GPU has a version number `X.Y` to indicate its **compute capability**. Her
 
 GPUs older than Pascal will become deprecated soon. We will focus on GPUs no older than Pascal.
 
-The computate capability of a GPU is not directly related to its performance. The following table lists the major metrics regarding the performance for a few selected GPUs.
+The computate capability of a GPU is not directly related to its performance. The following table lists the major metrics regarding performance for a few selected GPUs.
 
 | GPU  | compute capability |  memory capacity  |  memory bandwidth  |  double-precision peak FLOPs | single-precision peak FLOPs |
 |:------------|:---------------|:--------------|:-----------------|:------------|:------------------|
@@ -41,16 +41,10 @@ The computate capability of a GPU is not directly related to its performance. Th
 We notice that the double precision performane of a GeForce GPU is only 1/32 of its single-precision performance.
 
 
-\section{CUDA~程序开发工具}
+## Introduction to CUDA 
 
-以下几种软件开发工具都可以用来进行~GPU~编程：
-\begin{itemize}
-\item CUDA。这是本书的主题。
-\item OpenCL。这是一个更为通用的为各种异构平台编写并行程序的框架，也是~AMD（Advanced Micro Devices）公司的~GPU~的主要程序开发工具。本书不涉及~OpenCL~编程，对此感兴趣的读者可参考《OpenCL~异构并行计算：原理、机制与优化实践》（刘文志，陈轶，吴长江，北京：机械工业出版社）。
-\item OpenACC。这是一个由多个公司共同开发的异构并行编程标准。本书也不涉及~OpenACC~编程，对此感兴趣的读者可参考《OpenACC~并行编程实战》（何沧平，北京：机械工业出版社）。
-\end{itemize}
+There are a few tools for GPU computing, including CUDA, OpenCL, OpenACC, but we only consider CUDA in this book. We also only consider CUDA based on C++, which is called CUDA C++ for short. We will not consider CUDA Fortran.
 
-CUDA~编程语言最初主要是基于~C~语言的，但目前越来越多地支持~C++~语言。还有基于~Fortran~的~CUDA Fortran~版本及由其他编程语言包装的~CUDA~版本，但本书只涉及基于~C++~的~CUDA~编程。我们称基于~C++~的~CUDA~编程语言为~CUDA C++。对~Fortran~版本感兴趣的读者可以参考网站~\url{https://www.pgroup.com/}。用户可以免费下载支持~CUDA Fortran~编程的~PGI~开发工具套装的社区版本（Community Edition）。对应的还有收费的专业版本（Professional Edition）。PGI~是高性能计算编译器公司~Portland Group, Inc.~的简称，已被英伟达公司收购。
 
 CUDA~提供了两层~API（Application Programming Interface，应用程序编程接口）给程序员使用，即
 CUDA 驱动（driver） API和CUDA 运行时（runtime） API。其中，CUDA~驱动~API~是更加底层的~API，它为程序员提供了更为灵活的编程接口；CUDA~运行时~API~是在~CUDA~驱动~API~的基础上构建的一个更为高级的~API，更容易使用。这两种~API~在性能上几乎没有差别。从程序的可读性来看，使用~CUDA~运行时~API~是更好的选择。在其他编程语言中使用~CUDA~的时候，驱动~API~很多时候是必需的。因为作者没有使用驱动~API~的经验，故本书只涉及~CUDA~运行时~API。
