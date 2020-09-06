@@ -64,7 +64,7 @@ For Windows, one needs to install both CUDA and Visual Studio:
 
 * Installing Visual Studio. Go to https://visualstudio.microsoft.com/free-developer-offers/ and download a free Visual Studio (Community version). For the purpose of this book, we only need to install `Desktop development with C++` within the many components of Visual Studio. 
 
-* Installing CUDA. Go to https://developer.nvidia.com/ and choose a Windows CUDA version and install it. You can choose the highest version that support your GPU.
+* Installing CUDA. Go to https://developer.nvidia.com/cuda-downloads and choose a Windows CUDA version and install it. You can choose the highest version that support your GPU.
 
 * After installing both Visual Studio and CUDA (ProgramData folder might be hiden and you can enable to show it), go to the following folder
 ```
