@@ -4,9 +4,9 @@ Note: I am writing a simplified English version based on the Chinese version of 
 
 ## 1.1 Introduction to GPU 
 
-GPU means graphics processing unit, which is usually compared to CPU (central processing unit). While a typical CPU has a few relatively fast cores, a typical GPU has hundreds or thousands of relatively slow cores. In a CPU, more transistors are devoted to cache and control; in a GPU, more transistors are devoted to data processing. 
+GPU means `graphics processing unit`, which is usually compared to CPU (central processing unit). While a typical CPU has a few relatively fast cores, a typical GPU has hundreds or thousands of relatively slow cores. In a CPU, more transistors are devoted to cache and control; in a GPU, more transistors are devoted to data processing. 
 
-GPU computing is heterogeneous computing, which involves both CPU and GPU, which are usually referred to as host and device, respectively. Both CPU and non-embedded GPU have their own DRAM (dynamic random-access memory), and they are usually connected by a PCIe（peripheral component interconnect express）bus.
+GPU computing is `heterogeneous computing`. It involves both CPU and GPU, which are usually referred to as `host` and `device`, respectively. Both CPU and non-embedded GPU have their own DRAM (dynamic random-access memory), and they are usually connected by a PCIe（peripheral component interconnect express）bus.
 
 We only consider GPUs from Nvidia, because CUDA programming only supports these GPUs. There are a few series of Nvidia GPUs:
 * Tesla series: good for scientific computing but expensive.
@@ -45,9 +45,9 @@ We notice that the double precision performance of a GeForce GPU is only 1/32 of
 
 There are a few tools for GPU computing, including CUDA, OpenCL, and OpenACC, but we only consider CUDA in this book. We also only consider CUDA based on C++, which is called CUDA C++ for short. We will not consider CUDA FORTRAN.
 
-CUDA provides two APIs (Application Programming Interfaces) for developers: the CUDA driver API and the CUDA runtime API. The CUDA driver API is more fundamental (low-level) and more flexible. The CUDA runtime API is constructed based on top of the CUDA driver API and is easier to use. We only consider the CUDA runtime API.
+CUDA provides two APIs (Application Programming Interfaces) for developers: the CUDA driver API and the CUDA runtime API. The CUDA driver API is more fundamental (low-level) and more flexible. The CUDA runtime API is constructed based on the CUDA driver API and is easier to use. We only consider the CUDA runtime API.
 
-There are also many CUDA versions, which can also be represented as `X.Y`. The following table lists the recent CUDA versions and the supported compute capabilities.
+There are also many CUDA versions, which can also be represented as `X.Y`. The following table lists a few recent CUDA versions and the supported compute capabilities.
 
 | CUDA versions | supported GPUs |
 |:------------|:---------------|
@@ -64,15 +64,15 @@ For Windows, one needs to install both CUDA and Visual Studio:
 
 * Installing Visual Studio. Go to https://visualstudio.microsoft.com/free-developer-offers/ and download a free Visual Studio (Community version). For the purpose of this book, we only need to install `Desktop development with C++` within the many components of Visual Studio. 
 
-* Installing CUDA. Go to https://developer.nvidia.com/cuda-downloads and choose a Windows CUDA version and install it. You can choose the highest version that support your GPU.
+* Installing CUDA. Go to https://developer.nvidia.com/cuda-downloads and choose a Windows CUDA version and install it. You can choose the highest version that supports your GPU.
 
-* After installing both Visual Studio and CUDA (ProgramData folder might be hiden and you can enable to show it), go to the following folder
+* After installing both Visual Studio and CUDA (The `ProgramData` folder might be hiden and you can enable to show it), go to the following folder
 ```
     C:\ProgramData\NVIDIA Corporation\CUDA Samples\v10.1\1_Utilities\deviceQuery  
 ```
 and use Visual Studio to open the solution `deviceQuery_vs2019.sln`. Then build the solution and run the executable. If you see `Result = PASS` at the end of the output, congratulations! If you encountered problems, you can check the manual carefully: https://docs.nvidia.com/cuda/cuda-installation-guide-microsoft-windows.
 
-In this book, we will not use the Visual Studio IDE to develop CUDA programs. Instead, we use the command line (called **terminal** in Linux and **command prompt** in Windows) and, if needed, the `make` program. In Windows, to make the MSVC (Microsoft Visual C++ Compiler) `cl.exe` available, one can follow the following steps to open a command prompt:
+In this book, we will not use the Visual Studio IDE to develop CUDA programs. Instead, we use the **command line** (called **terminal** in Linux and **command prompt** in Windows) and, if needed, the `make` program. In Windows, to make the MSVC (Microsoft Visual C++ Compiler) `cl.exe` available, one can follow the following steps to open a command prompt:
 ```
 Windows start -> Visual Studio 2019 -> x64 Native Tools Command Prompt for VS 2019
 ```
@@ -107,16 +107,16 @@ it will show the information regarding the GPU(s) in the system. Here is an exam
 
 Here are some useful information from the above outputs:
 * From line 1 we can see the Nvidia driver version (426.00) and the CUDA version (10.1).
-* There is only one GPU in the system, which is a GeForce RTX 2070. It has a device ID of 0。If there are more GPUs, they will be labeled starting from 0. You can use the following command in the command line to select to use device 1 before running a CUDA program:
+* There is only one GPU in the system, which is a GeForce RTX 2070. It has a device ID of 0. If there are more GPUs, they will be labeled starting from 0. You can use the following command in the command line to select to use device 1 before running a CUDA program:
 ```
 $ export CUDA_VISIBLE_DEVICES=1        
 ```
-* This GPU is on the WDDM（windows display driver model）mode. Another possible mode is TCC（tesla compute cluster), but it is only avaible for the GPUs in the Tesla, Quadro, and Titan series. One can use the following commands to choose the mode（In Windows, one needs to have administrator rights and `sudo` below should be removed):
+* This GPU is on the **WDDM（windows display driver model）** mode. Another possible mode is **TCC（tesla compute cluster)**, but it is only avaible for GPUs in the Tesla, Quadro, and Titan series. One can use the following commands to choose the mode（In Windows, one needs to have administrator rights and `sudo` below should be removed):
 ```
 $ sudo nvidia-smi -g GPU_ID -dm 0 # set device GPU_ID to the WDDM mode
 $ sudo nvidia-smi -g GPU_ID -dm 1 # set device GPU_ID to the TCC mode
 ```
-* `Compute M`. refers to compute mode. Here the compute mode is `Default`, which means that multiple computing process are allowed to be run with the GPU. Another possible mode is `E. Process`，which means exclusive process mode. The `E. Process` mode is not possible for GPUs in the WDDM mode。One can use the following commands to choose the mode（In Windows, one needs to have administrator rights and `sudo` below should be removed):
+* `Compute M`. refers to compute mode. Here the compute mode is `Default`, which means that multiple computing process are allowed to be run with the GPU. Another possible mode is `E. Process`，which means exclusive process mode. The `E. Process` mode is not available for GPUs in the WDDM mode。One can use the following commands to choose the mode（In Windows, one needs to have administrator rights and `sudo` below should be removed):
 ```
 $ sudo nvidia-smi -i GPU_ID -c 0 # set device GPU_ID to Default mode
 $ sudo nvidia-smi -i GPU_ID -c 1 # set device GPU_ID to E. Process mode
