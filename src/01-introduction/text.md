@@ -64,11 +64,9 @@ Check this manual: https://docs.nvidia.com/cuda/cuda-installation-guide-linux
 
 ## Windows 10
 
-### Installing Visual Studio
+* Installing Visual Studio. Go to https://visualstudio.microsoft.com/free-developer-offers/ and download a free Visual Studio (Community version). For our purpose, you only need to install `Desktop development with C++` within the many components of Visual Studio. Of course, you can install more compoents too.
 
-* Go to https://visualstudio.microsoft.com/free-developer-offers/ and download a free Visual Studio (Community version). For our purpose, you only need to install `Desktop development with C++` within the many components of Visual Studio. Of course, you can install more compoents too.
-
-* Go to https://developer.nvidia.com/ and choose a Windows CUDA verison and install it. You can choose the highest version that support your GPU.
+* Installing CUDA. Go to https://developer.nvidia.com/ and choose a Windows CUDA verison and install it. You can choose the highest version that support your GPU.
 
 * After installing both Visual Studio and CUDA (ProgramData folder might be hiden and you can enable to show it), go to the following folder
 ```
