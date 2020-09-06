@@ -3,10 +3,9 @@
 
 ## Introduction to GPU 
 
-GPU means graphics processing unit, which is usually compared to a CPU (central processing unit). While a typical CPU has a few relatively fast cores, a typical GPU has hundreds or thousands of relatively slow cores. In a CPU, more transistors are devoted to cache and control; in a GPU, more transistors are devoted to data processing. 
+GPU means graphics processing unit, which is usually compared to CPU (central processing unit). While a typical CPU has a few relatively fast cores, a typical GPU has hundreds or thousands of relatively slow cores. In a CPU, more transistors are devoted to cache and control; in a GPU, more transistors are devoted to data processing. 
 
-
-GPU~计算不是指单独的~GPU~计算，而是指~CPU + GPU~的异构（heterogeneous）计算。一块单独的~GPU ~是无法独立地完成所有计算任务的，它必须在~CPU ~的调度下才能完成特定任务。在由~CPU~和~GPU~ 构成的异构计算平台中，通常将起控制作用的~CPU~ 称为主机（host），将起加速作用的~GPU~ 称为设备（device）。主机和（非集成）设备都有自己的~DRAM（dynamic random-access memory，动态随机存取内存），它们之间一般由~PCIe~总线（peripheral component interconnect express bus）连接，如图~\ref{figure:cpu_vs_gpu}~所示。
+GPU computing is heterogeneous computing, which involves both CPU and GPU, which are usually referred to as host and device, respectively. Both CPU and non-embedded GPU have their own DRAM（dynamic random-access memory), and they usually are connected by PCIe（peripheral component interconnect express）bus.
 
 本书中说的~GPU~都是指英伟达（Nvidia）公司推出的~GPU，因为~CUDA~编程目前只支持该公司的~GPU。以下几个系列的~GPU~都支持~CUDA~编程：
 \begin{itemize}
