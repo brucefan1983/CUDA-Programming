@@ -1,5 +1,3 @@
-Note: I am writing a simplified English version based on the Chinese version of the book. This is the first chapter.
-
 # Chapter 1: Introduction to GPU and CUDA 
 
 ## 1.1 Introduction to GPU 
