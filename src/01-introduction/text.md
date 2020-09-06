@@ -51,7 +51,7 @@ There are also many CUDA versions, which can also be represented as `X.Y`. The f
 
 | CUDA versions | supported GPUs |
 |:------------|:---------------|
-|CUDA 11.0 |  3.0-8.0 (Kepler to Ampere) |
+|CUDA 11.0 |  3.5-8.0 (Kepler to Ampere) |
 |CUDA 10.0-10.2 |  3.0-7.5 (Kepler to Turing) |
 |CUDA 9.0-9.2 |  3.0-7.2  (Kepler to Volta) | 
 |CUDA 8.0     |  2.0-6.2  (Fermi to Pascal) | 
