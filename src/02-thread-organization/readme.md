@@ -6,11 +6,11 @@ We start with the simplest CUDA program: printing a `Hello World` string from th
 
 ## 2.1 A `Hello World` Program in C++
 
-To master CUDA C++, one must first master C++, but we still begin with the most simple C++ program: printing a `Hello World` message to the console (screen).
+To master CUDA C++, one must first master C++, but we still begin with one of the simplest C++ program: printing a `Hello World` message to the console (screen).
 
 To develop a simple C++ program, one can follow the following steps:
 * Write the source code using a text editor (such as `gedit`; you can choose whatever you like).
-* Use a compiler to compile the source code to obtain an object file and then using a linker to link the object file and some standard object files to obtain an executable. The compiling and linking processes are usually done with a single command and we will simply call it a compiling process. 
+* Use a compiler to compile the source code to obtain an object file and then use a linker to link the object file and some standard object files to obtain an executable. The compiling and linking processes are usually done with a single command and we will simply call it a compiling process. 
 * Run the executable.
 
 Let us first write the following program in a source file named `hello.cpp` (https://github.com/brucefan1983/CUDA-Programming/blob/master/src/02-thread-organization/hello.cpp).
@@ -45,13 +45,13 @@ This will generate an executable named `hello` in the current directory. One can
 $ ./hello
 ```
 
-In Windows with the MSVC compilier `cl.exe`, one can compile the program using the following command in a command prompt:
+In Windows with the MSVC compiler `cl.exe`, one can compile the program using the following command in a command prompt:
 ```
-$ cl hello.cpp
+$ cl.exe hello.cpp
 ```
 This will generate an executable named `hello.exe`. It can be run using the following command
 ```
-hello
+hello.exe
 ```
 
 ## A `Hello World` Program in CUDA
