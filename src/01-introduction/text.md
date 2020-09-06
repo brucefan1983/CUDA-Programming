@@ -56,22 +56,25 @@ There are also many CUDA versions, which can also be represented as `X.Y`. The f
 |CUDA 9.0-9.2 | Compute capability 3.0-7.2  (Kepler to Volta) | 
 |CUDA 8.0     | Compute capability 2.0-6.2  (Fermi to Pascal) | 
 
-\section{CUDA~开发环境搭建示例}
+# Installing a CUDA devolopment envirionment
 
-下面叙述作者最近在装有~GeForce RTX 2070~的便携式计算机（以下简称计算机）中搭建~CUDA~开发环境的大致过程。因为作者的计算机中预装了~Windows 10~操作系统，所以我们以~Windows 10~操作系统为例进行讲解。因为~Linux~发行版有多种，故本书不列出在~Linux~中安装~CUDA~开发环境的步骤。读者可参阅~Nvidia~的官方文档：\url{https://docs.nvidia.com/cuda/cuda-installation-guide-linux}。
+## Linux
 
-我们说过，GPU~计算实际上是~CPU+GPU（主机+设备）的异构计算。在~CUDA C++~程序中，既有运行于主机的代码，也有运行于设备的代码。其中，运行于主机的代码需要由主机的~C++~编译器编译和链接。所以，除了安装~CUDA~工具箱，还需要安装一个主机的~C++~编译器。在~Windows~中，最常用的~C++~编译器是~Microsoft Visual C++ （MSVC），它目前集成在~Visual Studio~中，所以我们首先安装~Visual Studio。作者安装了最高版本的~Visual Studio 2019 16.x。因为这是个人使用的，故选择了免费的~Community~版本。下载地址为
-~\url{https://visualstudio.microsoft.com/free-developer-offers/}。对于~CUDA C++程序开发来说，只需要选择安装~Desktop development with C++~即可。当然，读者也可以选择安装更多的组件。
+Check this manual: https://docs.nvidia.com/cuda/cuda-installation-guide-linux
 
-关于~CUDA，作者选择安装~2019~年8月发布的~CUDA Toolkit 10.1 update2。首先，进入网址~\url{https://developer.nvidia.com/cuda-10.1-download-archive-update2}。然后根据提示，做如下选择：Operating System~项选择~Windows；Architecture~项选择~\verb"x86_64"；Version~项选择操作系统版本，我们这里是~10；Installer Type~项可以选择~exe (network)~或者~exe (local)，分别代表一边下载一边安装和下载完毕后安装。接着，运行安装程序，根据提示一步一步安装即可。该版本的~CUDA~工具箱包含一个对应版本的~Nvidia driver，故不需要再单独安装~Nvidia driver。
+## Windows 10
 
-安装好~Visual Studio~和~CUDA~后，进入到如下目录（读者如果找不到~C~盘下的~ProgramData~目录，可能是因为没有选择显示一些隐藏的文件）：
-\begin{small}
-\begin{verbatim}
-    C:\ProgramData\NVIDIA Corporation\CUDA Samples\v10.1\1_Utilities\deviceQuery    
-\end{verbatim}
-\end{small}
-然后，用~Visual Studio 2019~打开文件~\verb"deviceQuery_vs2019.sln"。接下来，编译（构建）、运行。若输出内容的最后部分为~\verb"Result = PASS"，则说明已经搭建好~Windows~中的~CUDA~开发环境。若有疑问，请参阅~Nvidia~的官方文档：\url{https://docs.nvidia.com/cuda/cuda-installation-guide-microsoft-windows}。
+### Installing Visual Studio
+
+* Go to https://visualstudio.microsoft.com/free-developer-offers/ and download a free Visual Studio (Community version). For our purpose, you only need to install `Desktop development with C++` within the many components of Visual Studio. Of course, you can install more compoents too.
+
+* Go to https://developer.nvidia.com/ and choose a Windows CUDA verison and install it. You can choose the highest version that support your GPU.
+
+* After installing both Visual Studio and CUDA (ProgramData folder might be hiden and you can enable to show it), go to the following folder
+```
+    C:\ProgramData\NVIDIA Corporation\CUDA Samples\v10.1\1_Utilities\deviceQuery  
+```
+and use Visual Studio to open the solution `deviceQuery_vs2019.sln`. Then build the solution and run the executable. If you see `Result = PASS` at the end of the output, congratulations! If you encounter problems, you can check the manual carefully: https://docs.nvidia.com/cuda/cuda-installation-guide-microsoft-windows.
 
 在上面的测试中，我们是直接用~Visual Studio~打开一个已有的解决方案（solution），然后直接构建并运行。本书不介绍~Visual Studio~的使用，而是选择用命令行解释器编译与运行程序。这里的命令行解释器指的是~Linux~中的~terminal~或者~Windows~中的~command prompt~程序。在~Windows~中使用~MSVC~作为~C++~程序的编译器时，需要单独设置相应的环境变量，或者从~Windows~的开始（start）菜单中找到~Visual Studio 2019~文件夹，然后单击其中的“x64 Native Tools Command Prompt for VS 2019”，而从打开一个加载了~MSVC~环境变量的命令行解释器。在本书的某些章节，需要有管理员的权限来使用~nvprof~性能分析器。此时，可以右击“x64 Native Tools Command Prompt for VS 2019”，然后选择“更多”，接着选择“以管理员身份运行”。
 
