@@ -6,19 +6,15 @@ Note: I am writing a simplified version of my Chinese CUDA book in English. This
 
 GPU means graphics processing unit, which is usually compared to CPU (central processing unit). While a typical CPU has a few relatively fast cores, a typical GPU has hundreds or thousands of relatively slow cores. In a CPU, more transistors are devoted to cache and control; in a GPU, more transistors are devoted to data processing. 
 
-GPU computing is heterogeneous computing, which involves both CPU and GPU, which are usually referred to as host and device, respectively. Both CPU and non-embedded GPU have their own DRAM（dynamic random-access memory), and they usually are connected by PCIe（peripheral component interconnect express）bus.
+GPU computing is heterogeneous computing, which involves both CPU and GPU, which are usually referred to as host and device, respectively. Both CPU and non-embedded GPU have their own DRAM（dynamic random-access memory), and they are usually connected by a PCIe（peripheral component interconnect express）bus.
 
-本书中说的~GPU~都是指英伟达（Nvidia）公司推出的~GPU，因为~CUDA~编程目前只支持该公司的~GPU。以下几个系列的~GPU~都支持~CUDA~编程：
-\begin{itemize}
-\item Tesla~系列：其中的内存为纠错内存（error-correcting code memory，ECC 内存），稳定性好，主要用于高性能、高强度的科学计算。
-\item Quadro~系列：支持高速~OpenGL渲染，主要用于专业绘图设计。
-\item GeForce~系列：主要用于游戏与娱乐，但也常用于科学计算。GeForce~系列的~GPU~没有纠错内存，用于科学计算时具有一定的风险。然而，GeForce~系列的~GPU~价格相对低廉、性价比高，用于学习~CUDA~编程是没有任何问题的。即使是便携式计算机中~GeForce~系列的~GPU~也可以用来学习~CUDA~编程。
-\item Jetson~系列：嵌入式设备中的~GPU。作者对此无使用经验，本书也不专门讨论。
-\end{itemize}
+We only consider GPUs from Nvidia, becasue CUDA programming only supports these GPUs. There are a few series of Nvidia GPUs:
+* Tesla series: good for scientific computing but expensive.
+* GeForce series: cheaper but less professional. 
+* Quadro series: kind of between the above two.
+* Jetson series: embeded device (I have never used these).
 
-每一款~GPU~都有一个用以表示其“计算能力”（compute capability）的版本号。该版本号可以写为形如~X.Y~的形式。其中，X~表示主版本号，Y~表示次版本号。版本号决定了~GPU~硬件所支持的功能，可为应用程序在运行时判断硬件特征提供依据。初学者往往误以为~GPU~的计算能力越高，性能就越高，但后面我们会看到，计算能力和性能没有简单的正比关系。
-
-版本号越大的~GPU~架构（architecture）越新。主版本号与~GPU~的核心架构相关联。很有意思的是，英伟达公司选择用著名科学家（到目前为止，大部分是物理学家）的姓氏作为~GPU~核心架构的代号，见表~\ref{table:compute-capability}。在主版本号相同时，具有较大次版本号的~GPU~的架构稍有更新。例如，同属于开普勒（Kepler）架构的~Tesla K40~和~Tesla K80~这两款~GPU~有相同的主版本号（X = 3），但有不同的次版本号，它们的计算能力分别是~3.5~和~3.7。注意：特斯拉（Tesla）既是第一代~GPU~架构的代号，也是科学计算系列~GPU~的统称，其具体含义要根据上下文确定。另外，计算能力为~7.5~的架构虽然和伏特（Volta）架构具有同样的主版本号（X = 7），但它一般被看作一个新的主要架构，代号为图灵（Turing）。据传，下一代~GPU~架构（X = 8）的代号为安培（Ampere）。表~\ref{table:gpus-arch}~列出了不同架构的各种~GPU~的名称。
+Every GPU has a version number `X.Y` to indicate its **compute capability**. Here, `X` is a major version number, and `Y` is a minor version number. A major version number corresponds to a major GPU architecture and is also named after a famous scientist. 
 
 \begin{table}[htb]
 \centering
@@ -47,6 +43,12 @@ X.Y = 7.5 & 图灵（Turing） & 2018\\
 \end{tabular}
 \label{table:compute-capability}
 \end{table}
+
+
+
+版本号越大的~GPU~架构（architecture）越新。主版本号与~GPU~的核心架构相关联。很有意思的是，英伟达公司选择用著名科学家（到目前为止，大部分是物理学家）的姓氏作为~GPU~核心架构的代号，见表~\ref{table:compute-capability}。在主版本号相同时，具有较大次版本号的~GPU~的架构稍有更新。例如，同属于开普勒（Kepler）架构的~Tesla K40~和~Tesla K80~这两款~GPU~有相同的主版本号（X = 3），但有不同的次版本号，它们的计算能力分别是~3.5~和~3.7。注意：特斯拉（Tesla）既是第一代~GPU~架构的代号，也是科学计算系列~GPU~的统称，其具体含义要根据上下文确定。另外，计算能力为~7.5~的架构虽然和伏特（Volta）架构具有同样的主版本号（X = 7），但它一般被看作一个新的主要架构，代号为图灵（Turing）。据传，下一代~GPU~架构（X = 8）的代号为安培（Ampere）。表~\ref{table:gpus-arch}~列出了不同架构的各种~GPU~的名称。
+
+
 
 
 \begin{table}[htb]
