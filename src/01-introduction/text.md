@@ -32,7 +32,7 @@ GPUs older than Pascal will become deprecated soon. We will focus on GPUs no old
 The computate capability of a GPU is not directly related to its performance. The following table lists the major metrics regarding the performance for a few selected GPUs.
 
 | GPU  | compute capability |  memory capacity  |  memory bandwidth  |  double-precision peak FLOPs | single-precision peak FLOPs |
-|:------------|:---------------|:--------------|
+|:------------|:---------------|:--------------|:-----------------|:------------|:------------------|
 | Tesla P100         | 6.0 | 16 GB | 732 GB/s | 4.7 | 9.3 |
 | Tesla V100         | 7.0 | 32 GB | 900 GB/s | 7   | 14  |
 | GeForce RTX 2070   | 7.5 | 8 GB  | 448 GB/s | 0.2 | 6.5 |
