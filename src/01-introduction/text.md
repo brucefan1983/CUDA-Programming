@@ -27,40 +27,19 @@ Every GPU has a version number `X.Y` to indicate its **compute capability**. Her
 | `X.Y=7.5` | Turing | 2018 |
 | `X=8` | Ampere | 2020 |
 
+GPUs older than Pascal will become deprecated soon. We will focus on GPUs no older than Pascal.
 
-在主版本号相同时，具有较大次版本号的~GPU~的架构稍有更新。例如，同属于开普勒（Kepler）架构的~Tesla K40~和~Tesla K80~这两款~GPU~有相同的主版本号（X = 3），但有不同的次版本号，它们的计算能力分别是~3.5~和~3.7。注意：特斯拉（Tesla）既是第一代~GPU~架构的代号，也是科学计算系列~GPU~的统称，其具体含义要根据上下文确定。另外，计算能力为~7.5~的架构虽然和伏特（Volta）架构具有同样的主版本号（X = 7），但它一般被看作一个新的主要架构，代号为图灵（Turing）。
+The computate capability of a GPU is not directly related to its performance. The following table lists the major metrics regarding the performance for a few selected GPUs.
 
-特斯拉架构和费米（Fermi）架构的~GPU~已不再受到最近几个~CUDA~版本的支持。本书将忽略任何特定于这两个架构的硬件功能。可以预见，开普勒架构的~GPU~也将很快（比如一两年后）不受最新版~CUDA~的支持。为简洁起见，本书有时也将忽略某些开普勒架构的特征。为简单起见，我们在表~\ref{table:gpus-arch}~中忽略了一类被称为~Titan~的~GPU。读者可以在如下网站查询任何一款支持~CUDA~的~GPU~的信息：\url{http://developer.nvidia.com/cuda-gpus}。
+| GPU  | compute capability |  memory capacity  |  memory bandwidth  |  double-precision peak FLOPs | single-precision peak FLOPs |
+|:------------|:---------------|:--------------|
+| Tesla P100         | 6.0 | 16 GB | 732 GB/s | 4.7 | 9.3 |
+| Tesla V100         | 7.0 | 32 GB | 900 GB/s | 7   | 14  |
+| GeForce RTX 2070   | 7.5 | 8 GB  | 448 GB/s | 0.2 | 6.5 |
+| GeForce RTX 2080ti | 7.5 | 11 GB | 732 GB/s | 0.4 | 13  |
 
+We notice that the double precision performane of a GeForce GPU is only 1/32 of its single-precision performance.
 
-计算能力并不等价于计算性能。例如，GeForce RTX 2000~系列的计算能力高于~Tesla V100，但后者在很多方面性能更高（售价也高得多）。
-
-表征计算性能的一个重要参数是浮点数运算峰值，即每秒最多能执行的浮点数运算次数，英文为~Floating-point operations per second，缩写为~FLOPS。GPU~的浮点数运算峰值在~$10^{12}$ FLOPS，即~teraFLOPS（简写为~TFLOPS)的 量级。浮点数运算峰值有单精度和双精度之分。对~Tesla~系列的~GPU~来说，双精度浮点数运算峰值一般是单精度浮点数运算峰值的~$1/2$~左右（对计算能力为~3.5~和~3.7~的~GPU~来说，是~$1/3$~左右）。对~GeForce~系列的~GPU~来说，双精度浮点数运算峰值一般是单精度浮点数运算峰值的~$1/32$~左右。另一个影响计算性能的参数是~GPU~中的内存带宽（memory bandwidth）。GPU~中的内存常称为显存。最后，显存容量也是制约应用程序性能的一个因素。如果一个应用程序需要的显存数量超过了一个~GPU~的显存容量，
-则在不使用统一内存（见第~\ref{chapter:unified-memory}~章）的情况下程序就无法正确运行。表~\ref{table:gpus}~列出了作者目前能够使用的几款~GPU~的主要性能指标。在浮点数运算峰值一栏中，括号前和括号中的数字分别对应双精度和单精度的情形。
-
-\begin{table}[htb]
-\centering
-\captionsetup{font=small}
-\caption{若干~GPU~的主要性能指标。}
-\begin{tabular}{ccccc}
-\hline
-GPU型号 &  计算能力 &  显存容量  & 显存带宽  & 浮点数运算峰值 \\
-\hline
-\hline
-Tesla K40 & 3.5  &  12 GB & 288 GB/s & 1.4 (4.3) TFLOPS\\
-\hline
-Tesla P100 & 6.0  &  16 GB & 732 GB/s & 4.7 (9.3) TFLOPS \\
-\hline
-Tesla V100 & 7.0  &  32 GB & 900 GB/s & 7 (14) TFLOPS \\
-\hline
-GeForce RTX 2070  & 7.5 &  8 GB & 448 GB/s & 0.2 (6.5) TFLOPS \\
-\hline
-GeForce RTX 2080ti & 7.5 &  11 GB & 616 GB/s & 0.4 (13) TFLOPS \\
-\hline
-\hline
-\end{tabular}
-\label{table:gpus}
-\end{table}
 
 \section{CUDA~程序开发工具}
 
