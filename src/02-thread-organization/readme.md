@@ -6,7 +6,7 @@ We start with the simplest CUDA program: printing a `Hello World` string from th
 
 ## 2.1 A `Hello World` Program in C++
 
-To master CUDA C++, one must first master C++, but we still begin with one of the simplest C++ program: printing a `Hello World` message to the console (screen).
+**To master CUDA C++, one must first master C++**, but we still begin with one of the simplest C++ program: printing a `Hello World` message to the console (screen).
 
 To develop a simple C++ program, one can follow the following steps:
 * Write the source code using a text editor (such as `gedit`; you can choose whatever you like).
