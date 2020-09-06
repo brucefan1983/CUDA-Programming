@@ -45,7 +45,7 @@ We notice that the double precision performance of a GeForce GPU is only 1/32 of
 
 There are a few tools for GPU computing, including CUDA, OpenCL, and OpenACC, but we only consider CUDA in this book. We also only consider CUDA based on C++, which is called CUDA C++ for short. We will not consider CUDA FORTRAN.
 
-CUDA provides two APIs (Application Programming Interfaces) for developers: the CUDA driver API and the CUDA runtime API. The CUDA driver API is more fundamental (low-level) and more flexible. The CUDA runtime API is constructed based on the CUDA driver API and is easier to use. We only consider the CUDA runtime API.
+CUDA provides two APIs (Application Programming Interfaces) for developers: the **CUDA driver API** and the **CUDA runtime API**. The CUDA driver API is more fundamental (low-level) and more flexible. The CUDA runtime API is constructed based on the CUDA driver API and is easier to use. We only consider the CUDA runtime API.
 
 There are also many CUDA versions, which can also be represented as `X.Y`. The following table lists a few recent CUDA versions and the supported compute capabilities.
 
@@ -81,7 +81,7 @@ In some cases, we need to have administrator rights, which can be achieved by ri
 
 ## 1.4 Using the `nvidia-smi` program
 
-After installing CUDA, one should be able to use the program (an executable) `nvidia-smi`（Nvidia's system management interface）from the command line. Simply type the name of this program:
+After installing CUDA, one should be able to use the program (an executable) `nvidia-smi`（**Nvidia's system management interface**）from the command line. Simply type the name of this program:
 ```
 $ nvidia-smi
 ```
