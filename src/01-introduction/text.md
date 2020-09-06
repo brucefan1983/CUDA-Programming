@@ -79,7 +79,7 @@ Windows start -> Visual Studio 2019 -> x64 Native Tools Command Prompt for VS 20
 In some cases, we need to have administrator rights, which can be achived by right clicking `x64 Native Tools Command Prompt for VS 2019` and choosing `more` and then `run as administrator`.
 
 
-# 1.4 Using the `nvidia-smi` program
+## 1.4 Using the `nvidia-smi` program
 
 After installing CUDA, one should be able to use the program (an executable) `nvidia-smi`（Nvidia's system management interface）from the command line. Simply type the name of this program:
 ```
