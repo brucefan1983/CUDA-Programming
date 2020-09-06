@@ -6,16 +6,15 @@ We start with the simplest CUDA program: printing a `Hello World` string from th
 
 ## A `Hello World` Program in C++
 
-学习CUDA C++编程需要读者比较熟练地掌握C++编程的基础。虽然CUDA支持很多C++的特征，但作者写的C++程序有很多C 程序的痕迹，而且本书基本上不涉及C++中的类和模板等编程特征。
+To master CUDA C++, one must first master C++, but we still begin with the most simple C++ program: printing a `Hello World` message to the console (screen).
 
-我们先回顾一下C++中Hello World程序的开发过程。在C++语言中开发一个程序的大致过程如下：
-\begin{enumerate}
-\item 用文本编辑器写一个源代码（source code）。
-\item 用编译器对源代码进行预处理、编译、汇编并链接必要的目标文件得到可执行文件（executable）。这些步骤往往可由一个命令完成。
-\item 运行可执行文件得到结果。
-\end{enumerate}
+To develop a simple C++ program, one can follow the following steps:
+* Wring the source code using a text editor (such as `gedit`; you can choose whatever you like).
+* Using a compiler to compile the source code to obtain an object file and then using a linker to link the object file and some standard object files to obtain an executable. The compiling and linking processes are usually done with a single command and we will simply to call it a compiling process. 
+* Run the executable.
 
-\begin{lstlisting}[language=C++,caption={本章程序hello.cpp中的内容。},label={listing:hello.cpp}]
+Let us first write the following program in a source file named `hello.cpp` (https://github.com/brucefan1983/CUDA-Programming/blob/master/src/02-thread-organization/hello.cpp).
+```
 #include <stdio.h>
 
 int main(void)
@@ -23,12 +22,13 @@ int main(void)
     printf("Hello World!\n");
     return 0;
 }
-\end{lstlisting}
+```
 
-首先，让我们用编辑器写下Listing \ref{listing:hello.cpp}中的源代码。然后，将程序的文件命名为\verb"hello.cpp"，并用\verb"g++"编译（如上所述，此处及后面所说的编译其实包含了预处理、编译、汇编、链接等步骤）：
-\begin{verbatim}
-    $ g++ hello.cpp
-\end{verbatim}
+In Linux, we can use the following command to compile it:
+```
+$ g++ hello.cpp
+```
+
 编译通过后，将得到一个名为\verb"a.out"的可执行文件。用如下命令执行该文件：
 \begin{verbatim}
     $ ./a.out
