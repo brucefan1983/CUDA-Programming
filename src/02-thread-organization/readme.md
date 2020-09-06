@@ -10,7 +10,7 @@ To master CUDA C++, one must first master C++, but we still begin with the most 
 
 To develop a simple C++ program, one can follow the following steps:
 * Write the source code using a text editor (such as `gedit`; you can choose whatever you like).
-* Use a compiler to compile the source code to obtain an object file and then using a linker to link the object file and some standard object files to obtain an executable. The compiling and linking processes are usually done with a single command and we will simply to call it a compiling process. 
+* Use a compiler to compile the source code to obtain an object file and then using a linker to link the object file and some standard object files to obtain an executable. The compiling and linking processes are usually done with a single command and we will simply call it a compiling process. 
 * Run the executable.
 
 Let us first write the following program in a source file named `hello.cpp` (https://github.com/brucefan1983/CUDA-Programming/blob/master/src/02-thread-organization/hello.cpp).
@@ -28,29 +28,32 @@ In Linux, we can use the following command to compile it:
 ```
 $ g++ hello.cpp
 ```
-
-编译通过后，将得到一个名为\verb"a.out"的可执行文件。用如下命令执行该文件：
-\begin{verbatim}
-    $ ./a.out
-\end{verbatim}
-接着，就可以看到屏幕上打印出如下文字：
-\begin{verbatim}
-    Hello World!
-\end{verbatim}
-也可以在编译时指定二进制文件的名字。例如，用如下命令：
-\begin{verbatim}
-    $ g++ hello.cpp -o hello
-\end{verbatim}
+This will generat an executable named `a.out` in the current directory. One can run this executable by typing
+```
+$ ./a.out
+```
+Then, one can see the following message printed in the console (screen):
+```
+Hello World!
+```
+One can also specify a name for the executable, e.g.,
+```
+$ g++ hello.cpp -o hello
+```
+This will generat an executable named `hello` in the current directory. One can run this executable by typing
 将得到一个名为\verb"hello"的可执行文件，可以用如下命令运行它：
-\begin{verbatim}
-    $ ./hello
-\end{verbatim}
+```
+$ ./hello
+```
 
-以上假定使用了GCC编译器套装。如果使用Windows下的MSVC编译器套装，则可用\verb"cl"编译程序：
-\begin{verbatim}
-    $ cl hello.cpp
-\end{verbatim}
-这将产生一个名为\verb"hello.exe"的可执行文件。
+In Windows with the MSVC compilier `cl.exe`, one can compile the program using the following command in a command prompt:
+```
+$ cl hello.cpp
+```
+This will generate an executable named `hello.exe`. It can be run using the following command
+```
+hello
+```
 
 ## A `Hello World` Program in CUDA
 
