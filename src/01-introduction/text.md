@@ -6,13 +6,13 @@ Note: I am writing a simplified English version based on the Chinese version of 
 
 GPU means graphics processing unit, which is usually compared to CPU (central processing unit). While a typical CPU has a few relatively fast cores, a typical GPU has hundreds or thousands of relatively slow cores. In a CPU, more transistors are devoted to cache and control; in a GPU, more transistors are devoted to data processing. 
 
-GPU computing is heterogeneous computing, which involves both CPU and GPU, which are usually referred to as host and device, respectively. Both CPU and non-embedded GPU have their own DRAM（dynamic random-access memory), and they are usually connected by a PCIe（peripheral component interconnect express）bus.
+GPU computing is heterogeneous computing, which involves both CPU and GPU, which are usually referred to as host and device, respectively. Both CPU and non-embedded GPU have their own DRAM (dynamic random-access memory), and they are usually connected by a PCIe（peripheral component interconnect express）bus.
 
-We only consider GPUs from Nvidia, becasue CUDA programming only supports these GPUs. There are a few series of Nvidia GPUs:
+We only consider GPUs from Nvidia, because CUDA programming only supports these GPUs. There are a few series of Nvidia GPUs:
 * Tesla series: good for scientific computing but expensive.
 * GeForce series: cheaper but less professional. 
 * Quadro series: kind of between the above two.
-* Jetson series: embeded device (I have never used these).
+* Jetson series: embedded device (I have never used these).
 
 Every GPU has a version number `X.Y` to indicate its **compute capability**. Here, `X` is a major version number, and `Y` is a minor version number. A major version number corresponds to a major GPU architecture and is also named after a famous scientist. See the following table.
 
@@ -38,16 +38,16 @@ The compute capability of a GPU is not directly related to its performance. The 
 | GeForce RTX 2070   | 7.5 | 8 GB  | 448 GB/s | 0.2 TFLOPs| 6.5 TFLOPs|
 | GeForce RTX 2080ti | 7.5 | 11 GB | 732 GB/s | 0.4 TFLOPs| 13 TFLOPs|
 
-We notice that the double precision performane of a GeForce GPU is only 1/32 of its single-precision performance.
+We notice that the double precision performance of a GeForce GPU is only 1/32 of its single-precision performance.
 
 
 ## 1.2 Introduction to CUDA 
 
-There are a few tools for GPU computing, including CUDA, OpenCL, and OpenACC, but we only consider CUDA in this book. We also only consider CUDA based on C++, which is called CUDA C++ for short. We will not consider CUDA Fortran.
+There are a few tools for GPU computing, including CUDA, OpenCL, and OpenACC, but we only consider CUDA in this book. We also only consider CUDA based on C++, which is called CUDA C++ for short. We will not consider CUDA FORTRAN.
 
-CUDA provides two APIs (Application Programming Interfaces) for devolopers: the CUDA driver API and the CUDA runtime API. The CUDA driver API is more fundamental (low-level) and more flexible. The CUDA runtime API is constructed based on top of the CUDA driver API and is easier to use. We only consider the CUDA runtime API.
+CUDA provides two APIs (Application Programming Interfaces) for developers: the CUDA driver API and the CUDA runtime API. The CUDA driver API is more fundamental (low-level) and more flexible. The CUDA runtime API is constructed based on top of the CUDA driver API and is easier to use. We only consider the CUDA runtime API.
 
-There are also many CUDA versions, which can also be represented as `X.Y`. The following table lists the recent CUDA versions and the  the supported compute capabilites.
+There are also many CUDA versions, which can also be represented as `X.Y`. The following table lists the recent CUDA versions and the supported compute capabilities.
 
 | CUDA versions | supported GPUs |
 |:------------|:---------------|
@@ -56,15 +56,15 @@ There are also many CUDA versions, which can also be represented as `X.Y`. The f
 |CUDA 9.0-9.2 | Compute capability 3.0-7.2  (Kepler to Volta) | 
 |CUDA 8.0     | Compute capability 2.0-6.2  (Fermi to Pascal) | 
 
-## 1.3 Installing a CUDA devolopment envirionment
+## 1.3 Installing CUDA 
 
 For Linux, check this manual: https://docs.nvidia.com/cuda/cuda-installation-guide-linux
 
 For Windows, one needs to install both CUDA and Visual Studio:
 
-* Installing Visual Studio. Go to https://visualstudio.microsoft.com/free-developer-offers/ and download a free Visual Studio (Community version). For our purpose, you only need to install `Desktop development with C++` within the many components of Visual Studio. Of course, you can install more compoents too.
+* Installing Visual Studio. Go to https://visualstudio.microsoft.com/free-developer-offers/ and download a free Visual Studio (Community version). For the purpose of this book, we only need to install `Desktop development with C++` within the many components of Visual Studio. 
 
-* Installing CUDA. Go to https://developer.nvidia.com/ and choose a Windows CUDA verison and install it. You can choose the highest version that support your GPU.
+* Installing CUDA. Go to https://developer.nvidia.com/ and choose a Windows CUDA version and install it. You can choose the highest version that support your GPU.
 
 * After installing both Visual Studio and CUDA (ProgramData folder might be hiden and you can enable to show it), go to the following folder
 ```
@@ -76,7 +76,7 @@ In this book, we will not use the Visual Studio IDE to develop CUDA programs. In
 ```
 Windows start -> Visual Studio 2019 -> x64 Native Tools Command Prompt for VS 2019
 ```
-In some cases, we need to have administrator rights, which can be achived by right clicking `x64 Native Tools Command Prompt for VS 2019` and choosing `more` and then `run as administrator`.
+In some cases, we need to have administrator rights, which can be achieved by right clicking `x64 Native Tools Command Prompt for VS 2019` and choosing `more` and then `run as administrator`.
 
 
 ## 1.4 Using the `nvidia-smi` program
@@ -107,16 +107,16 @@ it will show the information regarding the GPU(s) in the system. Here is an exam
 
 Here are some useful information from the above outputs:
 * From line 1 we can see the Nvidia driver version (426.00) and the CUDA version (10.1).
-* There is only one GPU in the system, which is a GeForce RTX 2070. It has a device ID of 0。If there are more GPUs, they will be labelled starting from 0. You can use the following command in the command line to select to use device 1 before running a CUDA program:
+* There is only one GPU in the system, which is a GeForce RTX 2070. It has a device ID of 0。If there are more GPUs, they will be labeled starting from 0. You can use the following command in the command line to select to use device 1 before running a CUDA program:
 ```
 $ export CUDA_VISIBLE_DEVICES=1        
 ```
-* This GPU is on the WDDM（windows display driver model）mode. Another possible mode is TCC（tesla compute cluster), but it is only avaible for the GPUs in the Tesla, Quadro, and Titan series. One can use the following commands to choose the mode（In Windows, one needs to have administator rights and `sudo` below should be removed):
+* This GPU is on the WDDM（windows display driver model）mode. Another possible mode is TCC（tesla compute cluster), but it is only avaible for the GPUs in the Tesla, Quadro, and Titan series. One can use the following commands to choose the mode（In Windows, one needs to have administrator rights and `sudo` below should be removed):
 ```
 $ sudo nvidia-smi -g GPU_ID -dm 0 # set device GPU_ID to the WDDM mode
 $ sudo nvidia-smi -g GPU_ID -dm 1 # set device GPU_ID to the TCC mode
 ```
-* `Compute M`. refers tocompute mode。Here the compute mode is `Default`, which means that multiple computing process are allowed to be run with the GPU. Another possible mode is `E. Process`，which means exclusive process mode. The `E. Process` mode is not possible for GPUs in the WDDM mode。One can use the following commands to choose the mode（In Windows, one needs to have administator rights and `sudo` below should be removed):
+* `Compute M`. refers to compute mode. Here the compute mode is `Default`, which means that multiple computing process are allowed to be run with the GPU. Another possible mode is `E. Process`，which means exclusive process mode. The `E. Process` mode is not possible for GPUs in the WDDM mode。One can use the following commands to choose the mode（In Windows, one needs to have administrator rights and `sudo` below should be removed):
 ```
 $ sudo nvidia-smi -i GPU_ID -c 0 # set device GPU_ID to Default mode
 $ sudo nvidia-smi -i GPU_ID -c 1 # set device GPU_ID to E. Process mode
