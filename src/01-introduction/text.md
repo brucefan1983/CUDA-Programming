@@ -43,49 +43,18 @@ We notice that the double precision performane of a GeForce GPU is only 1/32 of 
 
 ## Introduction to CUDA 
 
-There are a few tools for GPU computing, including CUDA, OpenCL, OpenACC, but we only consider CUDA in this book. We also only consider CUDA based on C++, which is called CUDA C++ for short. We will not consider CUDA Fortran.
+There are a few tools for GPU computing, including CUDA, OpenCL, and OpenACC, but we only consider CUDA in this book. We also only consider CUDA based on C++, which is called CUDA C++ for short. We will not consider CUDA Fortran.
 
+CUDA provides two APIs Application Programming Interfaces) for devolopers: the CUDA driver API and the CUDA runtime API. The CUDA driver API is more fundamental (low-level) and more flexible. The CUDA runtime API is constructed based on top of the CUDA driver API and is easier to use. We only consider the CUDA runtime API.
 
-CUDA~提供了两层~API（Application Programming Interface，应用程序编程接口）给程序员使用，即
-CUDA 驱动（driver） API和CUDA 运行时（runtime） API。其中，CUDA~驱动~API~是更加底层的~API，它为程序员提供了更为灵活的编程接口；CUDA~运行时~API~是在~CUDA~驱动~API~的基础上构建的一个更为高级的~API，更容易使用。这两种~API~在性能上几乎没有差别。从程序的可读性来看，使用~CUDA~运行时~API~是更好的选择。在其他编程语言中使用~CUDA~的时候，驱动~API~很多时候是必需的。因为作者没有使用驱动~API~的经验，故本书只涉及~CUDA~运行时~API。
+There are also many CUDA versions, which can also be represented as `X.Y`. The following table lists the recent CUDA versions and the  the supported compute capabilites.
 
-图~\ref{figure:cuda_tools}~展示了~CUDA~开发环境的主要组件。开发的应用程序是以主机（CPU）为出发点的。应用程序可以调用~CUDA~运行时~API、CUDA~驱动~API及一些已有的~CUDA~库。所有这些调用都将利用设备（GPU）的硬件资源。对~CUDA~运行时~API~的介绍是本书大部分章节的重点内容；第~\ref{chapter:lib}~章将介绍若干常用的~CUDA~库。
-
-\begin{figure}[ht]
-  \centering
-  \captionsetup{font=small}
-  \includegraphics[width=\columnwidth]{CUDA.pdf}\\
-  \caption{CUDA~编程开发环境概览。}
-  \label{figure:cuda_tools}
-\end{figure}
-
-CUDA~版本也由形如~X.Y~的两个数字表示，但它并不等同于GPU~的计算能力。可以这样理解：CUDA~版本是~GPU~软件开发平台的版本，而计算能力对应着~GPU~硬件架构的版本。
-
-最早的~CUDA 1.0~于~2007~年发布。当前（笔者交稿之日）最新的版本是~CUDA 10.2。CUDA~版本与~GPU~的最高计算能力都在逐年上升。虽然它们之间没有严格的对应关系，但一个具有较高计算能力的~GPU~通常需要一个较高的~CUDA~版本才能支持。最近的几个~CUDA~版本对计算能力的支持情况见表~\ref{table:cuda-versions}。一般来说，建议安装一个支持所用~GPU~的较新的~CUDA~工具箱。本书中的所有示例程序都可以在~CUDA~9.0-10.2~中进行测试。目前最新版本的~CUDA 10.2~有两个值得注意的地方。第一，它是最后一个支持~macOS~系统的~CUDA~版本；第二，它将~CUDA C 改名为~CUDA C++，用以强调~CUDA C++~是基于~C++~的扩展。
-
-
-\begin{table}[htb]
-\centering
-\captionsetup{font=small}
-\caption{最近的几个~CUDA~版本对~GPU~计算能力的支持情况。}
-\begin{tabular}{ccc}
-\hline
-CUDA~版本 &  所支持~GPU~的计算能力 & 架构 \\
-\hline
-\hline
-10.0-10.2 &  3.0-7.5 & 从开普勒到图灵 \\
-\hline
-9.0-9.2 &  3.0-7.2  & 从开普勒到伏特 \\
-\hline
-8.0 &  2.0-6.2  & 从费米到帕斯卡 \\
-\hline
-7.0-7.5 &  2.0-5.3 & 从费米到麦克斯韦 \\
-\hline
-\hline
-\end{tabular}
-\label{table:cuda-versions}
-\end{table}
-
+| CUDA versions | supported GPUs |
+|:------------|:---------------|
+|CUDA 11.0 |  3.0-8.0 (Kepler to Ampere) |
+|CUDA 10.0-10.2 |  3.0-7.5 (Kepler to Turing) |
+|CUDA 9.0-9.2 |  3.0-7.2  (Kepler to Volta) | 
+|CUDA 8.0     |  2.0-6.2  (Fermi to Pascal) | 
 
 \section{CUDA~开发环境搭建示例}
 
