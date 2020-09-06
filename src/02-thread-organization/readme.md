@@ -28,7 +28,7 @@ In Linux, we can use the following command to compile it:
 ```
 $ g++ hello.cpp
 ```
-This will generat an executable named `a.out` in the current directory. One can run this executable by typing
+This will generate an executable named `a.out` in the current directory. One can run this executable by typing
 ```
 $ ./a.out
 ```
@@ -40,7 +40,7 @@ One can also specify a name for the executable, e.g.,
 ```
 $ g++ hello.cpp -o hello
 ```
-This will generat an executable named `hello` in the current directory. One can run this executable by typing
+This will generate an executable named `hello` in the current directory. One can run this executable by typing
 ```
 $ ./hello
 ```
