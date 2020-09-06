@@ -14,66 +14,21 @@ We only consider GPUs from Nvidia, becasue CUDA programming only supports these 
 * Quadro series: kind of between the above two.
 * Jetson series: embeded device (I have never used these).
 
-Every GPU has a version number `X.Y` to indicate its **compute capability**. Here, `X` is a major version number, and `Y` is a minor version number. A major version number corresponds to a major GPU architecture and is also named after a famous scientist. 
+Every GPU has a version number `X.Y` to indicate its **compute capability**. Here, `X` is a major version number, and `Y` is a minor version number. A major version number corresponds to a major GPU architecture and is also named after a famous scientist. See the following table.
 
-\begin{table}[htb]
-\centering
-\captionsetup{font=small}
-\caption{各个~GPU~主计算能力的架构代号与发布年份。}
-\begin{tabular}{lll}
-\hline
-主计算能力 &  架构代号 & 发布年份  \\
-\hline
-\hline
-X = 1 & 特斯拉（Tesla）   & 2006 \\
-\hline
-X = 2 & 费米（Fermi）  & 2010\\
-\hline
-X = 3 & 开普勒（Kepler）  & 2012\\
-\hline
-X = 5 & 麦克斯韦（Maxwell）  & 2014\\
-\hline
-X = 6 & 帕斯卡（Pascal）& 2016\\
-\hline
-X = 7 & 伏特（Volta） & 2017\\
-\hline
-X.Y = 7.5 & 图灵（Turing） & 2018\\
-\hline
-\hline
-\end{tabular}
-\label{table:compute-capability}
-\end{table}
+| Major compute capability  | architecture name |   release year  |
+|:------------|:---------------|:--------------|
+| `X=1` | Tesla | 2006 |
+| `X=2` | Fermi | 2010 |
+| `X=3` | Kepler | 2012 |
+| `X=5` | Maxwell | 2014 |
+| `X=6` | Pascal | 2016 |
+| `X=7` | Volta | 2017 |
+| `X.Y=7.5` | Turing | 2018 |
+| `X=8` | Ampere | 2020 |
 
 
-
-版本号越大的~GPU~架构（architecture）越新。主版本号与~GPU~的核心架构相关联。很有意思的是，英伟达公司选择用著名科学家（到目前为止，大部分是物理学家）的姓氏作为~GPU~核心架构的代号，见表~\ref{table:compute-capability}。在主版本号相同时，具有较大次版本号的~GPU~的架构稍有更新。例如，同属于开普勒（Kepler）架构的~Tesla K40~和~Tesla K80~这两款~GPU~有相同的主版本号（X = 3），但有不同的次版本号，它们的计算能力分别是~3.5~和~3.7。注意：特斯拉（Tesla）既是第一代~GPU~架构的代号，也是科学计算系列~GPU~的统称，其具体含义要根据上下文确定。另外，计算能力为~7.5~的架构虽然和伏特（Volta）架构具有同样的主版本号（X = 7），但它一般被看作一个新的主要架构，代号为图灵（Turing）。据传，下一代~GPU~架构（X = 8）的代号为安培（Ampere）。表~\ref{table:gpus-arch}~列出了不同架构的各种~GPU~的名称。
-
-
-
-
-\begin{table}[htb]
-\centering
-\captionsetup{font=small}
-\caption{当前常用的各种~GPU~的名称。特斯拉架构和费米架构的~GPU~已经不再受到最新~CUDA~的支持，故没有列出。}
-\begin{tabular}{lllll}
-\hline
-架构 &  Tesla~系列 & Quadro~系列  & GeForce~系列  & Jetson~系列 \\
-\hline
-\hline
-开普勒 & Tesla K~系列  & Quadro K~系列 & GeForce 600/700~系列 & Tegra K1 \\
-\hline
-麦克斯韦 & Tesla M~系列  & Quadro M~系列 & GeForce 900~系列 & Tegra X1 \\
-\hline
-帕斯卡 & Tesla P系列  & Quadro P系列 & GeForce 1000~系列 & Tegra X2 \\
-\hline
-伏特 & Tesla V~系列  & 无 & 无                & AGX Xavier \\
-\hline
-图灵 & Tesla T~系列  & Quadro RTX~系列 & GeForce 2000~系列 & AGX Xavier \\
-\hline
-\hline
-\end{tabular}
-\label{table:gpus-arch}
-\end{table}
+在主版本号相同时，具有较大次版本号的~GPU~的架构稍有更新。例如，同属于开普勒（Kepler）架构的~Tesla K40~和~Tesla K80~这两款~GPU~有相同的主版本号（X = 3），但有不同的次版本号，它们的计算能力分别是~3.5~和~3.7。注意：特斯拉（Tesla）既是第一代~GPU~架构的代号，也是科学计算系列~GPU~的统称，其具体含义要根据上下文确定。另外，计算能力为~7.5~的架构虽然和伏特（Volta）架构具有同样的主版本号（X = 7），但它一般被看作一个新的主要架构，代号为图灵（Turing）。
 
 特斯拉架构和费米（Fermi）架构的~GPU~已不再受到最近几个~CUDA~版本的支持。本书将忽略任何特定于这两个架构的硬件功能。可以预见，开普勒架构的~GPU~也将很快（比如一两年后）不受最新版~CUDA~的支持。为简洁起见，本书有时也将忽略某些开普勒架构的特征。为简单起见，我们在表~\ref{table:gpus-arch}~中忽略了一类被称为~Titan~的~GPU。读者可以在如下网站查询任何一款支持~CUDA~的~GPU~的信息：\url{http://developer.nvidia.com/cuda-gpus}。
 
