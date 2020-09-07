@@ -70,19 +70,18 @@ The output from running the executable is the same as before. We will talk more 
 
 **I am up to here...**
 
-虽然上面的第一个版本是由CUDA的编译器编译的，但程序中根本没有使用GPU。下面来介绍一个使用GPU的Hello World程序。
+Although the file `hello1.cu` was compiled using `nvcc`, that program has not used GPU. We now introduce a program that really used GPU.
 
-首先，我们要知道，GPU只是一个设备，要它工作的话还需要有一个主机给它下达命令。这个主机就是CPU。所以，一个真正利用了GPU的CUDA程序既有主机代码（在程序hello1.cu中的所有代码都是主机代码），也有设备代码（可以理解为需要设备执行的代码）。主机对设备的调用是通过核函数（kernel function）来实现的。所以，一个典型的、简单的CUDA程序的结构具有下面的形式：
-
-\begin{verbatim}
-    int main(void)
-    {
-        主机代码
-　      核函数的调用
-　      主机代码
-        return 0;
-    }
-\end{verbatim}
+We know that GPU is device, which requires a host to give it commands. Therefore, a typical simple CUDA program has the following form:
+```
+int main(void)
+{
+    host code
+　  calling CUDA kernel(s)
+　  host code
+    return 0;
+}
+```
 
 CUDA中的核函数与C++中的函数是类似的，但一个显著的差别是：它必须被限定词（qualifier） \verb"__global__" 修饰。其中\verb"global"前后是双下划线。另外，核函数的返回类型必须是空类型，即\verb"void"。这两个要求读者先记住即可。关于核函数 的更多细节，以后再逐步深入介绍。遵循这两个要求，我们先写一个打印字符串的核函数：
 \begin{verbatim}
