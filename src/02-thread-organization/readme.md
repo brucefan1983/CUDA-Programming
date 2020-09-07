@@ -60,11 +60,11 @@ After reviewing the Hello World program in C++, we are ready to discuss similar 
 
 ### 2.2.1 A CUDA program containing host functions only
 
-We actually has already written a valid CUDA program. This is because that the CUDA compiler driver `nvcc` can compile pure C++ code by calling a host compiler (such as `g++` or `cl.exe`). The default suffix for CUDA source files is `.cu` and we thus rename `hello.cpp` as `hello1.cu` and use the following command to compile it:
+We actually have already written a valid CUDA program. This is because that the CUDA compiler driver `nvcc` can compile pure C++ code by calling a host compiler (such as `g++` or `cl.exe`). The default suffix for CUDA source files is `.cu` and we thus rename `hello.cpp` as `hello1.cu` (https://github.com/brucefan1983/CUDA-Programming/blob/master/src/02-thread-organization/hello1.cu) and use the following command to compile it:
 ```
 $ nvcc hello1.cu
 ```
-The output is the same as before. We will talk more about `nvcc` in the last section of this chapter. Now the reader only needs to know that `nvcc` can be used to compile CUDA source files with `.cu` suffix.
+The output from running the executable is the same as before. We will talk more about `nvcc` in the last section of this chapter. Now the reader only needs to know that `nvcc` can be used to compile CUDA source files with `.cu` suffix.
 
 ### 2.2.2 A CUDA program containing a CUDA kernel
 
