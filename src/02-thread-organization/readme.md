@@ -98,8 +98,6 @@ void __global__ hello_from_gpu()
 }
 ```
 
-**I am up to here...**
-
 We then write a main function and call the kernel from the host:
 ```
 #include <stdio.h>
@@ -127,17 +125,16 @@ Run the executable and we will see the following message from the console:
 Hello World from the GPU!
 ```
 
-**I am up to here...**
-
-
-
-上述程序有3个地方需要进一步解释：
-\begin{itemize}
-\item 先看看调用核函数 的格式：
-\begin{verbatim}
+Some explanations are needed here:
+* First, the kernel is called in the following way:
+```
     hello_from_gpu<<<1, 1>>>();
-\end{verbatim}
-这个调用格式与普通的C++函数的调用格式是有区别的。我们看到，在函数名\verb"hello_from_gpu"和括号\verb"()"之间有一对三括号\verb"<<<1, 1>>>"，里面还有用逗号隔开的两个数字。调用核函数时为什么需要这对三括号里面的信息呢？这是因为，一块GPU中有很多（例如，Tesla V100中有5120个）计算核心，从而可以支持很多线程（thread）。主机在调用一个核函数 时，必须指明需要在设备中指派多少个线程，不然设备不知道如何工作。三括号中的数就是用来指明核函数 中的线程数目以及排列情况的。核函数中的线程常组织为若干线程块（thread block）：三括号中的第一个数字可以看作线程块的个数，第二个数字可以看作每个线程块中的线程数。一个核函数的全部线程块构成一个网格（grid），而线程块的个数就记为网格大小（grid size）。每个线程块中含有同样数目的线程，该数目
+```
+There must be an **execution configuration** like `<<<1, 1>>>` between the kernel name and `()`. The execution configuration specifies the number of threads and their organization for the kernel. The threads for a kernel form a **grid**, which can contain multiple **blocks**. Each block in turn can contain multiple threads. The number of blocks within the grid is called the **grid size**. All the blocks in the grid have the same number of threads and this number is called the **block size**. Therefore, the total number of threads in a grid is the product of the grid size and the block size. For a simple execution configuration `<<<grid_size, block_size>>>` with two integer numbers `grid_size` and `block_size` (we will see more general execution configurations soon), the first number `grid_size` is the grid size and the second number `block_size` is the block size. In our `hello2.cu` program, the execution configuration `<<<1, 1>>>` means that both the grid size and the block size are 1 and there is only `1 * 1 = 1` thread used for the kernel.
+
+ **I am up to here...**
+
+核函数中的线程常组织为若干线程块（thread block）：三括号中的第一个数字可以看作线程块的个数，第二个数字可以看作每个线程块中的线程数。一个核函数的全部线程块构成一个网格（grid），而线程块的个数就记为网格大小（grid size）。每个线程块中含有同样数目的线程，该数目
 称为线程块大小（block size）。所以，核函数中总的线程数就等于网格大小乘以线程块大小，而三括号中的两个数字分别就是网格大小和线程块大小，即\verb"<<<网格大小, 线程块大小>>>"。所以，在上述程序中，主机只指派了设备的一个线程，网格大小和线程块大小都是1，即$1\times 1 = 1$。
 \item 核函数中的\verb"printf()"函数的使用方式和C++库（或者说C++从C中继承的库）中的\verb"printf()"函数的使用方式基本上是一样的。而且在核函数中使用\verb"printf()"函数时也需要包含头文件\verb"<stdio.h>"（也可以写成\verb"<cstdio>"）。需要注意的是，核函数中不支持C++的iostream（读者可亲自测试）。
 \item 我们注意到，在调用核函数之后，有如下一行语句：
@@ -146,6 +143,9 @@ Hello World from the GPU!
 \end{verbatim}
 这行语句调用了一个CUDA的运行时API函数。去掉这个函数就打印不出字符串了（请读者亲自尝试）。这是因为调用输出函数时，输出流是先存放在缓冲区的，而缓冲区不会自动刷新。只有程序遇到某种同步操作时缓冲区才会刷新。函数\verb"cudaDeviceSynchronize"的作用是同步主机与设备，所以能够促使缓冲区刷新。读者现在不需要弄明白这个函数到底是什么，因为我们这里的主要目的是介绍CUDA中的线程组织。
 \end{itemize}
+    
+    
+   
 
 ## Thread organization in CUDA 
 
