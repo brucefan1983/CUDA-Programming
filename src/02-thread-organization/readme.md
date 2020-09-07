@@ -54,21 +54,21 @@ This will generate an executable named `hello.exe`. It can be run using the foll
 $ hello.exe
 ```
 
-## A `Hello World` Program in CUDA
-
-**I am up to here...**
+## 2.2 `Hello World` Programs in CUDA
 
 After reviewing the Hello World program in C++, we are ready to discuss similar programs in CUDA.
 
-### A CUDA program containing host functions only
+### 2.2.1 A CUDA program containing host functions only
 
 We actually has already written a valid CUDA program. This is because that the CUDA compiler driver `nvcc` can compile pure C++ code by calling a host compiler (such as `g++` or `cl.exe`). The default suffix for CUDA source files is `.cu` and we thus rename `hello.cpp` as `hello1.cu` and use the following command to compile it:
 ```
-    $ nvcc hello1.cu
+$ nvcc hello1.cu
 ```
 The output is the same as before. We will talk more about `nvcc` in the last section of this chapter. Now the reader only needs to know that `nvcc` can be used to compile CUDA source files with `.cu` suffix.
 
-### A CUDA program containing a CUDA kernel
+### 2.2.2 A CUDA program containing a CUDA kernel
+
+**I am up to here...**
 
 虽然上面的第一个版本是由CUDA的编译器编译的，但程序中根本没有使用GPU。下面来介绍一个使用GPU的Hello World程序。
 
