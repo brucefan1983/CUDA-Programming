@@ -100,16 +100,8 @@ void __global__ hello_from_gpu()
 
 **I am up to here...**
 
-就像C++语言中的函数要被调用才能发挥作用一样，这个核函数 也要被调用才能发挥作用。下面，我们就写一个主函数来调用这个核函数，得到如Listing \ref{listing:hello2.cu} 所示的完整CUDA程序。我们可以用如下命令编译：
-\begin{verbatim}
-    $ nvcc hello2.cu
-\end{verbatim}
-然后运行得到的可执行文件就可从屏幕上看到如下输出：
-\begin{verbatim}
-    Hello World from the GPU!
-\end{verbatim}
-
-\begin{lstlisting}[language=C++,caption={本章程序hello2.cu中的内容。},label={listing:hello2.cu}]
+We then write a main function and call the kernel from the host:
+```
 #include <stdio.h>
 
 __global__ void hello_from_gpu()
@@ -124,6 +116,18 @@ int main(void)
     return 0;
 }
 \end{lstlisting}
+```
+ 
+This file (https://github.com/brucefan1983/CUDA-Programming/blob/master/src/02-thread-organization/hello2.cu) can be compiled as follows:
+```
+$ nvcc hello2.cu
+```
+Run the executable and we will see the following message from the console:
+```
+Hello World from the GPU!
+```
+
+**I am up to here...**
 
 
 
