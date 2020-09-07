@@ -68,8 +68,6 @@ The output from running the executable is the same as before. We will talk more 
 
 ### 2.2.2 A CUDA program containing a CUDA kernel
 
-**I am up to here...**
-
 Although the file `hello1.cu` was compiled using `nvcc`, that program has not used GPU. We now introduce a program that really used GPU.
 
 We know that GPU is device, which requires a host to give it commands. Therefore, a typical simple CUDA program has the following form:
@@ -83,13 +81,18 @@ int main(void)
 }
 ```
 
-CUDA中的核函数与C++中的函数是类似的，但一个显著的差别是：它必须被限定词（qualifier） \verb"__global__" 修饰。其中\verb"global"前后是双下划线。另外，核函数的返回类型必须是空类型，即\verb"void"。这两个要求读者先记住即可。关于核函数 的更多细节，以后再逐步深入介绍。遵循这两个要求，我们先写一个打印字符串的核函数：
-\begin{verbatim}
-    __global__ void hello_from_gpu()
-    {
-        printf("Hello World from the GPU!\n");
-    }    
-\end{verbatim}
+**I am up to here...**
+
+A `CUDA kernel` (also called `CUDA kernel function`, or simply `kernel`) is function that is called by the host and executes in the devide. There are many rules for defining a CUDA kernel, but now we only need to know that it must be decorated by the qualifiers `__global__` and `void`. That is, CUDA kernels cannot return values. Inside the CUDA kernel, nearly all C++ constructs are allowed.
+
+Following the above requirements, we write a CUDA kernel that prints a message to the console:
+```
+__global__ void hello_from_gpu()
+{
+    printf("Hello World from the GPU!\n");
+}    
+```
+
 限定符\verb"__global__"和\verb"void"的次序可随意。也就是说，上述核函数也可以写为如下形式：
 \begin{verbatim}
     void __global__ hello_from_gpu()
