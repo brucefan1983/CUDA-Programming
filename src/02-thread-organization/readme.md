@@ -83,7 +83,7 @@ int main(void)
 
 **I am up to here...**
 
-A `CUDA kernel` (also called `CUDA kernel function`, or simply `kernel`) is function that is called by the host and executes in the devide. There are many rules for defining a CUDA kernel, but now we only need to know that it must be decorated by the qualifiers `__global__` and `void`. That is, CUDA kernels cannot return values. Inside the CUDA kernel, nearly all C++ constructs are allowed.
+A `CUDA kernel` (also called `CUDA kernel function`, or simply `kernel`) is function that is called by the host and executes in the device. There are many rules for defining a CUDA kernel, but now we only need to know that it must be decorated by the qualifiers `__global__` and `void`. That is, CUDA kernels cannot return values. Inside the CUDA kernel, nearly all C++ constructs are allowed.
 
 Following the above requirements, we write a CUDA kernel that prints a message to the console:
 ```
@@ -92,14 +92,13 @@ __global__ void hello_from_gpu()
     printf("Hello World from the GPU!\n");
 }    
 ```
-
-限定符\verb"__global__"和\verb"void"的次序可随意。也就是说，上述核函数也可以写为如下形式：
-\begin{verbatim}
-    void __global__ hello_from_gpu()
-    {
-        printf("Hello World from the GPU!\n");
-    }
-\end{verbatim}
+The order of the qualifiers, `__global__` and `void`, are not important. That is, we can also write the CUDA kernel as:
+```
+void __global__ hello_from_gpu()
+{
+    printf("Hello World from the GPU!\n");
+}
+```
 
 就像C++语言中的函数要被调用才能发挥作用一样，这个核函数 也要被调用才能发挥作用。下面，我们就写一个主函数来调用这个核函数，得到如Listing \ref{listing:hello2.cu} 所示的完整CUDA程序。我们可以用如下命令编译：
 \begin{verbatim}
