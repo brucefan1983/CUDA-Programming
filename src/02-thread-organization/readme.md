@@ -83,7 +83,7 @@ int main(void)
 
 **I am up to here...**
 
-A `CUDA kernel` (also called `CUDA kernel function`, or simply `kernel`) is function that is called by the host and executes in the device. There are many rules for defining a CUDA kernel, but now we only need to know that it must be decorated by the qualifiers `__global__` and `void`. That is, CUDA kernels cannot return values. Inside the CUDA kernel, nearly all C++ constructs are allowed.
+A `CUDA kernel` (also called `CUDA kernel function`, or simply `kernel`) is function that is called by the host and executes in the device. There are many rules for defining a CUDA kernel, but now we only need to know that it must be decorated by the qualifiers `__global__` and `void`. That is, **CUDA kernels cannot return values**. Inside a CUDA kernel, **nearly** all C++ constructs are allowed.
 
 Following the above requirements, we write a CUDA kernel that prints a message to the console:
 ```
