@@ -51,22 +51,22 @@ $ cl.exe hello.cpp
 ```
 This will generate an executable named `hello.exe`. It can be run using the following command
 ```
-hello.exe
+$ hello.exe
 ```
 
 ## A `Hello World` Program in CUDA
 
 **I am up to here...**
 
-在复习了C++语言中的Hello World程序之后，我们接着介绍CUDA中的Hello World程序。
+After reviewing the Hello World program in C++, we are ready to discuss similar programs in CUDA.
 
 ### A CUDA program containing host functions only
 
-其实，我们已经写好了一个CUDA中的Hello World程序。这是因为，CUDA 程序的编译器驱动（compiler driver）\verb"nvcc"支持编译纯粹的C++代码。一般来说，一个标准的CUDA程序中既有纯粹的C++代码，也有不属于C++的真正的CUDA代码。CUDA程序的编译器驱动\verb"nvcc"在编译一个CUDA程序时，会将纯粹的C++代码交给C++的编译器（如前面提到的\verb"g++"或\verb"cl"）去处理，它自己则负责编译剩下的部分。CUDA程序源文件的后缀名默认是\verb".cu"，所以我们可以将上面写好的源文件更名为\verb"hello1.cu"，然后用\verb"nvcc"编译：
-\begin{verbatim}
+We actually has already written a valid CUDA program. This is because that the CUDA compiler driver `nvcc` can compile pure C++ code by calling a host compiler (such as `g++` or `cl.exe`). The default suffix for CUDA source files is `.cu` and we thus rename `hello.cpp` as `hello1.cu` and use the following command to compile it:
+```
     $ nvcc hello1.cu
-\end{verbatim}
-编译好之后即可运行。运行结果与C++程序的运行结果一样。关于CUDA程序的编译过程，将在本章最后一节及后续的某些章节详细讨论，现在只要知道可以用\verb"nvcc"编译CUDA程序即可。
+```
+The output is the same as before. We will talk more about `nvcc` in the last section of this chapter. Now the reader only needs to know that `nvcc` can be used to compile CUDA source files with `.cu` suffix.
 
 ### A CUDA program containing a CUDA kernel
 
