@@ -137,19 +137,12 @@ There must be an **execution configuration** like `<<<1, 1>>>` between the kerne
 ```
 after the kernel call is used to **synchronize the host and the device**, making sure that the output stream for the `printf` function has been flushed before returning from the kernel to the host. Without a synchronization like this, the host will not wait for the completion of kernel execution and the message would not be output to console. `cudaDeviceSynchronize()` is one of the many CUDA runtime API functions we will learn during the course of this book. The need for synchronization here reflects the **asynchronous nature of kernel launching**, but we will not bother to elaborate on it until Chapter 11.
 
- **I am up to here...**
- 
 ## 2.3 Thread organization in CUDA 
 
 ### 2.3.1 A CUDA kernel using multiple threads
 
-核函数中允许指派很多线程，这是一个必然的特征。这是因为，一个GPU往往有几千个计算核心，而总的线程数必须至少等于计算核心数时才有可能充分利用GPU中的全部计算资源。实际上，总的线程数大于计算核心数时才能更充分地利用GPU中的计算资源，因为这会让计算和内存访问之间及不同的计算之间合理地重叠，从而减小计算核心空闲的时间。
-
-所以，根据需要，在调用核函数 时可以指定使用多个线程。Listing \ref{listing:hello3.cu}所示程序在调用核函数
-\verb"hello_from_gpu"时指定了一个含有两个线程块的网格，而且每个线程块的大小是4。
-
-
-\begin{lstlisting}[language=C++,caption={本章程序hello3.cu中的内容。},label={listing:hello3.cu}]
+There are many cores in a GPU and one can asign many threads for a kernel, if needed. The following program (https://github.com/brucefan1983/CUDA-Programming/blob/master/src/02-thread-organization/hello3.cu) used a grid with 2 blocks for the kernel, and each block has 4 threads:
+```
 #include <stdio.h>
 
 __global__ void hello_from_gpu()
@@ -163,9 +156,13 @@ int main(void)
     cudaDeviceSynchronize();
     return 0;
 }
-\end{lstlisting}
+```
 
-因为网格大小是2，线程块大小是4，故总的线程数是$2\times4=8$。 也就是说，该程序中的核函数 调用将指派8个线程。核函数中代码的执行方式是“单指令-多线程”，即每一个线程都执行同一串指令。既然核函数中的指令是打印一个字符串，那么编译、运行上述程序，将在屏幕打印如下8行同样的文字：
+The total number of threads used in the kernel is thus `2 * 4 = 8`.
+
+ **I am up to here...**
+ 
+核函数中代码的执行方式是“单指令-多线程”，即每一个线程都执行同一串指令。既然核函数中的指令是打印一个字符串，那么编译、运行上述程序，将在屏幕打印如下8行同样的文字：
 \begin{verbatim}
     Hello World from the GPU!
 \end{verbatim}
