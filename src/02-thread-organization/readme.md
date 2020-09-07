@@ -125,8 +125,7 @@ Run the executable and we will see the following message from the console:
 Hello World from the GPU!
 ```
 
-Some explanations are needed here:
-* First, the kernel is called in the following way:
+We note that the kernel is called in the following way:
 ```
     hello_from_gpu<<<1, 1>>>();
 ```
@@ -136,7 +135,7 @@ There must be an **execution configuration** like `<<<1, 1>>>` between the kerne
 ```
     cudaDeviceSynchronize();
 ```
-after the kernel call is used to **synchronize the host and the device**, flushing of the output stream. Without a synchronization like this, the host will not wait for the completion of kernel execution and the message would not be output to console. `cudaDeviceSynchronize()` is one of the many CUDA runtime API functions. We will learn more CUDA runtime API functions during the course of this book. The need for synchronization here reflects the asynchronous nature of kernel launching, but we will not bother to elaborate on this until Chapter 11.
+after the kernel call is used to **synchronize the host and the device**, making sure that the output stream for the `printf` function has been flushed before returning from the kernel to the host. Without a synchronization like this, the host will not wait for the completion of kernel execution and the message would not be output to console. `cudaDeviceSynchronize()` is one of the many CUDA runtime API functions. We will learn more CUDA runtime API functions during the course of this book. The need for synchronization here reflects the **asynchronous nature of kernel launching**, but we will not bother to elaborate on it until Chapter 11.
 
  **I am up to here...**
  
