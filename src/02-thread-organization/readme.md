@@ -158,15 +158,21 @@ int main(void)
 }
 ```
 
-The total number of threads used in the kernel is thus `2 * 4 = 8`.
+The total number of threads used in the kernel is thus `2 * 4 = 8`. The code in the kernel is executed in a way called "single-instruction-multiple-threads", which means every thread in the kernel (or in the grid) executes the same sequence of instructions (we will talk more about this in Chapter 10). Therefore, running the executable of this program would print the following text to the console:
+```
+    Hello World from the GPU!
+    Hello World from the GPU!
+    Hello World from the GPU!
+    Hello World from the GPU!
+    Hello World from the GPU!
+    Hello World from the GPU!
+    Hello World from the GPU!
+    Hello World from the GPU!
+```
+
+Every line above corresponds to one thread. But the reader may ask: which line was produced by which thread? We will answer this question below.
 
  **I am up to here...**
- 
-核函数中代码的执行方式是“单指令-多线程”，即每一个线程都执行同一串指令。既然核函数中的指令是打印一个字符串，那么编译、运行上述程序，将在屏幕打印如下8行同样的文字：
-\begin{verbatim}
-    Hello World from the GPU!
-\end{verbatim}
-其中，每一行对应一个指派的线程。读者也许要问，每一行分别是哪一个线程输出的呢？下面就来讨论这个问题。
 
 ### 2.3.2 Using thread indices in a CUDA kernel
 
