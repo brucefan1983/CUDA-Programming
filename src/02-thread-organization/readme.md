@@ -131,7 +131,7 @@ We note that the kernel is called in the following way:
 ```
 There must be an **execution configuration** like `<<<1, 1>>>` between the kernel name and `()`. The execution configuration specifies the number of threads and their organization for the kernel. The threads for a kernel form a **grid**, which can contain multiple **blocks**. Each block in turn can contain multiple threads. The number of blocks within the grid is called the **grid size**. All the blocks in the grid have the same number of threads and this number is called the **block size**. Therefore, the total number of threads in a grid is the product of the grid size and the block size. For a simple execution configuration `<<<grid_size, block_size>>>` with two integer numbers `grid_size` and `block_size` (we will see more general execution configurations soon), the first number `grid_size` is the grid size and the second number `block_size` is the block size. In our `hello2.cu` program, the execution configuration `<<<1, 1>>>` means that both the grid size and the block size are 1 and there is only `1 * 1 = 1` thread used for the kernel.
 
-* The `printf()` function from the C++ libriary `<stdio.h>` (can also be written as `<cstdio>`) can be directly used in kernels. However, one cannot use functions from the `<iostream>` library in kernels. The statement
+* The `printf()` function from the C++ library `<stdio.h>` (can also be written as `<cstdio>`) can be directly used in kernels. However, one cannot use functions from the `<iostream>` library in kernels. The statement
 ```
     cudaDeviceSynchronize();
 ```
@@ -141,7 +141,7 @@ after the kernel call is used to **synchronize the host and the device**, making
 
 ### 2.3.1 A CUDA kernel using multiple threads
 
-There are many cores in a GPU and one can asign many threads for a kernel, if needed. The following program (https://github.com/brucefan1983/CUDA-Programming/blob/master/src/02-thread-organization/hello3.cu) used a grid with 2 blocks for the kernel, and each block has 4 threads:
+There are many cores in a GPU and one can assign many threads for a kernel, if needed. The following program (https://github.com/brucefan1983/CUDA-Programming/blob/master/src/02-thread-organization/hello3.cu) used a grid with 2 blocks for the kernel, and each block has 4 threads:
 ```
 #include <stdio.h>
 
