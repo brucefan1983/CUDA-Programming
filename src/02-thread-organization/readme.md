@@ -282,16 +282,14 @@ The output of this program is:
     Hello World from block-0 and thread-(1, 3)!
 ```
 
-The reader may notice a well define order for `threadIdx.x` and `threadIdx.y` here. If we label the lines from 0 to 7 from top to down, this index can be calculated as `threadIdx.y * blockDim.x + threadIdx.x`. Generally, we have a global thread index
+The reader may notice a well define order for `threadIdx.x` and `threadIdx.y` here. If we label the lines from 0 to 7 from top to down, this index can be calculated as `threadIdx.y * blockDim.x + threadIdx.x`. In general, the one-diemsional index of a thread `tid` is related to the multi-dimensional indices of the thread via the the following relation:
 ```
+    int tid = threadIdx.z * blockDim.x * blockDim.y + threadIdx.y * blockDim.x + threadIdx.x;
 ```
-
-
-This is an important indexing rule for the members of `threadIdx`. 
+**This is an important indexing rule**, which will be relevant when we discuss **coalesced memory access** in Chapter 6.
 
  **I am up to here...**
- 
-\verb"x"维度的线程指标\verb"threadIdx.x"是最内层的（变化最快）。
+
 
 \subsection{网格与线程块大小的限制}
 
