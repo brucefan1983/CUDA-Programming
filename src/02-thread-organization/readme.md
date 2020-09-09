@@ -60,7 +60,7 @@ After reviewing the Hello World program in C++, we are ready to discuss similar 
 
 ### 2.2.1 A CUDA program containing host functions only
 
-We actually have already written a valid CUDA program. This is because that the CUDA compiler driver `nvcc` can compile pure C++ code by calling a host compiler (such as `g++` or `cl.exe`). The default suffix for CUDA source files is `.cu` and we thus rename `hello.cpp` as `hello1.cu` (https://github.com/brucefan1983/CUDA-Programming/blob/master/src/02-thread-organization/hello1.cu) and use the following command to compile it:
+We actually have already written a valid CUDA program. This is because that the CUDA compiler driver `nvcc` can compile pure C++ code by calling a host compiler (such as `g++` or `cl.exe`). The default suffix for CUDA source files is `.cu` and we thus rename `hello.cpp` as [`hello1.cu`](https://github.com/brucefan1983/CUDA-Programming/blob/master/src/02-thread-organization/hello1.cu) and use the following command to compile it:
 ```
 $ nvcc hello1.cu
 ```
@@ -116,7 +116,7 @@ int main(void)
 \end{lstlisting}
 ```
  
-This file (https://github.com/brucefan1983/CUDA-Programming/blob/master/src/02-thread-organization/hello2.cu) can be compiled as follows:
+The file [`hello2.cu`](https://github.com/brucefan1983/CUDA-Programming/blob/master/src/02-thread-organization/hello2.cu) can be compiled as follows:
 ```
 $ nvcc hello2.cu
 ```
@@ -141,7 +141,7 @@ after the kernel call is used to **synchronize the host and the device**, making
 
 ### 2.3.1 A CUDA kernel using multiple threads
 
-There are many cores in a GPU and one can assign many threads for a kernel, if needed. The following program (https://github.com/brucefan1983/CUDA-Programming/blob/master/src/02-thread-organization/hello3.cu) used a grid with 2 blocks for the kernel, and each block has 4 threads:
+There are many cores in a GPU and one can assign many threads for a kernel, if needed. The following program [`hello3.cu`](https://github.com/brucefan1983/CUDA-Programming/blob/master/src/02-thread-organization/hello3.cu) used a grid with 2 blocks for the kernel, and each block has 4 threads:
 ```
 #include <stdio.h>
 
@@ -180,7 +180,7 @@ Every thread in a kernel has a unique identity, or index. Because we have used t
 
 Consider a kernel called with an execution configuration of `<<<10000, 256>>>`, we then know that the grid size `gridDim.x` is 10000，and the block size `blockDim.x` is 256. The block index `blockIdx.x` of a thread in the kernel can thus take values from 0 to 9999, and the thread index `threadIdx.x` of a thread can take values from 0 to 255. 
 
-Returning to our `hello3.cu` program, we have assigned 8 threads to the kernel and each thread printed one line of text, but we didn't know which line was from which thread. Now that we know every thread in the kernel can be uniquely identified, we could use this to tell us which line was from which thread. To this end, we rewrite the program to get a new one, as in `hello4.cu` (https://github.com/brucefan1983/CUDA-Programming/blob/master/src/02-thread-organization/hello4.cu):
+Returning to our `hello3.cu` program, we have assigned 8 threads to the kernel and each thread printed one line of text, but we didn't know which line was from which thread. Now that we know every thread in the kernel can be uniquely identified, we could use this to tell us which line was from which thread. To this end, we rewrite the program to get a new one, as in [`hello4.cu`](https://github.com/brucefan1983/CUDA-Programming/blob/master/src/02-thread-organization/hello4.cu):
 ```
 #include <stdio.h>
 
