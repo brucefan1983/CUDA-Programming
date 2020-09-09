@@ -326,7 +326,7 @@ Besides this, there is an important limit on the following product:
 
 ## 2.4 Headers in CUDA
 
-When using `nvcc` to compile a `.cu` source file, some CUDA related headers, such as `<cuda.h>` and `<cuda_runtime.h>` will be automatically inluded. In this book, we deal with pure CUDA code: all the source files will be `.cu` files and we only use `nvcc` to compile them. We therefore do not bother to figure out what headers are needed to include. I might extend this book by considering using mixed `.cu` and `.cpp` files for a program in a future version of this book. 
+When using `nvcc` to compile a `.cu` source file, some CUDA related headers, such as `<cuda.h>` and `<cuda_runtime.h>` will be automatically inluded. In this book, we deal with pure CUDA code: all the source files will be `.cu` files and we only use `nvcc` to compile them. We therefore do not bother to figure out what headers are needed. I might extend this book by considering using mixed `.cu` and `.cpp` files for a program in a future version. 
 
 ## 2.5 Using `nvcc` to compile CUDA programs
 
