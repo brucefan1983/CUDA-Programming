@@ -223,41 +223,25 @@ and sometimes we get the following output,
 ```
 That is, sometimes block 0 finishes the instructions first, and sometimes block 1 finishes the instructions first. This reflects a very important feature of the execution of CUDA kernels, i.e., **every block in the grid is independent of each other**. 
 
- **I am up to here...**
+### 2.3.3 Generalization to multi-dimensional grids and blocks
 
-### 2.3.3 Generalization to multi-dimensional grid
-
+The reader may have noticed that the 4 built-in variables introduced above used the `struct` or `class` syntax in C++. This is true:
 细心的读者可能注意到，前面介绍的4个内建变量都用了C++中的结构体（struct）或者类（class）的成员变量的语法。其中：
-\begin{itemize}
-\item \verb"blockIdx" 和\verb"threadIdx" 是类型为\verb"uint3" 的变量。该类型是一个结构体，具有\verb"x"、\verb"y"、 \verb"z" 这3个成员。所以，\verb"blockIdx.x" 只是3个成员中的一个，另外两个成员分别是
-    \verb"blockIdx.y" 和\verb"blockIdx.z"。类似地，\verb"threadIdx.x" 只是3个成员中的一个，另外两个成员分别是
-    \verb"threadIdx.y" 和\verb"threadIdx.z"。结构体\verb"uint3"在头文件\verb"vector_types.h"中定义：
-    \begin{verbatim}
+* `blockIdx` and `threadIdx` are of type `uint3`, which is defined in `vector_types.h` as:
+```
     struct __device_builtin__ uint3
     {
         unsigned int x, y, z;
     };    
     typedef __device_builtin__ struct uint3 uint3;
-    \end{verbatim}
-也就是说，该结构体由3个无符号整数类型的成员构成。
-\item \verb"gridDim" 和\verb"blockDim" 是类型为\verb"dim3" 的变量。该类型是一个结构体，具有\verb"x"、\verb"y"、 \verb"z" 这3个成员。所以，\verb"gridDim.x" 只是3个成员中的一个，另外两个成员分别是\verb"gridDim.y"和\verb"gridDim.z"。类似地，\verb"blockDim.x"只是3个成员中的一个，另外两个成员分别是\verb"blockDim.y"和\verb"blockDim.z"。结构体\verb"dim3"也在头文件\verb"vector_types.h"定义，除了和结构体\verb"uint3"有同样的3个成员之外，还在使用C++程序的情况下定义了一些成员函数，如下面使用的构造函数。
-\end{itemize}
-这些内建变量都只在核函数中有效（可见），而且满足如下关系：
-\begin{itemize}
-\item \verb"blockIdx.x" 的取值范围是从0 到\verb"gridDim.x - 1"。
-\item \verb"blockIdx.y" 的取值范围是从0 到\verb"gridDim.y - 1"。
-\item \verb"blockIdx.z" 的取值范围是从0 到\verb"gridDim.z - 1"。
-\item \verb"threadIdx.x" 的取值范围是从0 到\verb"blockDim.x - 1" 。
-\item \verb"threadIdx.y" 的取值范围是从0 到\verb"blockDim.y - 1" 。
-\item \verb"threadIdx.z" 的取值范围是从0 到\verb"blockDim.z - 1" 。
-\end{itemize}
+ ```
+Therefore, apart from `blockIdx.x`, we also have `blockIdx.y` and `blockIdx.z`. Similarly, apart from `threadIdx.x`, we also have `threadIdx.y` and `threadIdx.z`.
+* `gridDim` and `blockDim` are of type `dim3`, which is similar to `uint3` and has some constructors which will be introduced soon. Therefore, apart from `gridDim.x`, we also have `gridDim.y` and `gridDim.z`. Similarly, apart from `blockDim.x`, we also have `blockDim.y` and `blockDim.z`.
 
-我们前面介绍过，网格大小和线程块大小是在调用核函数时通过执行配置指定的。在之前的例子中，我们用的执行配置仅仅用了两个整数：
-\begin{verbatim}
-    <<<grid_size, block_size>>>
-\end{verbatim}
-我们知道，这两个整数的值将分别赋给内建变量\verb"gridDim.x" 和\verb"blockDim.x"。此时，\verb"gridDim" 和\verb"blockDim" 中没有被指定的成员取默认值1。在这种情况下，网格和线程块实际上都是“一维”的。
+**All these built-in variables are only visibal within CUDA kernels.**
 
+ **I am up to here...**
+ 
 也可以用结构体\verb"dim3" 定义“多维”的网格和线程块（这里用了C++中构造函数的语法）：
 \begin{verbatim}
     dim3 grid_size(Gx, Gy, Gz);
