@@ -180,7 +180,7 @@ Every thread in a kernel has a unique identity, or index. Because we have used t
 
 Consider a kernel called with an execution configuration of `<<<10000, 256>>>`, we then know that the grid size `gridDim.x` is 10000，and the block size `blockDim.x` is 256. The block index `blockIdx.x` of a thread in the kernel can thus take values from 0 to 9999, and the thread index `threadIdx.x` of a thread can take values from 0 to 255. 
 
-Returning to our `hello3.cu` program, we have assigned 8 threads to the kernel and each thread printed one line of text, but we didn't know which line was from which thread. Now that we know every thread in the kernel can be uniquely identified, we could use this to tell us which line was from which thread. To this end, we rewrite the program to get a new one, as in `hello4.cu`:
+Returning to our `hello3.cu` program, we have assigned 8 threads to the kernel and each thread printed one line of text, but we didn't know which line was from which thread. Now that we know every thread in the kernel can be uniquely identified, we could use this to tell us which line was from which thread. To this end, we rewrite the program to get a new one, as in `hello4.cu` (https://github.com/brucefan1983/CUDA-Programming/blob/master/src/02-thread-organization/hello4.cu):
 ```
 #include <stdio.h>
 
@@ -221,7 +221,7 @@ and sometimes we get the following output,
     Hello World from block 1 and thread 2.
     Hello World from block 1 and thread 3.
 ```
-That is, sometimes block 0 finishs the instructions first, and sometimes block 1 finishs the instructions. This reflects a very important feature of the execution of CUDA kernels, i.e., **every block in the grid is independent of each other**. 
+That is, sometimes block 0 finishes the instructions first, and sometimes block 1 finishes the instructions first. This reflects a very important feature of the execution of CUDA kernels, i.e., **every block in the grid is independent of each other**. 
 
  **I am up to here...**
 
