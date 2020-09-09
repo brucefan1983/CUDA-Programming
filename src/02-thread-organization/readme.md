@@ -326,9 +326,7 @@ Besides this, there is an important limit on the following product:
 
 ## 2.4 Headers in CUDA
 
-我们知道，在编写C++程序时，往往需要在源文件中包含一些标准的头文件。读者也许注意到了，本章程序包含了C++的头文件\verb"<stdio.h>"，但并没有包含任何CUDA相关的头文件。CUDA中也有一些头文件，但是在使用nvcc编译器驱动编译\verb".cu"文件时，将自动包含必要的CUDA头文件，如\verb"<cuda.h>" 和\verb"<cuda_runtime.h>"。因为\verb"<cuda.h>"包含了\verb"<stdlib.h>"，故用nvcc编译CUDA程序时甚至不需要在\verb".cu"文件中包含\verb"<stdlib.h>"。当然，用户依然可以在\verb".cu"文件中包含\verb"<stdlib.h>"，因为（正确编写的）头文件不会在一个编译单元内被包含多次。本书会从第\ref{chapter:error-check}章开始使用一个用户自定义头文件。
-
-在本书第\ref{chapter:lib}章我们将看到，在使用一些利用CUDA进行加速的应用程序库时，需要包含一些必要的头文件，并有可能还需要指定链接选项。
+When using `nvcc` to compile a `.cu` source file, some CUDA related headers, such as `<cuda.h>` and `<cuda_runtime.h>` will be automatically inluded. In this book, we deal with pure CUDA code: all the source files will be `.cu` files and we only use `nvcc` to compile them. We therefore do not bother to figure out what headers are needed to include. I might extend this book by considering using mixed `.cu` and `.cpp` files for a program in a future version of this book. 
 
 ## 2.5 Using `nvcc` to compile CUDA programs
 
