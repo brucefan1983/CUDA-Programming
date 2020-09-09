@@ -303,15 +303,21 @@ In general, the one-diemsional index `tid` of a thread is related to the multi-d
 ### 2.3.4 Limits on the grid and block sizes
 
 For all the GPUs starting from the Kepler architecture, the grid size is limited to 
-* `gridDim.x` <= 2^{31}-1
-* `gridDim.y` <= 2^{16}-1 = 65535
-* `gridDim.z` <= 2^{16}-1 = 65535
+```
+  gridDim.x <= 2^{31}-1
+  gridDim.y <= 2^{16}-1 = 65535
+  gridDim.z <= 2^{16}-1 = 65535
+```
 and the block size is limited to
-* `blockDim.x` <= 1024
-* `blockDim.y` <= 1024
-* `blockDim.z` <= 64
-Besides this, there is an important limit on the produce:
-* `blockDim.x * blockDim.y * blockDim.z` <= 1024
+```
+  blockDim.x <= 1024
+  blockDim.y <= 1024
+  blockDim.z <= 64
+```
+Besides this, there is an important limit on the following product:
+```
+  blockDim.x * blockDim.y * blockDim.z <= 1024
+```
 
 **It is important to remember the above limits.**
 
