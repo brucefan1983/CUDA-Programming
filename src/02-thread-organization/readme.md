@@ -282,9 +282,16 @@ The output of this program is:
     Hello World from block-0 and thread-(1, 3)!
 ```
 
+The reader may notice a well define order for `threadIdx.x` and `threadIdx.y` here. If we label the lines from 0 to 7 from top to down, this index can be calculated as `threadIdx.y * blockDim.x + threadIdx.x`. Generally, we have a global thread index
+```
+```
+
+
+This is an important indexing rule for the members of `threadIdx`. 
+
  **I am up to here...**
  
-因为线程块的大小是$2 \times 4$，所以我们知道在核 函数中，\verb"blockDim.x" 的值为2，\verb"blockDim.y" 的值为4。可以看到， \verb"threadIdx.x"的取值范围是从0 到1，而\verb"threadIdx.y" 的取值范围是从0 到3。另外，因为网格大小\verb"gridDim.x"是1，故核函数中\verb"blockIdx.x" 的值只能为0。最后，从输出结果可以确认，\verb"x"维度的线程指标\verb"threadIdx.x"是最内层的（变化最快）。
+\verb"x"维度的线程指标\verb"threadIdx.x"是最内层的（变化最快）。
 
 \subsection{网格与线程块大小的限制}
 
