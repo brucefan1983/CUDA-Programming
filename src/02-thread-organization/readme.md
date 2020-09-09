@@ -178,13 +178,10 @@ Every thread in a kernel has a unique identity, or index. Because we have used t
 * `blockIdx.x`: this variable specify the **block index of the thread within a grid**, which can take values from 0 to `gridDim.x - 1`.
 * `threadIdx.x`: this variable specify the **thread index of the thread within a block**, which can take values from 0 to `blockDim.x - 1`.
 
- **I am up to here...**
+Consider a kernel called with an execution configuration of `<<<10000, 256>>>`, we then know that the grid size `gridDim.x` is 10000，and the block size `blockDim.x` is 256. The block index `blockIdx.x` of a thread in the kernel can thus take values from 0 to 9999, and the thread index `threadIdx.x` of a thread can take values from 0 to 255. 
 
-举一个具体的例子。假如某个核函数的执行配置是\verb"<<<10000, 256>>>"，那么网格大小\verb"gridDim.x"的值为10000，线程块大小\verb"blockDim.x"的值为256。线程块指标\verb"blockIdx.x" 可以取0到9999之间的值，而每一个线程块中的线程指标\verb"threadIdx.x" 可以取0到255之间的值。当\verb"blockIdx.x" 等于0时，所有256 个\verb"threadIdx.x"的值对应第0个线程块；当\verb"blockIdx.x" 等于1时，所有256 个\verb"threadIdx.x"的值对应于第1 个线程块；依此类推。
-
-再次回到Hello World程序。在程序\verb"hello3.cu" 中，我们指派了8个线程，每个线程输出了一行文字，但我们不知道哪一行是由哪个线程输出的。既然每一个线程都有一个唯一的身份标识，那么我们就可以利用该身份标识判断哪一行是由哪个线程输出的。为此，我们将程序改写为Listing \ref{listing:hello4.cu}。
-
-\begin{lstlisting}[language=C++,caption={本章程序hello4.cu中的内容。},label={listing:hello4.cu}]
+Returning to our `hello3.cu` program, we have assigned 8 threads to the kernel and each thread printed one line of text, but we didn't know which line was from which thread. Now that we know every thread in the kernel can be uniquely identified, we could use this to tell us which line was from which thread. To this end, we rewrite the program to get a new one, as in `hello4.cu`:
+```
 #include <stdio.h>
 
 __global__ void hello_from_gpu()
@@ -200,10 +197,10 @@ int main(void)
     cudaDeviceSynchronize();
     return 0;
 }
-\end{lstlisting}
+```
 
-编译、运行这个程序，有时输出如下文字：
-\begin{verbatim}
+Running the executable for this program, sometimes we get the following output,
+```
     Hello World from block 1 and thread 0.
     Hello World from block 1 and thread 1.
     Hello World from block 1 and thread 2.
@@ -212,9 +209,9 @@ int main(void)
     Hello World from block 0 and thread 1.
     Hello World from block 0 and thread 2.
     Hello World from block 0 and thread 3.
-\end{verbatim}
-有时输出如下文字：
-\begin{verbatim}
+```
+and sometimes we get the following output,
+```
     Hello World from block 0 and thread 0.
     Hello World from block 0 and thread 1.
     Hello World from block 0 and thread 2.
@@ -223,8 +220,10 @@ int main(void)
     Hello World from block 1 and thread 1.
     Hello World from block 1 and thread 2.
     Hello World from block 1 and thread 3.
-\end{verbatim}
-也就是说，有时是第0个线程块先完成计算，有时是第1个线程块先完成计算。这反映了CUDA程序执行时的一个很重要的特征，即每个线程块的计算是相互独立的。不管完成计算的次序如何，每个线程块中的每个线程都进行一次计算。
+```
+That is, sometimes block 0 finishs the instructions first, and sometimes block 1 finishs the instructions. This reflects a very important feature of the execution of CUDA kernels, i.e., **every block in the grid is independent of each other**. 
+
+ **I am up to here...**
 
 ### 2.3.3 Generalization to multi-dimensional grid
 
