@@ -13,7 +13,7 @@ To develop a simple C++ program, one can follow the following steps:
 * Use a compiler to compile the source code to obtain an object file and then use a linker to link the object file and some standard object files to obtain an executable. The compiling and linking processes are usually done with a single command and we will simply call it a compiling process. 
 * Run the executable.
 
-Let us first write the following program in a source file named `hello.cpp` (https://github.com/brucefan1983/CUDA-Programming/blob/master/src/02-thread-organization/hello.cpp).
+Let us first write the following program in a source file named [`hello.cpp`](https://github.com/brucefan1983/CUDA-Programming/blob/master/src/02-thread-organization/hello.cpp).
 ```
 #include <stdio.h>
 
