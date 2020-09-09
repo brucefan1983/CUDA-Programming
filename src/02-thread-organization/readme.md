@@ -322,13 +322,16 @@ Besides this, there is an important limit on the following product:
 **It is important to remember the above limits.**
 
 
- **I am up to here...**
-
-## 2.4 Headers in CUDA
-
-When using `nvcc` to compile a `.cu` source file, some CUDA related headers, such as `<cuda.h>` and `<cuda_runtime.h>` will be automatically inluded. In this book, we deal with pure CUDA code: all the source files will be `.cu` files and we only use `nvcc` to compile them. We therefore do not bother to figure out what headers are needed. I might extend this book by considering using mixed `.cu` and `.cpp` files for a program in a future version. 
 
 ## 2.5 Using `nvcc` to compile CUDA programs
+
+### 2.5.1 Headers in CUDA
+
+When using `nvcc` to compile a `.cu` source file, some CUDA related headers, such as `<cuda.h>` and `<cuda_runtime.h>` will be automatically included. In this book, we deal with pure CUDA code: all the source files will be `.cu` files and we only use `nvcc` to compile them. We therefore do not bother to figure out what headers are needed. I might extend this book by considering using mixed `.cu` and `.cpp` files for a program in a future version. 
+
+### 2.5.2 Some important flags for `nvcc` 
+
+ **I am up to here...**
 
 CUDA的编译器驱动（compiler driver）nvcc先将全部源代码分离为主机代码和设备代码。主机代码完整地支持C++语法，但设备代码只部分地支持C++。nvcc先将设备代码编译为PTX（Parallel Thread eXecution）伪汇编代码，再将PTX代码编译为二进制的cubin目标代码。在将源代码编译为PTX代码时，需要用选项\verb"-arch=compute_XY"指定一个虚拟架构的计算能力，用以确定代码中能够使用的CUDA功能。在将PTX代码编译为cubin代码时，需要用选项\verb"-code=sm_ZW"指定一个真实架构的计算能力，用以确定可执行文件能够使用的GPU。真实架构的计算能力必须等于或者大于虚拟架构的计算能力。例如，可以用选项
 \begin{verbatim}
