@@ -226,7 +226,6 @@ That is, sometimes block 0 finishes the instructions first, and sometimes block 
 ### 2.3.3 Generalization to multi-dimensional grids and blocks
 
 The reader may have noticed that the 4 built-in variables introduced above used the `struct` or `class` syntax in C++. This is true:
-细心的读者可能注意到，前面介绍的4个内建变量都用了C++中的结构体（struct）或者类（class）的成员变量的语法。其中：
 * `blockIdx` and `threadIdx` are of type `uint3`, which is defined in `vector_types.h` as:
 ```
     struct __device_builtin__ uint3
@@ -237,78 +236,21 @@ The reader may have noticed that the 4 built-in variables introduced above used 
  ```
 Therefore, apart from `blockIdx.x`, we also have `blockIdx.y` and `blockIdx.z`. Similarly, apart from `threadIdx.x`, we also have `threadIdx.y` and `threadIdx.z`.
 * `gridDim` and `blockDim` are of type `dim3`, which is similar to `uint3` and has some constructors which will be introduced soon. Therefore, apart from `gridDim.x`, we also have `gridDim.y` and `gridDim.z`. Similarly, apart from `blockDim.x`, we also have `blockDim.y` and `blockDim.z`.
+* These built-in variables thus represent indices or sizes in three dimensions: `x`, `y`, and `z`. **All these built-in variables are only visibal within CUDA kernels.**
 
-**All these built-in variables are only visibal within CUDA kernels.**
-
- **I am up to here...**
- 
-也可以用结构体\verb"dim3" 定义“多维”的网格和线程块（这里用了C++中构造函数的语法）：
-\begin{verbatim}
+We can use the constructors of the struct `dim3` to define multi-dimensional grids and blocks:
+```
     dim3 grid_size(Gx, Gy, Gz);
     dim3 block_size(Bx, By, Bz);
-\end{verbatim}
-如果第三个维度的大小是1，可以写
-\begin{verbatim}
+```
+If the size of the `z` dimension is 1, we can simplify the above definitions to:
+```
     dim3 grid_size(Gx, Gy);
     dim3 block_size(Bx, By);
-\end{verbatim}
-例如，如果要定义一个$2 \times 2 \times 1$的网格及$3 \times 2 \times 1$的线程块，可将执行配置中的\verb"grid_size"和\verb"block_size"分别定义为如下结构体变量：
-\begin{verbatim}
-    dim3 grid_size(2, 2);  // 等价于 dim3 grid_size(2, 2, 1);
-    dim3 block_size(3, 2); // 等价于 dim3 block_size(3, 2, 1);
-\end{verbatim}
-由此产生的核函数中的线程组织见图\ref{figure:threads}。
+```
 
-\begin{figure}[ht]
-  \centering
-  \captionsetup{font=small}
-  \includegraphics[width=\columnwidth]{threads.pdf}\\
-  \caption{CUDA核函数中的线程组织示意图。在执行一个核函数时，会产生一个网格，由多个相同大小的线程块构成。该图中展示的是有$2 \times 2 \times 1$个线程块的网格，其中每个线程块包含$3 \times 2 \times 1$个线程。}
-  \label{figure:threads}
-\end{figure}
-
-多维的网格和线程块本质上还是一维的，就像多维数组本质上也是一维数组一样。
-与一个多维线程指标\verb"threadIdx.x"、\verb"threadIdx.y"、\verb"threadIdx.z"对应的一维指标为
-\begin{verbatim}
-    int tid = threadIdx.z * blockDim.x * blockDim.y + 
-              threadIdx.y * blockDim.x + threadIdx.x;
-\end{verbatim}
-也就是说，\verb"x"维度是最内层的（变化最快），而\verb"z"维度是最外层的（变化最慢）。与一个多维线程块指标\verb"blockIdx.x"、\verb"blockIdx.y"、\verb"blockIdx.z"对应的一维指标没有唯一的定义（主要是因为各个线程块的执行是相互独立的），但也可以类似地定义：
-\begin{verbatim}
-    int bid = blockIdx.z * gridDim.x * gridDim.y + 
-              blockIdx.y * gridDim.x + blockIdx.x;
-\end{verbatim}
-对于有些问题，如第\ref{chapter:global}章引入的矩阵转置问题，有时使用如下复合线程索引更合适：
-\begin{verbatim}
-    int nx = blockDim.x * blockIdx.x + threadIdx.x;
-    int ny = blockDim.y * blockIdx.y + threadIdx.y;
-    int nz = blockDim.z * blockIdx.z + threadIdx.z;
-\end{verbatim}
-
-一个线程块中的线程还可以细分为不同的线程束（thread warp）。
-一个线程束（即一束线程）是同一个线程块中相邻的\verb"warpSize"个线程。\verb"warpSize"也是一个内建变量，表示线程束大小，其值对于目前所有的GPU架构都是32。所以，一个线程束就是连续的32个线程。具体地说，一个线程块中第0到第31个线程属于第0个线程束，第32到第63个线程属于第1个线程束，依此类推。图\ref{figure:warps}中展示的每个线程块拥有两个线程束。
-
-我们可以通过继续修改Hello World程序来展示使用多维线程块的核函数中的线程组织情况。Listing \ref{listing:hello5.cu}是修改后的代码，在调用核函数时指定了一个$2 \times 4$的两维线程块。程序的输出是：
-\begin{verbatim}
-    Hello World from block-0 and thread-(0, 0)!
-    Hello World from block-0 and thread-(1, 0)!
-    Hello World from block-0 and thread-(0, 1)!
-    Hello World from block-0 and thread-(1, 1)!
-    Hello World from block-0 and thread-(0, 2)!
-    Hello World from block-0 and thread-(1, 2)!
-    Hello World from block-0 and thread-(0, 3)!
-    Hello World from block-0 and thread-(1, 3)!
-\end{verbatim}
-
-\begin{figure}[ht]
-  \centering
-  \captionsetup{font=small}
-  \includegraphics[width=\columnwidth]{warp.pdf}\\
-  \caption{线程块中相邻的32个线程构成一个线程束。}
-  \label{figure:warps}
-\end{figure}
-
-\begin{lstlisting}[language=C++,caption={本章程序hello5.cu中的内容。},label={listing:hello5.cu}]
+To demonstrate the usage of a multi-dimensional block, we write out last version of the Hello World program [`hello5.cu`](https://github.com/brucefan1983/CUDA-Programming/blob/master/src/02-thread-organization/hello5.cu):
+```
 #include <stdio.h>
 
 __global__ void hello_from_gpu()
@@ -326,8 +268,22 @@ int main(void)
     cudaDeviceSynchronize();
     return 0;
 }
-\end{lstlisting}
+```
 
+The output of this program is:
+```
+    Hello World from block-0 and thread-(0, 0)!
+    Hello World from block-0 and thread-(1, 0)!
+    Hello World from block-0 and thread-(0, 1)!
+    Hello World from block-0 and thread-(1, 1)!
+    Hello World from block-0 and thread-(0, 2)!
+    Hello World from block-0 and thread-(1, 2)!
+    Hello World from block-0 and thread-(0, 3)!
+    Hello World from block-0 and thread-(1, 3)!
+```
+
+ **I am up to here...**
+ 
 因为线程块的大小是$2 \times 4$，所以我们知道在核 函数中，\verb"blockDim.x" 的值为2，\verb"blockDim.y" 的值为4。可以看到， \verb"threadIdx.x"的取值范围是从0 到1，而\verb"threadIdx.y" 的取值范围是从0 到3。另外，因为网格大小\verb"gridDim.x"是1，故核函数中\verb"blockIdx.x" 的值只能为0。最后，从输出结果可以确认，\verb"x"维度的线程指标\verb"threadIdx.x"是最内层的（变化最快）。
 
 \subsection{网格与线程块大小的限制}
