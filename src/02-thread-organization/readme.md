@@ -172,28 +172,13 @@ The total number of threads used in the kernel is thus `2 * 4 = 8`. The code in 
 
 Every line above corresponds to one thread. But the reader may ask: which line was produced by which thread? We will answer this question below.
 
- **I am up to here...**
-
 ### 2.3.2 Using thread indices in a CUDA kernel
 
-通过前面的介绍，我们知道，可以为一个核 函数指派多个线程，而这些线程的组织结构是由执行配置（execution configuration）
-\begin{verbatim}
-    <<<grid_size, block_size>>>
-\end{verbatim}
-决定的。这里的\verb"grid_size"（网格大小）和\verb"block_size" （线程块大小）一般来说是一个结构体类型的变量，但也可以是一个普通的整型变量。我们先考虑简单的整型变量，稍后再介绍更一般的情形。这两个整型变量的乘积就是被调用核函数中总的线程数。
+Every thread in a kernel has a unique identity, or index. Because we have used two numbers (grid size and block size) in the execution configuration, every thread in the kernel should also be identified by two numbers. In the kernel, the grid size and block size are stored in the built-in variables `gridDim.x` and `blockDim.x`, respectively. A thread can be identified by the following built-in variables:
+* `blockIdx.x`: this variable specify the **block index of the thread within a grid**, which can take values from 0 to `gridDim.x - 1`.
+* `threadIdx.x`: this variable specify the **thread index of the thread within a block**, which can take values from 0 to `blockDim.x - 1`.
 
-我们强调过，本书不关心古老的特斯拉架构和费米架构。从开普勒架构开始，最大允许的线程块大小是1024，而最大允许的网格大小是$2^{31}-1$（针对这里的一维网格来说；后面介绍的多维网格能够定义更多的线程块）。 所以，用上述简单的执行配置时最多可以指派大约两万亿个线程。这通常是远大于一般的编程问题中常用的线程数目的。一般来说，只要线程数比GPU 中的计算核心数（几百至几千个）多几倍时，就有可能充分地利用GPU中的全部计算资源。总之，一个核函数允许指派的线程数目是巨大的，能够满足几乎所有应用程序的要求。需要指出的是，一个核函数中虽然可以指派如此巨大数目的线程数，但在执行时能够同时活跃（不活跃的线程处于等待状态）的线程数是由硬件（主要是CUDA 核心数）和软件（即核函数中的代码）决定的。
-
-每个线程在核函数中都有一个唯一的身份标识。由于我们用两个参数指定了线程数目，那么自然地，每个线程的身份可由两个参数确定。在核函数内部，程序是知道执行配置参数\verb"grid_size" 和\verb"block_size" 的值的。这两个值分别保存于如下两个内建变量（built-in variable）：
-\begin{itemize}
-\item \verb"gridDim.x"：该变量的数值等于执行配置中变量\verb"grid_size" 的数值。
-\item \verb"blockDim.x"：该变量的数值等于执行配置中变量\verb"block_size" 的数值。
-\end{itemize}
-类似地，在核函数中预定义了如下标识线程的内建变量：
-\begin{itemize}
-\item \verb"blockIdx.x"：该变量指定一个线程在一个网格中的线程块指标，其取值范围是从0 到\verb"gridDim.x - 1"。
-\item \verb"threadIdx.x"：该变量指定一个线程在一个线程块中的线程指标，其取值范围是从0 到\verb"blockDim.x - 1" 。
-\end{itemize}
+ **I am up to here...**
 
 举一个具体的例子。假如某个核函数的执行配置是\verb"<<<10000, 256>>>"，那么网格大小\verb"gridDim.x"的值为10000，线程块大小\verb"blockDim.x"的值为256。线程块指标\verb"blockIdx.x" 可以取0到9999之间的值，而每一个线程块中的线程指标\verb"threadIdx.x" 可以取0到255之间的值。当\verb"blockIdx.x" 等于0时，所有256 个\verb"threadIdx.x"的值对应第0个线程块；当\verb"blockIdx.x" 等于1时，所有256 个\verb"threadIdx.x"的值对应于第1 个线程块；依此类推。
 
