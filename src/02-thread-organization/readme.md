@@ -298,15 +298,25 @@ In general, the one-diemsional index `tid` of a thread is related to the multi-d
 ```
     int tid = threadIdx.z * blockDim.x * blockDim.y + threadIdx.y * blockDim.x + threadIdx.x;
 ```
-**This is an important indexing rule**, which will be relevant to our discussion of **coalesced memory access** in Chapter 6.
+**This is an important indexing rule**, which will be relevant to our discussion of **coalesced memory access** in Chapter 7.
+
+### 2.3.4 Limits on the grid and block sizes
+
+For all the GPUs starting from the Kepler architecture, the grid size is limited to 
+* `gridDim.x` <= 2^{31}-1
+* `gridDim.y` <= 2^{16}-1 = 65535
+* `gridDim.z` <= 2^{16}-1 = 65535
+and the block size is limited to
+* `blockDim.x` <= 1024
+* `blockDim.y` <= 1024
+* `blockDim.z` <= 64
+Besides this, there is an important limit on the produce:
+* `blockDim.x * blockDim.y * blockDim.z` <= 1024
+
+**It is important to remember the above limits.**
+
 
  **I am up to here...**
-
-
-\subsection{网格与线程块大小的限制}
-
-CUDA中对能够定义的网格大小和线程块大小做了限制。对任何从开普勒到图灵架构的GPU来说，网格大小在x、y和z这3个方向的最大允许值分别为$2^{31}-1$、$65535$和$65535$；线程块大小在x、y和z这3个方向的最大允许值分别为$1024$、$1024$和$64$。另外还要求线程块总的大小，即\verb"blockDim.x"、\verb"blockDim.y"和\verb"blockDim.z"的乘积不能大于$1024$。也就是说，不管如何定义，一个线程块最多只能有$1024$个线程。这些限制是必须牢记的。
-
 
 ## 2.4 Headers in CUDA
 
