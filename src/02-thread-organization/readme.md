@@ -249,7 +249,7 @@ If the size of the `z` dimension is 1, we can simplify the above definitions to:
     dim3 block_size(Bx, By);
 ```
 
-To demonstrate the usage of a multi-dimensional block, we write out last version of the Hello World program [`hello5.cu`](https://github.com/brucefan1983/CUDA-Programming/blob/master/src/02-thread-organization/hello5.cu):
+To demonstrate the usage of a multi-dimensional block, we write our last version of the Hello World program [`hello5.cu`](https://github.com/brucefan1983/CUDA-Programming/blob/master/src/02-thread-organization/hello5.cu):
 ```
 #include <stdio.h>
 
@@ -282,11 +282,23 @@ The output of this program is:
     Hello World from block-0 and thread-(1, 3)!
 ```
 
-The reader may notice a well define order for `threadIdx.x` and `threadIdx.y` here. If we label the lines from 0 to 7 from top to down, this index can be calculated as `threadIdx.y * blockDim.x + threadIdx.x`. In general, the one-diemsional index of a thread `tid` is related to the multi-dimensional indices of the thread via the the following relation:
+The reader may notice a well defined order for `threadIdx.x` and `threadIdx.y` here. If we label the lines as 0-7 from top to down, this label can be calculated as `threadIdx.y * blockDim.x + threadIdx.x = threadIdx.y * 2 + threadIdx.x`:
+```
+    Hello World from block-0 and thread-(0, 0)! // 0 = 0 * 2 + 0
+    Hello World from block-0 and thread-(1, 0)! // 1 = 0 * 2 + 1
+    Hello World from block-0 and thread-(0, 1)! // 2 = 1 * 2 + 0
+    Hello World from block-0 and thread-(1, 1)! // 3 = 1 * 2 + 1
+    Hello World from block-0 and thread-(0, 2)! // 4 = 2 * 2 + 0
+    Hello World from block-0 and thread-(1, 2)! // 5 = 2 * 2 + 1
+    Hello World from block-0 and thread-(0, 3)! // 6 = 3 * 2 + 0
+    Hello World from block-0 and thread-(1, 3)! // 7 = 3 * 2 + 1
+```
+
+In general, the one-diemsional index `tid` of a thread is related to the multi-dimensional indices of the thread via the the following relation:
 ```
     int tid = threadIdx.z * blockDim.x * blockDim.y + threadIdx.y * blockDim.x + threadIdx.x;
 ```
-**This is an important indexing rule**, which will be relevant when we discuss **coalesced memory access** in Chapter 6.
+**This is an important indexing rule**, which will be relevant to our discussion of **coalesced memory access** in Chapter 6.
 
  **I am up to here...**
 
