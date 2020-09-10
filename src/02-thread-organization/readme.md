@@ -1,5 +1,3 @@
-**Unfinished...**
-
 # Chapter 2: Thread Organization in CUDA
 
 We start with the simplest CUDA program: printing a `Hello World` string from the GPU.
@@ -321,8 +319,6 @@ Besides this, there is an important limit on the following product:
 
 **It is important to remember the above limits.**
 
-
-
 ## 2.5 Using `nvcc` to compile CUDA programs
 
 ### 2.5.1 Headers in CUDA
@@ -346,9 +342,6 @@ will result in errors. Usually, the two compute capabilities are set to the same
 $ nvcc -arch=compute_70 -code=sm_70 xxx.cu
 ```
 
-
- **I am up to here...**
- 
 Executables compiled in the above way can only be run in GPUs with compute capability `Z.V`, where `V >= W`. For example, an executable compiled using 
 ```
 $ nvcc -arch=compute_60 -code=sm_60 xxx.cu
