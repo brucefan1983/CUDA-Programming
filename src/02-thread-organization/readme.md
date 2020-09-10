@@ -366,11 +366,11 @@ $ nvcc -gencode arch=compute_60,code=sm_60 \      # generate a cubin binary for 
        -gencode arch=compute_60,code=compute_60 \ # generate a PTX that can be just-in-time compiled to cubin binary for newer architectures
        xxx.cu
 ```
-can can be run GPUs with any architecture no less than Pascal. There is a simplified version for the above command:
+can be run in GPUs with any architecture no less than Pascal. There is a simplified version for the above command:
 ```
 $ nvcc -arch=sm_60 xxx.cu
 ```
-We will used this simplified version all over this book.
+We will use this simplified version all over this book.
 
 The reader might have noticed that we have not used any flag when compiling our Hello World programs using `nvcc`. This is because each CUDA version has a default flag for the compute capability:
 * CUDA 6.0 and older: default to compute capability 1.0
