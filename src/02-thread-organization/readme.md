@@ -333,15 +333,22 @@ When using `nvcc` to compile a `.cu` source file, some CUDA related headers, suc
 
  **I am up to here...**
 
-CUDA的编译器驱动（compiler driver）nvcc先将全部源代码分离为主机代码和设备代码。主机代码完整地支持C++语法，但设备代码只部分地支持C++。nvcc先将设备代码编译为PTX（Parallel Thread eXecution）伪汇编代码，再将PTX代码编译为二进制的cubin目标代码。在将源代码编译为PTX代码时，需要用选项\verb"-arch=compute_XY"指定一个虚拟架构的计算能力，用以确定代码中能够使用的CUDA功能。在将PTX代码编译为cubin代码时，需要用选项\verb"-code=sm_ZW"指定一个真实架构的计算能力，用以确定可执行文件能够使用的GPU。真实架构的计算能力必须等于或者大于虚拟架构的计算能力。例如，可以用选项
-\begin{verbatim}
-    -arch=compute_35 -code=sm_60
-\end{verbatim}
-编译，但不能用选项
-\begin{verbatim}
-    -arch=compute_60 -code=sm_35
-\end{verbatim}
-编译（编译器会报错）。如果仅仅针对一个GPU编译程序，一般情况下建议将以上两个计算能力都选为所用GPU的计算能力。
+The CUDA compiler driver `nvcc` first separate the source code into host code and device code. The host code will be compiled by a host C++ compiler such as `cl.exe` or `g++`. `nvcc` will first compile the device code into an intermidiate PTX（Parallel Thread eXecution）code, and then compile PTX code into cubin binary. 
+
+When compiling a device code into a PTX code, a flag `-arch=compute_XY` to `nvcc` is needed to specify the computate capability of a **virtual architecture**, which determines the CUDA features. When compiling a PTX code into a cubin binary, a flag `-code=sm_ZW` is needed to specify the computate capability of a **real architecture**, which determines the GPUs on which the binary can run. **The compute capability of the real architecture must be no less than that of the virtual architecture.** For example, 
+```
+$ nvcc -arch=compute_60 -code=sm_70 xxx.cu
+```
+is ok, but 
+```
+$ nvcc -arch=compute_70 -code=sm_60 xxx.cu
+```
+will result int errors. Usually, the two computate capabilities are set to the same, e.g.,
+```
+$ nvcc -arch=compute_70 -code=sm_70 xxx.cu
+```
+
+
 
 用以上的方式编译出来的可执行文件只能在少数几个GPU中才能运行。选项\verb"-code=sm_ZW"指定了GPU的真实架构为\verb"Z.W"。对应的可执行文件只能在主版本号为\verb"Z"、次版本号大于或等于\verb"W"的GPU中运行。举例来说，由编译选项
 \begin{verbatim}
