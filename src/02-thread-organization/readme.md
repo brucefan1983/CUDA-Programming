@@ -331,11 +331,9 @@ When using `nvcc` to compile a `.cu` source file, some CUDA related headers, suc
 
 ### 2.5.2 Some important flags for `nvcc` 
 
- **I am up to here...**
+The CUDA compiler driver `nvcc` first separates the source code into host code and device code. The host code will be compiled by a host C++ compiler such as `cl.exe` or `g++`. `nvcc` will first compile the device code into an intermidiate PTX（Parallel Thread eXecution）code, and then compile the PTX code into a **cubin** binary. 
 
-The CUDA compiler driver `nvcc` first separate the source code into host code and device code. The host code will be compiled by a host C++ compiler such as `cl.exe` or `g++`. `nvcc` will first compile the device code into an intermidiate PTX（Parallel Thread eXecution）code, and then compile PTX code into cubin binary. 
-
-When compiling a device code into a PTX code, a flag `-arch=compute_XY` to `nvcc` is needed to specify the computate capability of a **virtual architecture**, which determines the CUDA features. When compiling a PTX code into a cubin binary, a flag `-code=sm_ZW` is needed to specify the computate capability of a **real architecture**, which determines the GPUs on which the binary can run. **The compute capability of the real architecture must be no less than that of the virtual architecture.** For example, 
+When compiling a device code into a PTX code, a flag `-arch=compute_XY` to `nvcc` is needed to specify the compute capability of a **virtual architecture**, which determines the CUDA features that an be used. When compiling a PTX code into a cubin binary, a flag `-code=sm_ZW` is needed to specify the compute capability of a **real architecture**, which determines the GPUs on which the binary can run. **The compute capability of the real architecture must be no less than that of the virtual architecture.** For example, 
 ```
 $ nvcc -arch=compute_60 -code=sm_70 xxx.cu
 ```
@@ -343,12 +341,13 @@ is ok, but
 ```
 $ nvcc -arch=compute_70 -code=sm_60 xxx.cu
 ```
-will result int errors. Usually, the two computate capabilities are set to the same, e.g.,
+will result int errors. Usually, the two compute capabilities are set to the same, e.g.,
 ```
 $ nvcc -arch=compute_70 -code=sm_70 xxx.cu
 ```
 
 
+ **I am up to here...**
 
 用以上的方式编译出来的可执行文件只能在少数几个GPU中才能运行。选项\verb"-code=sm_ZW"指定了GPU的真实架构为\verb"Z.W"。对应的可执行文件只能在主版本号为\verb"Z"、次版本号大于或等于\verb"W"的GPU中运行。举例来说，由编译选项
 \begin{verbatim}
