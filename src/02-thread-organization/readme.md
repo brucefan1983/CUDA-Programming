@@ -327,7 +327,7 @@ When using `nvcc` to compile a `.cu` source file, some CUDA related headers, suc
 
 ### 2.5.2 Some important flags for `nvcc` 
 
-The CUDA compiler driver `nvcc` first separates the source code into host code and device code. The host code will be compiled by a host C++ compiler such as `cl.exe` or `g++`. `nvcc` will first compile the device code into an intermidiate PTX（Parallel Thread eXecution）code, and then compile the PTX code into a **cubin** binary. 
+The CUDA compiler driver `nvcc` first separates the source code into host code and device code. The host code will be compiled by a host C++ compiler such as `cl.exe` or `g++`. `nvcc` will first compile the device code into an intermediate PTX（Parallel Thread eXecution）code, and then compile the PTX code into a **cubin** binary. 
 
 When compiling a device code into a PTX code, a flag `-arch=compute_XY` to `nvcc` is needed to specify the compute capability of a **virtual architecture**, which determines the CUDA features that can be used. When compiling a PTX code into a cubin binary, a flag `-code=sm_ZW` is needed to specify the compute capability of a **real architecture**, which determines the GPUs on which the binary can run. **The compute capability of the real architecture must be no less than that of the virtual architecture.** For example, 
 ```
@@ -342,7 +342,7 @@ will result in errors. Usually, the two compute capabilities are set to the same
 $ nvcc -arch=compute_70 -code=sm_70 xxx.cu
 ```
 
-Executables compiled in the above way can only be run in GPUs with compute capability `Z.V`, where `V >= W`. For example, an executable compiled using 
+An executable compiled in the above way can only be run in GPUs with compute capability `Z.V`, where `V >= W`. For example, an executable compiled using 
 ```
 $ nvcc -arch=compute_60 -code=sm_60 xxx.cu
 ```
@@ -363,7 +363,7 @@ There is a mechanism called just-in-time compilation in `nvcc`, which can get a 
 For example, an executable compiled using 
 ```
 $ nvcc -gencode arch=compute_60,code=sm_60 \      # generate a cubin binary for Pascal arthitecture
-       -gencode arch=compute_60,code=compute_60 \ # generate a PTX that can be just-in-time compiled to cubin binary for any newer arthitecture
+       -gencode arch=compute_60,code=compute_60 \ # generate a PTX that can be just-in-time compiled to cubin binary for newer architectures
        xxx.cu
 ```
 can can be run GPUs with any architecture no less than Pascal. There is a simplified version for the above command:
