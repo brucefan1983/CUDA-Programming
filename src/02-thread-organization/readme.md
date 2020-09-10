@@ -333,7 +333,7 @@ When using `nvcc` to compile a `.cu` source file, some CUDA related headers, suc
 
 The CUDA compiler driver `nvcc` first separates the source code into host code and device code. The host code will be compiled by a host C++ compiler such as `cl.exe` or `g++`. `nvcc` will first compile the device code into an intermidiate PTX（Parallel Thread eXecution）code, and then compile the PTX code into a **cubin** binary. 
 
-When compiling a device code into a PTX code, a flag `-arch=compute_XY` to `nvcc` is needed to specify the compute capability of a **virtual architecture**, which determines the CUDA features that an be used. When compiling a PTX code into a cubin binary, a flag `-code=sm_ZW` is needed to specify the compute capability of a **real architecture**, which determines the GPUs on which the binary can run. **The compute capability of the real architecture must be no less than that of the virtual architecture.** For example, 
+When compiling a device code into a PTX code, a flag `-arch=compute_XY` to `nvcc` is needed to specify the compute capability of a **virtual architecture**, which determines the CUDA features that can be used. When compiling a PTX code into a cubin binary, a flag `-code=sm_ZW` is needed to specify the compute capability of a **real architecture**, which determines the GPUs on which the binary can run. **The compute capability of the real architecture must be no less than that of the virtual architecture.** For example, 
 ```
 $ nvcc -arch=compute_60 -code=sm_70 xxx.cu
 ```
@@ -341,68 +341,50 @@ is ok, but
 ```
 $ nvcc -arch=compute_70 -code=sm_60 xxx.cu
 ```
-will result int errors. Usually, the two compute capabilities are set to the same, e.g.,
+will result in errors. Usually, the two compute capabilities are set to the same, e.g.,
 ```
 $ nvcc -arch=compute_70 -code=sm_70 xxx.cu
 ```
 
 
  **I am up to here...**
+ 
+Executables compiled in the above way can only be run in GPUs with compute capability `Z.V`, where `V >= W`. For example, an executable compiled using 
+```
+$ nvcc -arch=compute_60 -code=sm_60 xxx.cu
+```
+can only be run in GPUs with Pascal architectures.
 
-用以上的方式编译出来的可执行文件只能在少数几个GPU中才能运行。选项\verb"-code=sm_ZW"指定了GPU的真实架构为\verb"Z.W"。对应的可执行文件只能在主版本号为\verb"Z"、次版本号大于或等于\verb"W"的GPU中运行。举例来说，由编译选项
-\begin{verbatim}
-    -arch=compute_35 -code=sm_35
-\end{verbatim}
-编译出来的可执行文件只能在计算能力为3.5和3.7的GPU中执行，而由编译选项
-\begin{verbatim}
-    -arch=compute_35 -code=sm_60
-\end{verbatim}
-编译出来的可执行文件只能在所有帕斯卡架构的GPU中执行。
+If one hopes that an executable can be run in more GPUs, one can specify more flags in the following way:
+```
+$ nvcc -gencode arch=compute_60,code=sm_60 \
+       -gencode arch=compute_70,code=sm_70 \
+       -gencode arch=compute_80,code=sm_80 \
+       xxx.cu
+```
 
-如果希望编译出来的可执行文件能够在更多的GPU中执行，可以同时指定多组计算能力，每一组用如下形式的编译选项：
-\begin{verbatim}
-    -gencode arch=compute_XY,code=sm_ZW
-\end{verbatim}
-例如，用选项
-\begin{verbatim}
-    -gencode arch=compute_35,code=sm_35
-    -gencode arch=compute_50,code=sm_50
-    -gencode arch=compute_60,code=sm_60
-    -gencode arch=compute_70,code=sm_70
-\end{verbatim}
-编译出来的可执行文件将包含4个二进制版本，分别对应开普勒架构（不包含比较老的3.0和3.2的计算能力）、麦克斯韦架构、帕斯卡架构和伏特架构。这样的可执行文件称为胖二进制文件（fatbinary）。在不同架构的GPU中运行时会自动选择对应的二进制版本。需要注意的是，上述编译选项假定所使用的CUDA版本支持7.0的计算能力，也就是说至少是CUDA 9.0。如果在编译选项中指定了不被支持的计算能力，编译器会报错。另外需要注意的是，过多地指定计算能力，会增加编译时间和可执行文件的大小。
-
-nvcc有一种称为即时编译（just-in-time compilation）的机制，可以在运行可执行文件时从其中保留的PTX代码临时编译出一个cubin目标代码。要在可执行文件中保留（或者说嵌入）一个这样的PTX代码，就必须用如下方式指定所保留PTX代码的虚拟架构：
-\begin{verbatim}
+There is a mechanism called just-in-time compilation in `nvcc`, which can get a cubin binary from a PTX code *just in time*, if such a PTX code has been kept. To keep such a PTX code, one must use the following flag:
+```
     -gencode arch=compute_XY,code=compute_XY
-\end{verbatim}
-这里的两个计算能力都是虚拟架构的计算能力，必须完全一致。例如，假如我们处于只有CUDA 8.0的年代（不支持伏特架构），但希望编译出的二进制版本适用于尽可能多的GPU，则可以用如下的编译选项：
-\begin{verbatim}
-    -gencode arch=compute_35,code=sm_35
-    -gencode arch=compute_50,code=sm_50
-    -gencode arch=compute_60,code=sm_60
-    -gencode arch=compute_60,code=compute_60
-\end{verbatim}
-其中，前三行的选项分别对应3个真实架构的cubin目标代码，第四行的选项对应保留的PTX代码。这样编译出来的可执行文件可以直接在伏特架构的GPU中运行，只不过不一定能充分利用伏特架构的硬件功能。在伏特架构的GPU中运行时，会根据虚拟架构为6.0的PTX代码即时地编译出一个适用于当前GPU的目标代码。
+```
+For example, an executable compiled using 
+```
+$ nvcc -gencode arch=compute_60,code=sm_60 \      # generate a cubin binary for Pascal arthitecture
+       -gencode arch=compute_60,code=compute_60 \ # generate a PTX that can be just-in-time compiled to cubin binary for any newer arthitecture
+       xxx.cu
+```
+can can be run GPUs with any architecture no less than Pascal. There is a simplified version for the above command:
+```
+$ nvcc -arch=sm_60 xxx.cu
+```
+We will used this simplified version all over this book.
 
-在学习CUDA编程时，有一个简化的编译选项可以使用：
-\begin{verbatim}
-    -arch=sm_XY
-\end{verbatim}
-它等价于
-\begin{verbatim}
-    -gencode arch=compute_XY,code=sm_XY
-    -gencode arch=compute_XY,code=compute_XY
-\end{verbatim}
-例如，在作者的装有GeForce RTX 2070的计算机中，可以用选项\verb"-arch=sm_75"编译一个CUDA程序。
+The reader might have noticed that we have not used any flag when compiling our Hello World programs using `nvcc`. This is because each CUDA version has a default flag for the compute capability:
+* CUDA 6.0 and older: default to compute capability 1.0
+* CUDA 6.5-8.0: default to compute capability 2.0
+* CUDA 9.0-10.2: compute capability 3.0
+* CUDA 11.0: default to compute capability 3.5
 
-读者也许注意到了，本章的程序在编译时并没有通过编译选项指定计算能力。这是因为编译器有一个默认的计算能力。以下是各个CUDA版本中的编译器在编译CUDA代码时默认的计算能力：
-\begin{itemize}
-    \item CUDA 6.0 及更早的：默认的计算能力是1.0。
-    \item CUDA 6.5 到CUDA 8.0：默认的计算能力是2.0。
-    \item CUDA 9.0 到CUDA 10.2：默认的计算能力是3.0。
-\end{itemize}
+The author used CUDA 10.1, which defaults to compute capability 3.0. However, we will specify a compute capability for our future programs in this book.
 
-作者所用的CUDA版本是10.1，故本章的程序在编译时实际上使用了3.0的计算能力。如果用CUDA 6.0进行编译，而且不指定一个计算能力，则会使用默认的1.0的计算能力。此时本章的程序将无法正确地编译，因为从GPU中直接向屏幕打印信息是从计算能力2.0才开始支持的功能。正如在第\ref{chapter:GPU-and-CUDA}章强调过的，本书中的所有示例程序都可以在CUDA9.0-10.2中进行测试。
-
-关于nvcc编译器驱动更多的介绍，请参考如下官方文档：\url{https://docs.nvidia.com/cuda/cuda-compiler-driver-nvcc}。
+For more details about `nvcc`, see the official manual: https://docs.nvidia.com/cuda/cuda-compiler-driver-nvcc.
