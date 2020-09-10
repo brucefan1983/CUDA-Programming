@@ -375,7 +375,7 @@ We will use this simplified version all over this book.
 The reader might have noticed that we have not used any flag when compiling our Hello World programs using `nvcc`. This is because each CUDA version has a default flag for the compute capability:
 * CUDA 6.0 and older: default to compute capability 1.0
 * CUDA 6.5-8.0: default to compute capability 2.0
-* CUDA 9.0-10.2: compute capability 3.0
+* CUDA 9.0-10.2: default to compute capability 3.0
 * CUDA 11.0: default to compute capability 3.5
 
 The author used CUDA 10.1, which defaults to compute capability 3.0. However, we will specify a compute capability for our future programs in this book.
