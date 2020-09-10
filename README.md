@@ -2,8 +2,9 @@
 
 
 ## I am writing a simplified English version of the book
-* Chapter 1 (finished): https://github.com/brucefan1983/CUDA-Programming/blob/master/src/01-introduction/readme.md
-* Chapter 2 (unfinished): https://github.com/brucefan1983/CUDA-Programming/blob/master/src/02-thread-organization/readme.md
+* Chapter 1 (**finished**): https://github.com/brucefan1983/CUDA-Programming/blob/master/src/01-introduction/readme.md
+* Chapter 2 (**finished**): https://github.com/brucefan1983/CUDA-Programming/blob/master/src/02-thread-organization/readme.md
+* Chapter 3 (**unfinished**): https://github.com/brucefan1983/CUDA-Programming/blob/master/src/03-basic-framework/readme.md
   
 ## 相关仓库
 * 由琪同学正在用 pyCUDA 实现本书中的范例，见如下仓库：
