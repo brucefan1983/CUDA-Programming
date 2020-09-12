@@ -63,15 +63,11 @@ void check(const double *z, const int N)
 \end{lstlisting}
 ```
 
-
-用~\verb"g++"~编译运行该程序，将在屏幕打印~\verb"No errors"，表示~\verb"add()"~函数的计算结果正确。对该程序的解释如下：
-\begin{itemize}
-    \item 在主函数中，第16-18行定义了3个双精度浮点数类型的指针变量，然后将它们指向由函数~\verb"malloc"（在头文件~\verb"<stdlib.h>"~中声明）~分配的内存，从而得到3个长度为~$10^8$ 的一维数组。这将需要约2.4 GB的主机内存。后面的~CUDA~程序也至少需要有2.4 GB设备内存。如果读者的主机或设备内存不够多，可以适当调整本书范例中相关数组的大小后再进行测试。
-    \item 第~20-24~行将数组~\verb"x"~和~\verb"y"~中的每个元素分别初始化为~$1.23$~和~$2.34$。
-    \item 第~26~行调用自定义函数~\verb"add()"~计算数组~\verb"x"~与数组~\verb"y"~的和，将结果存放在数组~\verb"z"~中。
-    \item 第~27~行用一个自定义的~\verb"check()"~函数检验数组~\verb"z"~中的每个元素是不是都是正确值~$3.57$。注意：在判断两个浮点数是否相等时，不能用运算符~\verb"=="，而要将这两个数的差的绝对值与一个很小的数进行比较。在上述程序中，我们假定，当两个双精度浮点数的差的绝对值小于~$10^{-15}$~时它们就是相等的。求绝对值的函数在~C++~头文件~\verb"<math.h>"~中声明，故需要在程序开头包含此头文件。
-    \item 最后，第~29-31~行释放分配的内存。
-\end{itemize}
+The above program can be compiled by using `g++` or the `cl.exe`. Running the executable, we will see the following message on the screen,
+```
+No errors
+``` 
+which indicates that the result from the `add` function is correct. The reader should be able to understand this program, otherwise he/she needs to review some knowledge of C++ programming first.
 
 \section{CUDA~程序的基本框架}
 
