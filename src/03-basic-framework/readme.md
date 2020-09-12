@@ -74,9 +74,9 @@ For a simple CUDA program written in a single source file, the basic framework i
 ```
 header inclusion
 const or macro definition
-declarations of C++ functions or CUDA kernels
+declarations of C++ functions and CUDA kernels
 
-int main(void)
+int main()
 {
     allocate host and device memory
     initialize data in host memory
@@ -86,7 +86,7 @@ int main(void)
     free host and device memory
 }
 
-definitions of C++ functions or CUDA kernels
+definitions of C++ functions and CUDA kernels
 ```
 
 在上述~CUDA~程序的基本框架中，有很多内容还没有介绍。但是，我们先把利用~CUDA~求数组之和的全部源代码列出来，之后再逐步讲解。Listing \ref{listing:add1.cu}~给出了除~\verb"check"~函数定义（该函数和前一个~C++~程序中的同名函数具有相同的定义）之外的全部源代码。
