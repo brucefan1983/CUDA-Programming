@@ -6,7 +6,7 @@
 
 We consider a simple task: adding up two arrays of the same length (same number of elements). We first give a C++ program [add.cpp](https://github.com/brucefan1983/CUDA-Programming/tree/master/src/03-basic-framework/add.cpp) solving this problem:
 
-![add.cpp.png](https://github.com/brucefan1983/CUDA-Programming/blob/master/src/03-basic-framework/git/add.cpp.png)
+![add.cpp.png](https://github.com/brucefan1983/CUDA-Programming/blob/master/src/03-basic-framework/fig/add.cpp.png)
 
 
 The above program can be compiled by using `g++` (or `cl.exe`):
@@ -43,7 +43,7 @@ definitions of C++ functions and CUDA kernels
 
 We first give a CUDA program [add1.cu](https://github.com/brucefan1983/CUDA-Programming/tree/master/src/03-basic-framework/add.cu) which does the same calculations as the C++ program [add.cpp](https://github.com/brucefan1983/CUDA-Programming/tree/master/src/03-basic-framework/add.cpp), but in device instead of in host (the `check` function is omitted since it is the same in both programs):
 
-![add1.cu.png](https://github.com/brucefan1983/CUDA-Programming/blob/master/src/03-basic-framework/git/add1.cu.png)
+![add1.cu.png](https://github.com/brucefan1983/CUDA-Programming/blob/master/src/03-basic-framework/fig/add1.cu.png)
 
 This CUDA program can be compiled as follows:
 ```
