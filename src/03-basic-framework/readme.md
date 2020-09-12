@@ -9,11 +9,16 @@ We consider a simple task: adding up two arrays of the same length (same number 
 ![add.cpp.png](https://github.com/brucefan1983/CUDA-Programming/blob/master/src/03-basic-framework/add.cpp.png)
 
 
-The above program can be compiled by using `g++` or `cl.exe`. Running the executable, we will see the following message on the screen,
+The above program can be compiled by using `g++` (or `cl.exe`):
+```
+g++ add.cpp
+```
+
+Running the executable, we will see the following message on the screen,
 ```
 No errors
 ``` 
-which indicates that the result from the `add` function is correct. The reader should be able to understand this program, otherwise he/she needs to review some knowledge of C++ programming first.
+which indicates that the calculations have been done in an expected way. The reader should be able to understand this program without difficulty, otherwise he/she needs to gain sufficient knowledge of C++ programming first.
 
 ## Basic framework of simple CUDA programs
 
@@ -36,7 +41,7 @@ int main()
 definitions of C++ functions and CUDA kernels
 ```
 
-We first give a CUDA program [add1.cu](https://github.com/brucefan1983/CUDA-Programming/tree/master/src/03-basic-framework/add.cu) which does the same calculations as the C++ program [add.cu](https://github.com/brucefan1983/CUDA-Programming/tree/master/src/03-basic-framework/add.cpp), but in device instead of in host (the `check` function is omitted since it is the same in both programs):
+We first give a CUDA program [add1.cu](https://github.com/brucefan1983/CUDA-Programming/tree/master/src/03-basic-framework/add.cu) which does the same calculations as the C++ program [add.cpp](https://github.com/brucefan1983/CUDA-Programming/tree/master/src/03-basic-framework/add.cpp), but in device instead of in host (the `check` function is omitted since it is the same in both programs):
 
 ![add1.cu.png](https://github.com/brucefan1983/CUDA-Programming/blob/master/src/03-basic-framework/add1.cu.png)
 
@@ -49,7 +54,7 @@ Executing the executable will produce the same output as the C++ program:
 No errors
 ```
 
-We describe the CUDA program [add1.cu](https://github.com/brucefan1983/CUDA-Programming/tree/master/src/03-basic-framework/add.cu) in detail in the following sections.
+We will describe the CUDA program [add1.cu](https://github.com/brucefan1983/CUDA-Programming/tree/master/src/03-basic-framework/add.cu) in detail in the following sections.
 
 ** I am up to here...**
 
