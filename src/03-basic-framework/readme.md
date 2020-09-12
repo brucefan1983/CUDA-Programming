@@ -47,7 +47,7 @@ We first give a CUDA program [add1.cu](https://github.com/brucefan1983/CUDA-Prog
 
 This CUDA program can be compiled as follows:
 ```
-$ nvcc -arch=sm_75 add1.cu # the user can change 75 to the number corresponding to compute capability of the GPU used
+$ nvcc -arch=sm_75 add1.cu # the user can change 75 to the number corresponding to the compute capability of the GPU used
 ```
 Executing the executable will produce the same output as the C++ program:
 ```
