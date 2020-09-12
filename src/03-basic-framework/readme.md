@@ -4,7 +4,7 @@
 
 ## 3.1 An example: adding up two arrays
 
-We consider a simple task: adding up to arrays. We first give a C++ program [add.cpp](https://github.com/brucefan1983/CUDA-Programming/tree/master/src/03-basic-framework/add.cpp) solving this problem:
+We consider a simple task: adding up two arrays of the same length (same number of elements). We first give a C++ program [add.cpp](https://github.com/brucefan1983/CUDA-Programming/tree/master/src/03-basic-framework/add.cpp) solving this problem:
 
 ![add.cpp.png](https://github.com/brucefan1983/CUDA-Programming/blob/master/src/03-basic-framework/add.cpp.png)
 
