@@ -17,7 +17,7 @@ const double c = 3.57;
 void add(const double *x, const double *y, double *z, const int N);
 void check(const double *z, const int N);
 
-int main(void)
+int main()
 {
     const int N = 100000000;
     const int M = sizeof(double) * N;
