@@ -60,7 +60,6 @@ void check(const double *z, const int N)
     }
     printf("%s\n", has_error ? "Has errors" : "No errors");
 }
-\end{lstlisting}
 ```
 
 The above program can be compiled by using `g++` or the `cl.exe`. Running the executable, we will see the following message on the screen,
