@@ -40,20 +40,18 @@ We first give a CUDA program [add1.cu](https://github.com/brucefan1983/CUDA-Prog
 
 ![add1.cu.png](https://github.com/brucefan1983/CUDA-Programming/blob/master/src/03-basic-framework/add1.cu.png)
 
+This CUDA program can be compiled as follows:
+```
+$ nvcc -arch=sm_75 add1.cu # the user can change 75 to the number corresponding to compute capability of the GPU used
+```
+Executing the executable will produce the same output as the C++ program:
+```
+No errors
+```
 
+We describe the CUDA program [add1.cu](https://github.com/brucefan1983/CUDA-Programming/tree/master/src/03-basic-framework/add.cu) in detail in the following sections.
 
-
-用~\verb"nvcc"~编译该程序，并指定与~GeForce RTX 2070~对应的计算能力（读者可以选用自己所用~GPU~的计算能力）：
-\begin{verbatim}
-    $ nvcc -arch=sm_75 add1.cu
-\end{verbatim}
-将得到一个可执行文件~\verb"a.out"。运行该程序得到的输出应该与前面~C++~程序所得到的输出一样，说明得到了预期的结果。
-
-值得注意的是，当使用较大的数据量时，网格大小往往很大。例如，本例中的网格大小为~$10^8/128=781250$。如果读者使用~CUDA 8.0，而在用~\verb"nvcc"~编译程序时又忘了指定一个计算能力，那就会根据默认的~2.0~的计算能力编译程序。对于该计算能力，网格大小在~\verb"x"~方向的上限为~65535，小于本例中所使用的值。这将导致程序无法正确地执行。这是初学者需要特别注意的一个问题。下面对该程序进行详细的讲解。
-
-\subsection{隐形的设备初始化}
-
-在CUDA运行时API中，没有明显地初始化设备（即GPU）的函数。在第一次调用一个和设备管理及版本查询功能无关的运行时API函数时，设备将自动地初始化。
+** I am up to here...**
 
 \subsection{设备内存的分配与释放}
 
