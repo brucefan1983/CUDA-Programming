@@ -62,31 +62,32 @@ void check(const double *z, const int N)
 }
 ```
 
-The above program can be compiled by using `g++` or the `cl.exe`. Running the executable, we will see the following message on the screen,
+The above program can be compiled by using `g++` or `cl.exe`. Running the executable, we will see the following message on the screen,
 ```
 No errors
 ``` 
 which indicates that the result from the `add` function is correct. The reader should be able to understand this program, otherwise he/she needs to review some knowledge of C++ programming first.
 
-\section{CUDA~程序的基本框架}
+## Basic framework of simple CUDA programs
 
-在现实的中、大型程序中，往往使用多个源文件，每个源文件又包含多个函数。本书第~\ref{chapter:md}~的例子就是这样。然而，在其他章节的例子中，我们只使用一个源文件，其中包含一个主函数和若干其他 函数（包括~C++~自定义函数和~CUDA~核函数）。在这种情况下，一个典型的~CUDA~程序的基本框架见~Listing \ref{listing:typical-cuda}。
+For a simple CUDA program written in a single source file, the basic framework is as follows:
+```
+header inclusion
+const or macro definition
+declarations of C++ functions or CUDA kernels
 
-\begin{lstlisting}[language=C++,caption={一个典型的~CUDA~程序的基本框架。},label={listing:typical-cuda}]
-头文件包含
-常量定义（或者宏定义）
-C++ 自定义函数和 CUDA 核函数的声明（原型）
 int main(void)
 {
-    分配主机与设备内存
-    初始化主机中的数据
-    将某些数据从主机复制到设备
-    调用核函数在设备中进行计算
-    将某些数据从设备复制到主机
-    释放主机与设备内存
+    allocate host and device memory
+    initialize data in host memory
+    transfer data from host to device
+    launch (call) kernel to do calculations in the device
+    transfer data from device to host
+    free host and device memory
 }
-C++ 自定义函数和 CUDA 核函数的定义（实现）
-\end{lstlisting}
+
+definitions of C++ functions or CUDA kernels
+```
 
 在上述~CUDA~程序的基本框架中，有很多内容还没有介绍。但是，我们先把利用~CUDA~求数组之和的全部源代码列出来，之后再逐步讲解。Listing \ref{listing:add1.cu}~给出了除~\verb"check"~函数定义（该函数和前一个~C++~程序中的同名函数具有相同的定义）之外的全部源代码。
 
