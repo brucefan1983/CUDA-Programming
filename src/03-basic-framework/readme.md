@@ -2,16 +2,10 @@
 
 # Chapter 3 Basic framework of simple CUDA programs
 
+## 3.1 An example: adding up two arrays
 
-\chapter{简单~CUDA 程序的基本框架~\label{chapter:framework}}
-
-第~\ref{chapter:thread}~章通过经典的~Hello World~程序介绍了~CUDA~中的线程组织。学会了编写与运行~Hello World~程序，就对~CUDA~编程有了一个初步的认识。然而，用~\verb"printf"~函数直接从核函数中输出数据只有在调试（debug）程序时才偶尔用到。从本章开始，我们将告别~Hello World~程序，学习编写更加有用的~CUDA~程序。本章将通过数组相加的计算讲解~CUDA~程序的基本框架。
-
-\section{例子：数组相加}
-
-我们考虑一个简单的计算：求两个具有同样长度的一维数组的对应元素之和。该计算是非常简单的。我们可以写出如~Listing \ref{listing:add.cpp}~所示的~C++~程序。
-
-\begin{lstlisting}[language=C++,caption={本章程序~add.cpp~中的内容。},label={listing:add.cpp}]
+We consider a simple task: adding up to arrays. We first give a C++ program [add.cpp](https://github.com/brucefan1983/CUDA-Programming/tree/master/src/03-basic-framework/add.cpp) solving this problem.
+```
 #include <math.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -67,6 +61,8 @@ void check(const double *z, const int N)
     printf("%s\n", has_error ? "Has errors" : "No errors");
 }
 \end{lstlisting}
+```
+
 
 用~\verb"g++"~编译运行该程序，将在屏幕打印~\verb"No errors"，表示~\verb"add()"~函数的计算结果正确。对该程序的解释如下：
 \begin{itemize}
