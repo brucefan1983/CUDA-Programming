@@ -89,9 +89,8 @@ int main()
 definitions of C++ functions and CUDA kernels
 ```
 
-在上述~CUDA~程序的基本框架中，有很多内容还没有介绍。但是，我们先把利用~CUDA~求数组之和的全部源代码列出来，之后再逐步讲解。Listing \ref{listing:add1.cu}~给出了除~\verb"check"~函数定义（该函数和前一个~C++~程序中的同名函数具有相同的定义）之外的全部源代码。
-
-\begin{lstlisting}[language=C++,caption={本章程序~add1.cu~中的大部分内容。},label={listing:add1.cu}]
+We first give a CUDA program [add.cu](https://github.com/brucefan1983/CUDA-Programming/tree/master/src/03-basic-framework/add.cu) which does the same calculations as C++ program [add.cu](https://github.com/brucefan1983/CUDA-Programming/tree/master/src/03-basic-framework/add.cpp), but in device instead of in host (the `check` function is omitted since it is the same in both program):
+```
 #include <math.h>
 #include <stdio.h>
 
@@ -144,7 +143,7 @@ void __global__ add(const double *x, const double *y, double *z)
     const int n = blockDim.x * blockIdx.x + threadIdx.x;
     z[n] = x[n] + y[n];
 }
-\end{lstlisting} 
+```
 
 
 用~\verb"nvcc"~编译该程序，并指定与~GeForce RTX 2070~对应的计算能力（读者可以选用自己所用~GPU~的计算能力）：
