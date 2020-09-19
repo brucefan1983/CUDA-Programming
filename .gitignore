@@ -1,5 +1,6 @@
 src/*/*.exe
 src/*/*.exp
 src/*/*.lib
+src/*/*.obj
 src/*/*/a.out
 
