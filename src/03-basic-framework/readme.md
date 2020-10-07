@@ -4,70 +4,8 @@
 
 ## 3.1 An example: adding up two arrays
 
-We consider a simple task: adding up two arrays of the same length (same number of elements). We first give a C++ program [add.cpp](https://github.com/brucefan1983/CUDA-Programming/tree/master/src/03-basic-framework/add.cpp) solving this problem:
+We consider a simple task: adding up two arrays of the same length (same number of elements). We first write a C++ program [add.cpp](https://github.com/brucefan1983/CUDA-Programming/tree/master/src/03-basic-framework/add.cpp) solving this problem. It can be compiled by using `g++` (or `cl.exe`):
 
-```c++
-#include <math.h>
-#include <stdlib.h>
-#include <stdio.h>
-
-const double EPSILON = 1.0e-15;
-const double a = 1.23;
-const double b = 2.34;
-const double c = 3.57;
-void add(const double *x, const double *y, double *z, const int N);
-void check(const double *z, const int N);
-
-int main(void)
-{
-    const int N = 100000000;
-    const int M = sizeof(double) * N;
-    double *x = (double*) malloc(M);
-    double *y = (double*) malloc(M);
-    double *z = (double*) malloc(M);
-
-    for (int n = 0; n < N; ++n)
-    {
-        x[n] = a;
-        y[n] = b;
-    }
-
-    add(x, y, z, N);
-    check(z, N);
-
-    free(x);
-    free(y);
-    free(z);
-    return 0;
-}
-
-void add(const double *x, const double *y, double *z, const int N)
-{
-    for (int n = 0; n < N; ++n)
-    {
-        z[n] = x[n] + y[n];
-    }
-}
-
-void check(const double *z, const int N)
-{
-    bool has_error = false;
-    for (int n = 0; n < N; ++n)
-    {
-        if (fabs(z[n] - c) > EPSILON)
-        {
-            has_error = true;
-        }
-    }
-    printf("%s\n", has_error ? "Has errors" : "No errors");
-}
-
-```
-
-
-
-
-The above program can be compiled by using `g++` (or `cl.exe`):
 ```
 g++ add.cpp
 ```
@@ -99,68 +37,10 @@ int main()
 definitions of C++ functions and CUDA kernels
 ```
 
-We first give a CUDA program [add1.cu](https://github.com/brucefan1983/CUDA-Programming/tree/master/src/03-basic-framework/add.cu) which does the same calculations as the C++ program [add.cpp](https://github.com/brucefan1983/CUDA-Programming/tree/master/src/03-basic-framework/add.cpp), but in device instead of in host (the `check` function is omitted since it is the same in both programs):
+We first write a CUDA program [add1.cu](https://github.com/brucefan1983/CUDA-Programming/tree/master/src/03-basic-framework/add.cu) which does the same calculations as the C++ program [add.cpp](https://github.com/brucefan1983/CUDA-Programming/tree/master/src/03-basic-framework/add.cpp). This CUDA program can be compiled as follows:
 
-```c++
-#include <math.h>
-#include <stdio.h>
-
-const double EPSILON = 1.0e-15;
-const double a = 1.23;
-const double b = 2.34;
-const double c = 3.57;
-void __global__ add(const double *x, const double *y, double *z);
-void check(const double *z, const int N);
-
-int main(void)
-{
-    const int N = 100000000;
-    const int M = sizeof(double) * N;
-    double *h_x = (double*) malloc(M);
-    double *h_y = (double*) malloc(M);
-    double *h_z = (double*) malloc(M);
-
-    for (int n = 0; n < N; ++n)
-    {
-        h_x[n] = a;
-        h_y[n] = b;
-    }
-
-    double *d_x, *d_y, *d_z;
-    cudaMalloc((void **)&d_x, M);
-    cudaMalloc((void **)&d_y, M);
-    cudaMalloc((void **)&d_z, M);
-    cudaMemcpy(d_x, h_x, M, cudaMemcpyHostToDevice);
-    cudaMemcpy(d_y, h_y, M, cudaMemcpyHostToDevice);
-
-    const int block_size = 128;
-    const int grid_size = N / block_size;
-    add<<<grid_size, block_size>>>(d_x, d_y, d_z);
-
-    cudaMemcpy(h_z, d_z, M, cudaMemcpyDeviceToHost);
-    check(h_z, N);
-
-    free(h_x);
-    free(h_y);
-    free(h_z);
-    cudaFree(d_x);
-    cudaFree(d_y);
-    cudaFree(d_z);
-    return 0;
-}
-
-void __global__ add(const double *x, const double *y, double *z)
-{
-    const int n = blockDim.x * blockIdx.x + threadIdx.x;
-    z[n] = x[n] + y[n];
-}
-```
-
-
-
-This CUDA program can be compiled as follows:
-```
-$ nvcc -arch=sm_75 add1.cu # the user can change 75 to the number corresponding to the compute capability of the GPU used
+```shell
+$ nvcc -arch=sm_75 add1.cu 
 ```
 Executing the executable will produce the same output as the C++ program:
 ```
@@ -211,43 +91,27 @@ cudaError_t cudaFree(void* address);
 
 Note that the argument here is a pointer, not a double pointer.
 
+### 3.2.2 Data transfer between host and device
+
+We can transfer (copy) some data from host to device after allocating the device memory, see lines 29-30 in  [add1.cu](https://github.com/brucefan1983/CUDA-Programming/tree/master/src/03-basic-framework/add.cu). Here we used the CUDA runtime API function `cudaMemcpy()` with the following prototype:
+
+```c++
+cudaError_t cudaMemcpy( 	
+    void                *dst,
+    const void          *src,
+    size_t              count,
+    enum cudaMemcpyKind kind);
+```
+
+Here, `dst` is the address of the destination (to be transferred to), `src` is the address of the source (to be transferred from), `count` is the number of bytes to transferred , and `kind` indicates the direction of the data transfer. The possible values of the enum parameter `kind` include `cudaMemcpyHostToHost`, `cudaMemcpyHostToDevice`, `cudaMemcpyDeviceToHost`, `cudaMemcpyDeviceToDevice`, and `cudaMemcpyDefault`. The meanings of the first 4 are obvious and for the last one, it means that transfer direction will be automatically inferred from the pointers `dst` and `src`. This automatic process requires that the host system is 64 bit supporting unified virtual addressing. Therefore, one can also use `cudaMemcpyDefault` in lines 29-30. 
+
+After calling the kernel at line 34, we use the `cudaMemcpy` function to transfer some data from device to host, where the last parameter should be `cudaMemcpyDeviceToHost` or `cudaMemcpyDefault`. 
+
+In the [add2wrong.cu](https://github.com/brucefan1983/CUDA-Programming/blob/master/src/03-basic-framework/add2wrong.cu) program, the author intentionally changed `cudaMemcpyHostToDevice` to `cudaMemcpyDeviceToHost`. The reader can try to compile and run it to see what happens.
+
+
+
 ** up to here **
-
-\subsection{主机与设备之间数据的传递}
-
-在分配了设备内存之后，就可以将某些数据从主机传递到设备中去了。第~29-30~行将主机中存放在~\verb"h_x"~和~\verb"h_y"~中的数据复制到设备中的相应变量~\verb"d_x"~和~\verb"d_y"~所指向的缓冲区中去。这里用到了~CUDA~运行时~API~函数~\verb"cudaMemcpy()"，其原型是：
-\begin{verbatim}
-    cudaError_t cudaMemcpy
-    ( 	
-        void                *dst,
-        const void          *src,
-        size_t              count,
-        enum cudaMemcpyKind kind	
-    );
-\end{verbatim}
-其中：
-\begin{itemize}
-\item 第一个参数~\verb"dst"~是目标地址。
-\item 第二个参数~\verb"src"~是源地址。
-\item 第三个参数~\verb"count"~是复制数据的字节数。
-\item 第四个参数~\verb"kind"~一个枚举类型的变量，标志数据传递方向。它只能取如下几个值：
-\begin{itemize}
-\item \verb"cudaMemcpyHostToHost"，表示从主机复制到主机。
-\item \verb"cudaMemcpyHostToDevice"，表示从主机复制到设备。
-\item \verb"cudaMemcpyDeviceToHost"，表示从设备复制到主机。
-\item \verb"cudaMemcpyDeviceToDevice"，表示从设备复制到设备。
-\item \verb"cudaMemcpyDefault"，表示根据指针~\verb"dst"~和~\verb"src"~所指地址自动判断数据传输的方向。这要求系统具有统一虚拟寻址（unified virtual addressing）的功能（要求~64~位的主机）。CUDA~正在逐步放弃对~32~位主机的支持，故一般情况下用该选项自动确定数据传输方向是没有问题的。至于是明确地指定传输方向更好，还是利用自动判断更好，则是一个仁者见仁、智者见智的问题。
-\end{itemize}
-\item 返回值是一个错误代号。如果调用成功，返回~\verb"cudaSuccess"。
-\item 该函数的作用是将一定字节数的数据从源地址所指缓冲区复制到目标地址所指缓冲区。
-\end{itemize}
-
-
-我们回头看程序的第~29~行。它的作用就是将~\verb"h_x"~指向的主机内存中~\verb"M"~字节的数据复制到~\verb"d_x"~指向的设备内存中去。因为这里的源地址是主机中的内存，目标地址是设备中的内存，所以第四个参数必须是~\verb"cudaMemcpyHostToDevice"~或~\verb"cudaMemcpyDefault"，否则将导致错误。
-
-类似地，在调用核函数进行计算，得到需要的数据之后，我们需要将设备中的数据复制到主机，这正是第~36~行的代码所做的事情。该行代码的作用就是将~\verb"d_z"~指向的设备内存中~\verb"M"~字节的数据复制到~\verb"h_z"~指向的主机内存中去。因为这里的源地址是设备中的内存，目标地址是主机中的内存，所以第四个参数必须是~\verb"cudaMemcpyDeviceToHost"~或~\verb"cudaMemcpyDefault"，否则将导致错误。
-
-在本章的程序~\verb"add2wrong.cu"~中，作者故意将第~29-30~行的传输方向参数写成了~\verb"cudaMemcpyDeviceToHost"。请读者编译、运行该程序，看看会得到什么结果。
 
 \subsection{核函数中数据与线程的对应}
 
