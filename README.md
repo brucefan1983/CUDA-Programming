@@ -1,11 +1,10 @@
 # 《`CUDA` 编程：基础与实践》源代码
 
 
-## I am writing a simplified English version of the book (I use [carbon](https://carbon.now.sh/) to generate images for some codes)
+## I am writing a simplified English version (about half size of the Chinese version) of the book:
 * [Chapter 1 (**finished**)](https://github.com/brucefan1983/CUDA-Programming/blob/master/src/01-introduction/readme.md)
 * [Chapter 2 (**finished**)](https://github.com/brucefan1983/CUDA-Programming/blob/master/src/02-thread-organization/readme.md)
-* [Chapter 3 (**unfinished**)](https://github.com/brucefan1983/CUDA-Programming/blob/master/src/03-basic-framework/readme.md)
-  
+* [Chapter 3 (**finished**)](https://github.com/brucefan1983/CUDA-Programming/blob/master/src/03-basic-framework/readme.md)
 ## 相关仓库
 * 由琪同学正在用 pyCUDA 实现本书中的范例，见如下仓库：
 https://github.com/YouQixiaowu/CUDA-Programming-with-Python
@@ -37,8 +36,8 @@ https://github.com/YouQixiaowu/CUDA-Programming-with-Python
 | 文件       | 知识点 |
 |:------------|:---------------|
 | `hello.cpp` | 用 `C++` 写一个 Hello World 程序 |
-| `hello1.cu` | 一个正确的 `C++` 程序也是一个正确的 `CUDA` 程序 | 
-| `hello2.cu` | 写一个打印字符串的 `CUDA` 核函数并调用 | 
+| `hello1.cu` | 一个正确的 `C++` 程序也是一个正确的 `CUDA` 程序 |
+| `hello2.cu` | 写一个打印字符串的 `CUDA` 核函数并调用 |
 | `hello3.cu` | 使用含有多个线程的线程块 |
 | `hello4.cu` | 使用多个线程块 |
 | `hello5.cu` | 使用两维线程块 |
@@ -60,7 +59,7 @@ https://github.com/YouQixiaowu/CUDA-Programming-with-Python
 | 文件       | 知识点 |
 |:------------|:---------------|
 | `check1api.cu`    | 检测 `CUDA` 运行时 API 函数的调用 |
-| `check2kernel.cu` | 检测 `CUDA` 核函数的调用 | 
+| `check2kernel.cu` | 检测 `CUDA` 核函数的调用 |
 | `memcheck.cu`     | 用 `cuda-memcheck` 检测内存方面的错误 |
 | `error.cuh`       | 本书常用的用于检测错误的宏函数 |
 
@@ -72,13 +71,13 @@ https://github.com/YouQixiaowu/CUDA-Programming-with-Python
 | `add1cpu.cu`    | 为 `C++` 版的数组相加函数计时 |
 | `add2gpu.cu`    | 为数组相加核函数计时 |
 | `add3memcpy.cu` | 如果把数据传输的时间也包含进来，还有加速吗？|
-| `arithmetic1cpu.cu`       | 提高算术强度的 `C++` 函数 | 
+| `arithmetic1cpu.cu`       | 提高算术强度的 `C++` 函数 |
 | `arithmetic2gpu.cu`       | 提高算术强度的核函数；GPU/CPU 加速比是不是很高？ |
 
 
 ### 第 6 章： `CUDA` 中的内存组织
 
-| 文件        | 知识点 | 
+| 文件        | 知识点 |
 |:------------|:---------------|
 | `static.cu`    | 如何使用静态全局内存 |
 | `query.cu`     | 如何在 CUDA 程序中查询所用 GPU 的相关技术指标 |
@@ -86,7 +85,7 @@ https://github.com/YouQixiaowu/CUDA-Programming-with-Python
 
 ### 第 7 章：全局内存的合理使用
 
-| 文件        | 知识点 | 
+| 文件        | 知识点 |
 |:------------|:---------------|
 | `matrix.cu` | 合并与非合并读、写对程序性能的影响 |
 
@@ -125,7 +124,7 @@ https://github.com/YouQixiaowu/CUDA-Programming-with-Python
 
 
 ### 第 12 章：统一内存
-| 文件       | 知识点 | 
+| 文件       | 知识点 |
 |:------------|:---------------|
 | `add.cu` | 使用统一内存可以简化代码 |
 | `oversubscription1.cu` | 统一内存在初始化时才被分配  |
@@ -139,7 +138,7 @@ https://github.com/YouQixiaowu/CUDA-Programming-with-Python
 | `cpp`     | C++ 版本的 MD 程序 |
 | `force-only`   | 仅将求力的函数移植到 CUDA |
 | `whole-code` | 全部移植到 CUDA |
-  
+
 ### 第 14 章：CUDA 库
 | 文件        | 知识点 |
 |:------------|:---------------|
@@ -176,11 +175,11 @@ https://github.com/YouQixiaowu/CUDA-Programming-with-Python
 
 | N    | 时间 |
 |:-------|:-------|
-| 1000    | 0.91 ms | 
-| 10000   | 0.99 ms | 
-| 100000  | 3.8 ms | 
+| 1000    | 0.91 ms |
+| 10000   | 0.99 ms |
+| 100000  | 3.8 ms |
 | 1000000 | 28 ms |
-| 10000000   | 250 ms | 
+| 10000000   | 250 ms |
 | 100000000  | 2500 ms |
 
 ### 矩阵复制和转置 (第 7-8 章)
@@ -189,11 +188,11 @@ https://github.com/YouQixiaowu/CUDA-Programming-with-Python
 
 | 计算     | V100 (S) | V100 (D) | 2080ti (S) | 2080ti (D) | K40 (S) |
 |:---------------------------------|:-------|:-------|:-------|:-------|:-------|
-| 矩阵复制                             | 1.1 ms | 2.0 ms | 1.6 ms | 2.9 ms |  | 
-| 读取为合并、写入为非合并的矩阵转置     | 4.5 ms | 6.2 ms | 5.3 ms | 5.4 ms | 12 ms | 
-| 写入为合并、读取为非合并的矩阵转置     | 1.6 ms | 2.2 ms | 2.8 ms | 3.7 ms | 23 ms | 
+| 矩阵复制                             | 1.1 ms | 2.0 ms | 1.6 ms | 2.9 ms |  |
+| 读取为合并、写入为非合并的矩阵转置     | 4.5 ms | 6.2 ms | 5.3 ms | 5.4 ms | 12 ms |
+| 写入为合并、读取为非合并的矩阵转置     | 1.6 ms | 2.2 ms | 2.8 ms | 3.7 ms | 23 ms |
 | 在上一个版本的基础上使用 `__ldg` 函数 | 1.6 ms | 2.2 ms | 2.8 ms | 3.7 ms | 8 ms |
-| 利用共享内存转置，但有 bank 冲突      | 1.8 ms | 2.6 ms | 3.5 ms | 4.3 ms |  | 
+| 利用共享内存转置，但有 bank 冲突      | 1.8 ms | 2.6 ms | 3.5 ms | 4.3 ms |  |
 | 利用共享内存转置，且无 bank 冲突      | 1.4 ms | 2.5 ms | 2.3 ms | 4.2 ms |  |
 
 
@@ -206,15 +205,15 @@ https://github.com/YouQixiaowu/CUDA-Programming-with-Python
 
 | 计算方法与机器                         | 计算时间 |   结果  |
 |:----------------------------------------------|:----------|:----------|
-| CPU 中循环累加                        | 100 ms | 33554432 （**完全错误**） | 
-| 全局内存+线程块同步函数                | 5.8 ms  | 123633392 （**三位**正确的有效数字）| 
-| 静态共享内存+线程块同步函数            | 5.8 ms | 123633392 （**三位**正确的有效数字）| 
-| 动态共享内存+线程块同步函数            | 5.8 ms | 123633392 （**三位**正确的有效数字）|  
-| 共享内存+原子函数+线程块同步函数        | 3.8 ms |123633392 （**三位**正确的有效数字）| 
-| 共享内存+原子函数+线程束同步函数        | 3.4 ms |123633392 （**三位**正确的有效数字）| 
-| 共享内存+原子函数+线程束洗牌函数        | 2.8 ms |123633392 （**三位**正确的有效数字）| 
-| 共享内存+原子函数+协作组               | 2.8 ms |123633392 （**三位**正确的有效数字）| 
-| 共享内存+协作组+两个核函数             | 2.0 ms |123000064 （**七位**正确的有效数字）| 
+| CPU 中循环累加                        | 100 ms | 33554432 （**完全错误**） |
+| 全局内存+线程块同步函数                | 5.8 ms  | 123633392 （**三位**正确的有效数字）|
+| 静态共享内存+线程块同步函数            | 5.8 ms | 123633392 （**三位**正确的有效数字）|
+| 动态共享内存+线程块同步函数            | 5.8 ms | 123633392 （**三位**正确的有效数字）|
+| 共享内存+原子函数+线程块同步函数        | 3.8 ms |123633392 （**三位**正确的有效数字）|
+| 共享内存+原子函数+线程束同步函数        | 3.4 ms |123633392 （**三位**正确的有效数字）|
+| 共享内存+原子函数+线程束洗牌函数        | 2.8 ms |123633392 （**三位**正确的有效数字）|
+| 共享内存+原子函数+协作组               | 2.8 ms |123633392 （**三位**正确的有效数字）|
+| 共享内存+协作组+两个核函数             | 2.0 ms |123000064 （**七位**正确的有效数字）|
 | 共享内存+协作组+两个核函数+静态全局内存 | 1.5 ms |123000064 （**七位**正确的有效数字）|
 
 
@@ -224,7 +223,7 @@ https://github.com/YouQixiaowu/CUDA-Programming-with-Python
 * 使用单精度或双精度时，CPU 都用时约 250 毫秒。
 * GPU 测试结果见下表：
 
-| 是否使用原子函数     | V100 (S) | V100 (D) | RTX 2070 (S) | RTX 2070 (D) | 
+| 是否使用原子函数     | V100 (S) | V100 (D) | RTX 2070 (S) | RTX 2070 (D) |
 |:----------------|:---------|:---------|:-----------|:-----------|
 | 否 | 1.9 ms | 2.6  ms | 2.8 ms | 23 ms |
 | 是    | 1.8 ms | 2.6  ms | 2.5 ms | 16 ms |
@@ -242,7 +241,7 @@ https://github.com/YouQixiaowu/CUDA-Programming-with-Python
 * 产出步数 = 20000
 * 各个部分所花时间见下表
 
-| 求力部分     | 运动方程积分部分 | 全部 | 
+| 求力部分     | 运动方程积分部分 | 全部 |
 |:----------------|:---------|:-----------|
 | 62 s| 0.7 s | 62.7 s |
 
@@ -263,6 +262,3 @@ https://github.com/YouQixiaowu/CUDA-Programming-with-Python
 | 32000 | 10000 | 1.6 s | 0.3 s  |  1.9 s  | 1.7e8 原子步每秒|
 | 108000 | 4000 | 2.0 s | 0.4 s  |  2.4 s  | 1.8e8 原子步每秒|
 | 256000 | 2000 | 2.2 s | 0.4 s  |  2.6 s  | 2.0e8 原子步每秒|
-
-## 第一次校稿后发现的错误（将在第二次校稿时改正）
-* 第10章warp.cu中的一个nask应该改成mask。
