@@ -6,7 +6,65 @@
 
 We consider a simple task: adding up two arrays of the same length (same number of elements). We first give a C++ program [add.cpp](https://github.com/brucefan1983/CUDA-Programming/tree/master/src/03-basic-framework/add.cpp) solving this problem:
 
-![add.cpp.png](https://github.com/brucefan1983/CUDA-Programming/blob/master/src/03-basic-framework/fig/add.cpp.png)
+```c++
+#include <math.h>
+#include <stdlib.h>
+#include <stdio.h>
+
+const double EPSILON = 1.0e-15;
+const double a = 1.23;
+const double b = 2.34;
+const double c = 3.57;
+void add(const double *x, const double *y, double *z, const int N);
+void check(const double *z, const int N);
+
+int main(void)
+{
+    const int N = 100000000;
+    const int M = sizeof(double) * N;
+    double *x = (double*) malloc(M);
+    double *y = (double*) malloc(M);
+    double *z = (double*) malloc(M);
+
+    for (int n = 0; n < N; ++n)
+    {
+        x[n] = a;
+        y[n] = b;
+    }
+
+    add(x, y, z, N);
+    check(z, N);
+
+    free(x);
+    free(y);
+    free(z);
+    return 0;
+}
+
+void add(const double *x, const double *y, double *z, const int N)
+{
+    for (int n = 0; n < N; ++n)
+    {
+        z[n] = x[n] + y[n];
+    }
+}
+
+void check(const double *z, const int N)
+{
+    bool has_error = false;
+    for (int n = 0; n < N; ++n)
+    {
+        if (fabs(z[n] - c) > EPSILON)
+        {
+            has_error = true;
+        }
+    }
+    printf("%s\n", has_error ? "Has errors" : "No errors");
+}
+
+```
+
+
 
 
 The above program can be compiled by using `g++` (or `cl.exe`):
@@ -14,16 +72,16 @@ The above program can be compiled by using `g++` (or `cl.exe`):
 g++ add.cpp
 ```
 
-Running the executable, we will see the following message on the screen,
+Running the executable, we will see the following message on the screen:
 ```
 No errors
 ```
 which indicates that the calculations have been done in an expected way. The reader should be able to understand this program without difficulty, otherwise he/she needs to gain sufficient knowledge of C++ programming first.
 
-## Basic framework of simple CUDA programs
+## 3.2 Basic framework of simple CUDA programs
 
 For a simple CUDA program written in a single source file, the basic framework is as follows:
-```
+```c++
 header inclusion
 const or macro definition
 declarations of C++ functions and CUDA kernels
@@ -43,7 +101,62 @@ definitions of C++ functions and CUDA kernels
 
 We first give a CUDA program [add1.cu](https://github.com/brucefan1983/CUDA-Programming/tree/master/src/03-basic-framework/add.cu) which does the same calculations as the C++ program [add.cpp](https://github.com/brucefan1983/CUDA-Programming/tree/master/src/03-basic-framework/add.cpp), but in device instead of in host (the `check` function is omitted since it is the same in both programs):
 
-![add1.cu.png](https://github.com/brucefan1983/CUDA-Programming/blob/master/src/03-basic-framework/fig/add1.cu.png)
+```c++
+#include <math.h>
+#include <stdio.h>
+
+const double EPSILON = 1.0e-15;
+const double a = 1.23;
+const double b = 2.34;
+const double c = 3.57;
+void __global__ add(const double *x, const double *y, double *z);
+void check(const double *z, const int N);
+
+int main(void)
+{
+    const int N = 100000000;
+    const int M = sizeof(double) * N;
+    double *h_x = (double*) malloc(M);
+    double *h_y = (double*) malloc(M);
+    double *h_z = (double*) malloc(M);
+
+    for (int n = 0; n < N; ++n)
+    {
+        h_x[n] = a;
+        h_y[n] = b;
+    }
+
+    double *d_x, *d_y, *d_z;
+    cudaMalloc((void **)&d_x, M);
+    cudaMalloc((void **)&d_y, M);
+    cudaMalloc((void **)&d_z, M);
+    cudaMemcpy(d_x, h_x, M, cudaMemcpyHostToDevice);
+    cudaMemcpy(d_y, h_y, M, cudaMemcpyHostToDevice);
+
+    const int block_size = 128;
+    const int grid_size = N / block_size;
+    add<<<grid_size, block_size>>>(d_x, d_y, d_z);
+
+    cudaMemcpy(h_z, d_z, M, cudaMemcpyDeviceToHost);
+    check(h_z, N);
+
+    free(h_x);
+    free(h_y);
+    free(h_z);
+    cudaFree(d_x);
+    cudaFree(d_y);
+    cudaFree(d_z);
+    return 0;
+}
+
+void __global__ add(const double *x, const double *y, double *z)
+{
+    const int n = blockDim.x * blockIdx.x + threadIdx.x;
+    z[n] = x[n] + y[n];
+}
+```
+
+
 
 This CUDA program can be compiled as follows:
 ```
@@ -56,11 +169,19 @@ No errors
 
 We will describe the CUDA program [add1.cu](https://github.com/brucefan1983/CUDA-Programming/tree/master/src/03-basic-framework/add.cu) in detail in the following sections.
 
-** I am up to here...**
+### 3.2.1 Memory allocation in device
 
-\subsection{设备内存的分配与释放}
+In our CUDA program, we defined three pointers 
 
-在上述程序中，我们首先在主机中定义了3个数组并进行了初始化。这与之前~C++~版本的相应部分是一样的。接着，第~25-28~行在设备中也定义了3个数组并分配了内存（显存）。第~25~行就是定义3个双精度类型变量的指针。如果不看后面的代码，我们并不知道这3个指针会指向哪些内存区域。只有通过第~26-28~行的~\verb"cudaMalloc()"~函数才能确定它们将指向设备中的内存，而不是主机中的内存。该函数是一个~CUDA~运行时~API~函数。所有~CUDA~运行时~API~函数都以~\verb"cuda"~开头。本书仅涉及极少数的~CUDA~运行时~API~函数。完整的列表见如下网页（一个几百页的手册）：\url{https://docs.nvidia.com/cuda/cuda-runtime-api}。
+```c++
+double *d_x, *d_y, *d_z;
+```
+
+and used the `cudaMalloc()` function to allocate memory in device. This is a CUDA runtime API function. Every CUDA runtime API function begins with `cuda`. Here is the online manual for all the CUDA runtime functions: https://docs.nvidia.com/cuda/cuda-runtime-api.
+
+
+
+*** up to here***
 
 正如在~C++~中可由~\verb"malloc()"~函数动态分配内存，在~CUDA~中，设备内存的动态分配可由~\verb"cudaMalloc()"~函数实现。该函数的原型如下：
 \begin{verbatim}
