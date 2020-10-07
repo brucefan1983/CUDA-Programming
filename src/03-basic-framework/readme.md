@@ -109,38 +109,41 @@ After calling the kernel at line 34, we use the `cudaMemcpy` function to transfe
 
 In the [add2wrong.cu](https://github.com/brucefan1983/CUDA-Programming/blob/master/src/03-basic-framework/add2wrong.cu) program, the author intentionally changed `cudaMemcpyHostToDevice` to `cudaMemcpyDeviceToHost`. The reader can try to compile and run it to see what happens.
 
+### 3.2.3 Correspondence between data and threads in CUDA kernel
+
+Lines 32-34 defined the execution configuration for the kernel: a block size of 128 and a grid size of 10^8/128. 
+
+Now we check the `add` functions in  `add.cpp` and `add1.cu`. We see that there is a `for` loop in the host function, but not in the kernel. In the host `add` function, we need to loop over each element of the arrays, and thus need a `for` loop. In the device `add` function (the kernel), this `for`-loop is gone. This is because we have many threads in the kernel and each thread will do the same calculation, but with different data, int the so-called "single-instruction-multiple-threads" way. In the kernel, we define a one-dimensional index `n` in the following way:
+
+```c++
+const int n = blockDim.x * blockIdx.x + threadIdx.x;
+```
+
+This provides a correspondence between the data index `n` and the thread indices `blockIdx` and `threadIdx`. With this `n` defined, we can simply use it to access the data stored in the arrays:
+
+```c++
+z[n] = x[n] + y[n];
+```
+
+We stress again that even if each thread executes this same statement, the value of `n` is different for different threads. 
+
+### 3.2.3 Some requirements for kernels
+
+Kernels are the most important aspect in CUDA programming. Here we list a few general requirements for CUDA kernels:
+
+* A kernel must return `void`.
+* A kernel must be decorated by `__global__`.
+* Function name for a kernel can be overloaded.
+* The number of parameters for a kernel must be fixed. 
+* We can pass normal values to a kernel, which is visible for each thread. We will know that these parameters will be read through the constant cache in Chapter 6.
+* Pointers passed to a kernel must point to device memory, unless unified memory is used (to be discussed in Chapter 12).
+* Kernels cannot be class member functions. Usually, one wraps kernels within class members.
+* A kernel cannot call another kernel, unless dynamic parallelism is used, but we will not touch this topic in this book.
+* One must provide an execution configuration when launching a kernel.
 
 
-** up to here **
 
-\subsection{核函数中数据与线程的对应}
-
-将有关的数据从主机传至设备之后，就可以调用核函数在设备中进行计算了。第~32-34~行确定了核函数的执行配置：使用具有~128~个线程的一维线程块，一共有~$10^8/128$~个这样的线程块。仔细比较程序~\verb"add.cpp"~中的主机端函数（第~35-41~行）和程序~\verb"add1.cu"~中的设备端函数（第~48-52~行），可以看出，将主机中的函数改为设备中的核函数是非常简单的：基本上就是去掉一层循环。在主机函数中，我们需要依次对数组的每一个元素进行操作，所以需要使用一个循环。在设备的核函数中，我们用“单指令-多线程”的方式编写代码，故可去掉该循环，只需将数组元素指标与线程指标一一对应即可。
-
-例如，在上述核函数中，使用了语句
-\begin{verbatim}
-    const int n = blockDim.x * blockIdx.x + threadIdx.x;
-\end{verbatim}
-来确定对应方式。赋值号右边只出现标记线程的内建变量，左边的~\verb"n"~是后面代码中将要用到的数组元素指标。在这种情况下，第~0~号线程块中的~\verb"blockDim.x"~个线程对应于第0个到第~\verb"blockDim.x-1"~个数组元素，第~1~号线程块中的~\verb"blockDim.x"~个线程对应于第~\verb"blockDim.x"~个到第~\verb"2*blockDim.x-1"~个数组元素，第~2~号线程块中的~\verb"blockDim.x"~个线程对应于第~\verb"2*blockDim.x"~个到第~\verb"3*blockDim.x-1"~个数组元素，依此类推。这里的~\verb"blockDim.x"~等于执行配置中指定的（一维）线程块大小。核函数中定义的线程数目与数组元素数目一样，都是~$10^8$。在将线程指标与数据指标一一对应之后，就可以对数组元素进行操作了。该操作的语句为
-\begin{verbatim}
-    z[n] = x[n] + y[n];
-\end{verbatim}
-在主机函数中和核函数中是一样的。通常，在写出一个主机端的函数后，翻译成核函数是非常直接的。最后，值得一提的是，在调试程序时，也可以仅仅使用一个线程。为此，可以将核函数中的代码改成对应主机函数中的代码（即有~for~循环的代码），然后用执行配置~\verb"<<<1, 1>>>"~调用核函数。
-
-\subsection{核函数的要求}
-
-核函数无疑是~CUDA~编程中最重要的方面。我们这里列出编写核函数时要注意的几点：
-\begin{itemize}
-\item 核函数的返回类型必须是~\verb"void"。所以，在核函数中可以用~\verb"return"~关键字，但不可返回任何值。
-\item 必须使用限定符~\verb"__global__"。也可以加上一些其他C++中的限定符，如~\verb"static"。限定符的次序可任意。
-\item 函数名无特殊要求，而且支持~C++~ 中的重载（overload），即可以用同一个函数名表示具有不同参数列表的函数。
-\item 不支持可变数量的参数列表，即参数的个数必须确定。
-\item 可以向核函数传递非指针变量（如例子中的~\verb"int N"），其内容对每个线程可见。
-\item 除非使用统一内存编程机制（将在第~\ref{chapter:unified-memory}~章介绍），否则传给核函数的数组（指针）必须指向设备内存。
-\item 核函数不可成为一个类的成员。通常的做法是用一个包装函数调用核函数，而将包装函数定义为类的成员。
-\item 在计算能力~3.5~之前，核函数之间不能相互调用。从计算能力~3.5~开始，引入了动态并行（dynamic parallelism）机制，在核函数内部可以调用其他核函数，甚至可以调用自己（这样的函数称为递归函数）。但本书不讨论动态并行，感兴趣的读者请参考《CUDA C++ Programming Guide》的附录~D。
-\item 无论是从主机调用，还是从设备调用，核函数都是在设备中执行。调用核函数时必须指定执行配置，即三括号和它里面的参数。在本例中，选取的线程块大小为~128，网格大小为数组元素个数除以线程块大小，即~$10^8/128=781250$。
-\end{itemize}
+**up to here**
 
 \subsection{核函数中~if~语句的必要性}
 
