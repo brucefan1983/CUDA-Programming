@@ -179,43 +179,39 @@ double *d_x, *d_y, *d_z;
 
 and used the `cudaMalloc()` function to allocate memory in device. This is a CUDA runtime API function. Every CUDA runtime API function begins with `cuda`. Here is the online manual for all the CUDA runtime functions: https://docs.nvidia.com/cuda/cuda-runtime-api.
 
+The prototype of `cudaMalloc()` is:
 
+```c++
+cudaError_t cudaMalloc(void **address, size_t size);
+```
 
-*** up to here***
+Here, `address` is the address of the pointer (so it is a double pointer), `size` is the number of bytes to be allocated, and `cudaSuccess` is a return value indicating whether there is error when calling this function. We will ignore this return value in this Chapter and discuss it in the next Chapter. In the CUDA program, we have used this function to allocate memory for the three pointers:
 
-正如在~C++~中可由~\verb"malloc()"~函数动态分配内存，在~CUDA~中，设备内存的动态分配可由~\verb"cudaMalloc()"~函数实现。该函数的原型如下：
-\begin{verbatim}
-    cudaError_t cudaMalloc(void **address, size_t size);			
-\end{verbatim}
-其中：
-\begin{itemize}
-\item 第一个参数~\verb"address"~是待分配设备内存的指针。注意：因为内存（地址）本身就是一个指针，所以待分配设备内存的指针就是指针的指针，即双重指针。
-\item 第二个参数~\verb"size"~是待分配内存的字节数。
-\item 返回值是一个错误代号。如果调用成功，返回~\verb"cudaSuccess"，否则返回一个代表某种错误的代号（下一章会进一步讨论）。
-\end{itemize}
-该函数为某个变量分配~\verb"size" 字节的线性内存（linear memory）。初学者不必深究什么是线性内存，也暂时不用关心该函数的返回值。在第26-28行，我们忽略了函数~\verb"cudaMalloc()"~的返回值。这几行代码用到的参数~\verb"M"~是所分配内存的字节数，即~\verb"sizeof(double) * N"。注意：虽然在很多情况下~\verb"sizeof(double)"~等于~8，但用~\verb"sizeof(double)" 是更加通用、安全的做法。
+```c++
+    cudaMalloc((void **)&d_x, M);
+    cudaMalloc((void **)&d_y, M);
+    cudaMalloc((void **)&d_z, M);
+```
 
-调用函数~\verb"cudaMalloc()"~时传入的第一个参数~\verb"(void **)&d_x"~稍难理解。首先，我们知道~\verb"d_x"~是一个~\verb"double"~类型的指针，那么它的地址~\verb"&d_x"~就是~\verb"double"~类型的双重指针。而~\verb"(void **)"~是一个强制类型转换操作，将一个某种类型的双重指针转换为一个~\verb"void"~类型的双重指针。这种类型转换可以不明确地写出来，即对函数~\verb"cudaMalloc()"~的调用可以简写为
-\begin{verbatim}
-    cudaMalloc(&d_x, M); 			
-\end{verbatim}
-读者可以自行试一试。
+Here, `M` is `sizeof(double) * N`, where `N` is the number of elements in an array, and `sizeof(double)` is the  memory size (number of bytes) for a double-precision floating point number. The type conversion `(void **)` can be omitted, i.e., we can change the above lines to:
 
-读者也许会问，\verb"cudaMalloc()"~函数为什么需要一个双重指针作为变量呢？这是因为（以第~26~行为例），该函数的功能是改变指针~\verb"d_x"~本身的值（将一个指针赋值给~\verb"d_x"），而不是改变~\verb"d_x"~所指内存缓冲区中的变量值。在这种情况下，必须将~\verb"d_x"~的地址~\verb"&d_x"~传给函数~\verb"cudaMalloc()"~才能达到此效果。这是~C++~编程中非常重要的一点。如果读者对指针的概念比较模糊，请务必阅读相关资料，查漏补缺。从另一个角度来说，函数~\verb"cudaMalloc()"~要求用传双重指针的方式改变一个指针的值，而不是直接返回一个指针，是因为该函数已经将返回值用于返回错误代号，而~C++~又不支持多个返回值。
+```c++
+    cudaMalloc(&d_x, M);
+    cudaMalloc(&d_y, M);
+    cudaMalloc(&d_z, M);
+```
 
-总之，用~\verb"cudaMalloc()" 函数可以为不同类型的指针变量分配设备内存。注意，为了区分主机和设备中的变量，我们（遵循~CUDA~编程的传统）用~\verb"d_"~作为所有设备变量的前缀，而用~\verb"h_"~作为对应主机变量的前缀。
+The reason for using a pointer to pointer for the first parameter in this function is that we need to change the value of the pointer itself, other than the value in the memory pointed by the pointer.
 
-正如用~\verb"malloc()"~函数分配的主机内存需要用~\verb"free()"~函数释放一样，用~\verb"cudaMalloc()"~函数分配的设备内存需要用~\verb"cudaFree()"~函数释放。该函数的原型为
-\begin{verbatim}
-    cudaError_t cudaFree(void* address);   
-\end{verbatim}
-这里，参数~\verb"address"~就是待释放的设备内存变量（不是双重指针）。返回值是一个错误代号。如果调用成功，返回~\verb"cudaSuccess"。
+Memory allocated by `cudaMalloc()` needs to be freed by using the `cudaFree()` function:
 
-主机内存也可由~C++~中的~\verb"new"~运算符动态分配，并由~\verb"delete"~运算符释放。读者可以将程序~\verb"add1.cu"~中的~\verb"malloc()"~和~\verb"free()"~语句分别换成用~\verb"new"~和~\verb"delete"~实现的等价的语句，看看是否能正确地编译、运行。
+```c++
+cudaError_t cudaFree(void* address);   
+```
 
-在分配与释放各种内存时，相应的操作一定要两两配对，否则将有可能出现内存错误。将程序~\verb"add1.cu"~中的~\verb"cudaFree()"~改成~\verb"free()"，虽然能够正确地编译，而且能够在屏幕打印出~\verb"No errors"~的结果，但在程序退出之前，还是会出现所谓的段错误（segmentation fault）。读者可以自行试一试。主动尝试错误是编程学习中非常重要的技巧，因为通过它可以熟悉各种编译和运行错误，提高排错能力。
+Note that the argument here is a pointer, not a double pointer.
 
-从计算能力~2.0~开始，CUDA~还允许在核函数内部用~\verb"malloc()"~和~\verb"free()"~动态地分配与释放一定数量的全局内存。一般情况下，这样容易导致较差的程序性能，不建议使用。如果发现有这样的需求，可能需要思考如何重构算法。
+** up to here **
 
 \subsection{主机与设备之间数据的传递}
 
