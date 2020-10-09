@@ -1,143 +1,60 @@
-\chapter{CUDA~程序的错误检测\label{chapter:error-check}}
+# Chapter 4: Error checking in CUDA programs
 
-和编写~C++~程序一样，编写~CUDA~程序时难免会出现各种各样的错误。有的错误在编译的过程中就可以被编译器捕捉，称为编译错误。有的错误在编译期间没有被发现，但在运行的时候出现，称为运行时刻的错误。一般来说，运行时刻的错误更难排错。本章讨论如何检测运行时刻的错误，包括使用一个检查~CUDA~运行时~API~函数返回值的宏函数及使用~CUDA-MEMCHECK~工具。
+In this chapter, we show how to check CUDA runtime API functions and CUDA kernels.
 
-\section{一个检测~CUDA~运行时错误的宏函数}
 
-在第~\ref{chapter:framework}~章，我们学习了一些~CUDA~运行时~API~函数，如分配设备内存的函数~\verb"cudaMalloc()"、释放设备内存的函数~\verb"cudaFree()"~及传输数据的函数~\verb"cudaMemcpy()"。所有~CUDA~运行时~API~函数都是以~\verb"cuda"为前缀的，而且都有一个类型为~\verb"cudaError_t"~的返回值，代表了一种错误信息。只有返回值为~\verb"cudaSuccess"~时才代表成功地调用了~API~函数。
 
-\begin{lstlisting}[language=C++,caption={本书中使用的一个检测~CUDA~运行时错误的宏函数。},label={listing:error.cuh}]
+## 4.1 A macro function checking CUDA runtime API functions
+
+In the last chapter, we have learned some CUDA runtime API functions, such as `cudaMalloc`, `cudaFree`, and `cudaMemcpy`. All but very few CUDA runtime API functions return a value, which indicates a type of error when it is not `cudaSuccess`. Based on this, we can write a macro function which can check this return value for a CUDA runtime API function and report a meaningful error message when the API function is not successfully called. The macro function is presented in [error.cuh](https://github.com/brucefan1983/CUDA-Programming/blob/master/src/04-error-check/error.cuh), as given below:
+
+```c++
 #pragma once
 #include <stdio.h>
 
-#define CHECK(call)                                                     \
-do                                                                      \
-{                                                                       \
-    const cudaError_t error_code = call;                                \
-    if (error_code != cudaSuccess)                                      \
-    {                                                                   \
-        printf("CUDA Error:\n");                                        \
-        printf("    File:       %s\n", __FILE__);                       \
-        printf("    Line:       %d\n", __LINE__);                       \
-        printf("    Error code: %d\n", error_code);                     \
-        printf("    Error text: %s\n", cudaGetErrorString(error_code)); \
-        exit(1);                                                        \
-    }                                                                   \
+#define CHECK(call)                                   \
+do                                                    \
+{                                                     \
+    const cudaError_t error_code = call;              \
+    if (error_code != cudaSuccess)                    \
+    {                                                 \
+        printf("CUDA Error:\n");                      \
+        printf("    File:       %s\n", __FILE__);     \
+        printf("    Line:       %d\n", __LINE__);     \
+        printf("    Error code: %d\n", error_code);   \
+        printf("    Error text: %s\n",                \
+            cudaGetErrorString(error_code));          \
+        exit(1);                                      \
+    }                                                 \
 } while (0)
-\end{lstlisting}
 
-根据这样的规则，我们可以写出一个头文件（error.cuh），它包含一个检测~CUDA~运行时错误的宏函数（macro function），见~Listing~\ref{listing:error.cuh}。对该宏函数的解释如下：
-\begin{itemize}
-    \item 该文件开头一行的~\verb"#pragma once"~是一个预处理指令，其作用是确保当前文件在一个编译单元中不被重复包含。该预处理指令和如下复合的预处理指令作用相当，但更加简洁：
-\begin{verbatim}
-    #ifndef ERROR_CUH_
-    #define ERROR_CUH_
-        头文件中的内容（即上述文件中第 2-17 行的内容）
-    #endif
-\end{verbatim}
-    \item 该宏函数的名称是~\verb"CHECK"，参数~\verb"call"~是一个~CUDA~运行时~API~函数。
-    \item 在定义宏时，如果一行写不下，需要在行末写~\verb"\"，表示续行。
-    \item 第~7~行定义了一个~\verb"cudaError_t"~类型的变量~\verb"error_code"，并初始化为函数~\verb"call"~的返回值。
-    \item 第~8~行判断该变量的值是否为~\verb"cudaSuccess"。如果不是，在第~9-16~行报道相关文件、行数、错误代号及错误的文字描述并退出程序。\verb"cudaGetErrorString"~显然也是一个~CUDA~运行时~API~函数，作用是将错误代号转化为错误的文字描述。
-\end{itemize}
+```
 
-在使用该宏函数时，只要将一个~CUDA~运行时~API~函数当作参数传入该宏函数即可。例如，如下宏函数的调用
-\begin{verbatim}
-    CHECK(cudaFree(d_x));
-\end{verbatim}
-将会被展开为~Listing \ref{listing:expansion}~所示的代码段。
 
-\begin{lstlisting}[language=C++,caption={宏函数调用的展开。},label={listing:expansion}]
-do
-{
-    const cudaError_t error_code = cudaFree(d_x);              
-    if (error_code != cudaSuccess)                    
-    {                                                 
-        printf("CUDA Error:\n");                      
-        printf("    File:       %s\n", __FILE__);     
-        printf("    Line:       %d\n", __LINE__);     
-        printf("    Error code: %d\n", error_code);   
-        printf("    Error text: %s\n", cudaGetErrorString(error_code));          
-        exit(1);                                      
-    }
-} while (0);
-\end{lstlisting}
 
-读者可能会问，宏函数的定义中为什么用了一个~\verb"do-while"~语句？不用该语句在大部分情况下也是可以的，但在某些情况下不安全（这里不对此展开讨论，感兴趣的读者可自行研究）。也可以不用宏函数，而用普通的函数，但此时必须将宏~\verb"__FILE__"~和~\verb"__LINE__"~传给该函数，这样用起来不如宏函数简洁。
+### 4.1.1 Checking CUDA runtime API functions using the macro function
 
-\subsection{检查运行时~API~函数}
+As an example, we check all the CUDA API functions in the [add2wrong.cu](https://github.com/brucefan1983/CUDA-Programming/blob/master/src/03-basic-framework/add2wrong.cu) program of Chapter 3, obtaining the [check1api.cu](https://github.com/brucefan1983/CUDA-Programming/blob/master/src/04-error-check/check1api.cu) program of this chapter. We can compile this program using 
 
-作为一个例子，我们将第~\ref{chapter:framework}~章的程序~\verb"add2wrong.cu"~中的~CUDA~运行时API函数都用宏函数~\verb"CHECK"~进行包装，得到~\verb"check1api.cu"，部分代码见~Listing \ref{listing:check1api.cu}。在该文件的开头，包含了上述头文件：
-\begin{verbatim}
-    #include "error.cuh"
-\end{verbatim}
-第~27-29~行对分配设备内存的函数进行了检查；第~30-31~行及第~37~行对数据传输的函数进行了检查；第~43-45~行对释放设备内存的函数进行了检查。用
-\begin{verbatim}
-    $ nvcc -arch=sm_75 check1api.cu
-\end{verbatim}
-编译该程序，然后运行得到的可执行文件，将得到如下输出：
-\begin{verbatim}
+```shell
+$ nvcc -arch=sm_75 check1api.cu
+```
+
+Running the executable, we will get the following output:
+
+```shell
     CUDA Error:
         File:       check1api.cu
         Line:       30
         Error code: 11
         Error text: invalid argument
-\end{verbatim}
-可见，宏函数正确地捕捉到了运行时刻的错误，告诉我们文件~\verb"check1api.cu"~的第~30~行代码中出现了非法的参数。非法参数指的是~\verb"cudaMemcpy"~函数的参数有问题，因为我们故意将~cudaMemcpyHostToDevice~写成了~cudaMemcpyDeviceToHost。可见，用了检查错误的宏函数之后，我们可以得到更有用的错误信息，而不仅仅是一个错误的运行结果。从这里开始，我们将坚持用这个宏函数包装大部分的~CUDA~运行时~API~函数。有一个例外是~cudaEventQuery~函数，因为它很有可能返回 cudaErrorNotReady，但又不代表程序出错了。
+```
 
-\begin{lstlisting}[language=C++,caption={本章程序~check1api.cu~中的部分代码。},label={listing:check1api.cu}]
-#include "error.cuh"
-#include <math.h>
-#include <stdio.h>
+We see that the macro function captured the error, telling us that there is invalid argument in line 30 of the source file. Here, the invalid argument is the last one, `cudaMemcpyDeviceToHost`, which should be `cudaMemcpyHostToDevice`. 
 
-const double EPSILON = 1.0e-15;
-const double a = 1.23;
-const double b = 2.34;
-const double c = 3.57;
-void __global__ add(const double *x, const double *y, double *z, const int N);
-void check(const double *z, const int N);
+### 4.1.2 Checking CUDA kernels using the macro function
 
-int main(void)
-{
-    const int N = 100000000;
-    const int M = sizeof(double) * N;
-    double *h_x = (double*) malloc(M);
-    double *h_y = (double*) malloc(M);
-    double *h_z = (double*) malloc(M);
-
-    for (int n = 0; n < N; ++n)
-    {
-        h_x[n] = a;
-        h_y[n] = b;
-    }
-
-    double *d_x, *d_y, *d_z;
-    CHECK(cudaMalloc((void **)&d_x, M));
-    CHECK(cudaMalloc((void **)&d_y, M));
-    CHECK(cudaMalloc((void **)&d_z, M));
-    CHECK(cudaMemcpy(d_x, h_x, M, cudaMemcpyDeviceToHost));
-    CHECK(cudaMemcpy(d_y, h_y, M, cudaMemcpyDeviceToHost));
-
-    const int block_size = 128;
-    const int grid_size = (N + block_size - 1) / block_size;
-    add<<<grid_size, block_size>>>(d_x, d_y, d_z, N);
-
-    CHECK(cudaMemcpy(h_z, d_z, M, cudaMemcpyDeviceToHost));
-    check(h_z, N);
-
-    free(h_x);
-    free(h_y);
-    free(h_z);
-    CHECK(cudaFree(d_x));
-    CHECK(cudaFree(d_y));
-    CHECK(cudaFree(d_z));
-    return 0;
-}
-\end{lstlisting}
-
-
-
-\subsection{检查核函数}
+**I am up to here...**
 
 用上述方法不能捕捉调用核函数的相关错误，因为核函数不返回任何值（回顾一下，核函必须用~\verb"void"~修饰）。有一个方法可以捕捉调用核函数可能发生的错误，即在调用核函数之后加上如下两个语句：
 \begin{verbatim}
@@ -181,23 +98,23 @@ int main(void)
         h_x[n] = a;
         h_y[n] = b;
     }
-
+    
     double *d_x, *d_y, *d_z;
     CHECK(cudaMalloc((void **)&d_x, M));
     CHECK(cudaMalloc((void **)&d_y, M));
     CHECK(cudaMalloc((void **)&d_z, M));
     CHECK(cudaMemcpy(d_x, h_x, M, cudaMemcpyHostToDevice));
     CHECK(cudaMemcpy(d_y, h_y, M, cudaMemcpyHostToDevice));
-
+    
     const int block_size = 1280;
     const int grid_size = (N + block_size - 1) / block_size;
     add<<<grid_size, block_size>>>(d_x, d_y, d_z, N);
     CHECK(cudaGetLastError());
     CHECK(cudaDeviceSynchronize());
-
+    
     CHECK(cudaMemcpy(h_z, d_z, M, cudaMemcpyDeviceToHost));
     check(h_z, N);
-
+    
     free(h_x);
     free(h_y);
     free(h_z);
