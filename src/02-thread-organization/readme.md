@@ -111,7 +111,6 @@ int main(void)
     cudaDeviceSynchronize();
     return 0;
 }
-\end{lstlisting}
 ```
 
 The file [`hello2.cu`](https://github.com/brucefan1983/CUDA-Programming/blob/master/src/02-thread-organization/hello2.cu) can be compiled as follows:
