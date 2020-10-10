@@ -82,7 +82,7 @@ This will make kernel launching synchronous, as if `cudaDeviceSynchronize`  is u
 
 ## 4.2 Using CUDA-MEMCHECK to check memory errors
 
-CUDA provided a CUDA-MEMCHECK tool set, which can be used in the following way:
+CUDA provides a CUDA-MEMCHECK tool set, which can be used in the following way:
 
 ```shell
    $ cuda-memcheck --tool memcheck [options] app_name [options] 
