@@ -53,48 +53,19 @@ We can similarly build the single-precision and double-precision versions of the
 | :------- | :------- | :--------- | :--------- | :------- | :------- | :------- | :------- | :------ | :------ |
 | 1.5 ms   | 3.0 ms   | 2.1 ms     | 4.3 ms     | 2.2 ms   | 4.3 ms   | 3.3 ms   | 6.8 ms   | 6.5 ms  | 13 ms   |
 
+From the testing results, we see that for all the machines (CPU or GPUs), the double-precision version is about 2X as slow as the corresponding single-precision version. This is because the array addition problem is dominated by memory accessing, rather than floating point computations.
 
+We can also calculate the effective memory bandwidth of a task, which is defined as the accessed number of bytes divided by time used. Taking RTX 2070 and single-precision as an example, the effective band width is 3 * 1.0e8 * 4 B / 3.3 ms ~ 360 GB/s, which is slightly smaller than the theoretical band width of this GPU (448 GB/s). When the effective band width of a task is close to the theoretical band width, it indicates that the task is memory accessing bounded, not floating point computation bounded. The performance (inverse of time) of the `add` kernel is roughly proportional to the theoretical band width of the GPU.
 
-我们还可以计算数组相加问题在~GPU~中达到的有效显存带宽（effective memory bandwidth），并与表~\ref{table:add-timing}~中的理论显存带宽（theoretical memory bandwidth）进行比较。有效显存带宽定义为GPU在单位时间内访问设备内存的字节数。以作者计算机中的GeForce RTX 2070和使用单精度浮点数的情形为例，根据表中的数据，其有效显存带宽为
-\begin{equation}
-\frac{3 \times 10^8 \times 4 ~\rm{B}}{3.3\times 10^{-3} ~\rm{s}} \approx 360 ~\rm{GB/s}
-\end{equation}
-可见，有效显存带宽略小于理论显存带宽，进一步说明该问题是访存主导的，即该问题中的浮点数运算所占比例可以忽略不计。
+## 5.2 Factors affecting GPU acceleration
 
-\begin{table}[htb]
-\captionsetup{font=small}
-\centering
-\caption{数组相加程序中的核函数在若干~GPU~中的耗时。在“浮点数运算峰值”和“核函数耗时”这两栏中，括号前的数字对应于双精度浮点数版本，括号中的数字对应于单精度浮点数版本。}
-\begin{tabular}{ccccc}
-\hline
-GPU型号  & 计算能力 & 显存带宽 & 浮点数运算峰值 & 核函数耗时  \\
-\hline
-\hline
-Tesla K40 & 3.5 &  288 GB/s & 1.4 (4.3) TFLOPS & 13 (6.5) ms \\
-\hline
-Tesla P100 & 6.0 &  732 GB/s & 4.7 (9.3) TFLOPS & 4.3 (2.2) ms \\
-\hline
-Tesla V100 & 7.0 & 900 GB/s & 7 (14) TFLOPS & 3.0 (1.5) ms \\
-\hline
-GeForce RTX 2070（笔记本） & 7.5  & 448 GB/s & 0.2 (6.5) TFLOPS & 6.8 (3.3) ms \\
-\hline
-GeForce RTX 2080ti & 7.5  & 616 GB/s & 0.4 (13) TFLOPS & 4.3 (2.1) ms \\
-\hline
-\hline
-\end{tabular}
-\label{table:add-timing}
-\end{table}
+Using RTX 2070, the speedup factor of the CUDA kernel over the corresponding host function is 60/3.3, which is about 17. This is not very low, but is also not very high. In this section, we discuss when a high speedup factor can be obtained.
 
-在程序~\verb"add2gpu.cu"~中，我们仅仅对核函数进行了计时。因为我们的~CUDA~程序相对于~C++~程序多了数据复制的操作，所以我们也尝试将数据复制的操作加入被计时的代码段。由此得到的程序为~\verb"add3memcpy.cu"。我们仅用~GeForce RTX 2070~进行测试：使用单精度时，数据复制和核函数调用共耗时~180~毫秒；使用双精度时，它们共耗时~360~毫秒。
+### 5.2.1 Ratio of data transfer
+
+In the program `add2gpu.cu`, we have only timed the CUDA kernel. Here, we also include the data transfer before and after the kernel into the code block to be timed, as in the program `add3memcpy.cu`. Using RTX 2070, this part takes 180 ms and 360 ms, respectively, for the single-precision and double-precision versions.
 
 从上述测试得到的数据可以看到一个令人惊讶的结果：核函数的运行时间不到数据复制时间的~$2\%$。如果将CPU与GPU之间的数据传输时间也计入，CUDA~程序相对于~C++~程序得到的不是性能提升，而是性能降低。总之，如果一个程序的计算任务仅仅是将来自主机端的两个数组相加，并且要将结果传回主机端，使用GPU就不是一个明智的选择。那么，什么样的计算任务能够用GPU获得加速呢？本章下面的内容将回答这个问题。
-
-
-
-
-\section{几个影响~GPU 加速的关键因素}
-
-\subsection{数据传输的比例}
 
 从第~\ref{section:timing}~节的讨论我们知道，如果一个程序的目的仅仅是计算两个数组的和，那么用~GPU~可能比用~CPU~还要慢。这是因为，花在数据传输（CPU~与~GPU~之间）上的时间比计算（求和）本身还要多很多。GPU~计算核心和设备内存之间数据传输的峰值理论带宽要远高于~GPU~和~CPU~之间数据传输的带宽。参看表~\ref{table:add-timing}，典型~GPU~的显存带宽理论值为几百吉字节每秒，而常用的连接GPU和CPU内存的PCIe x16 Gen3仅有16 GB/s的带宽。它们相差几十倍。要获得可观的GPU加速，就必须尽量缩减数据传输所花时间的比例。有时候，即使有些计算在GPU中的速度并不高，也要尽量在GPU中实现，避免过多的数据经由PCIe传递。这是CUDA编程中较重要的原则之一。
 
@@ -246,6 +217,4 @@ __device__​ double __fsqrt_rz (double  x); // round-towards-zero mode
 
 在开发~CUDA~程序时，浮点数精度的选择及数学函数和内建函数之间的选择都要视应用程序的要求而定。例如，在作者开发的分子动力学模拟程序~GPUMD（\url{https://github.com/brucefan1983/GPUMD}）中，绝大部分的代码使用了双精度浮点数，只在极个别的地方使用了单精度浮点数，而且没有使用内建函数；在作者开发的经验势拟合程序~GPUGA（\url{https://github.com/brucefan1983/GPUGA}）中，统一使用了单精度浮点数，而且使用了内建函数。之所以这样选择，是因为前者对计算精度要求较高，后者对计算精度要求较低。
 
-\chapter{CUDA~的内存组织\label{chapter:memory}}
 
-前一章讨论了几个获得~GPU~加速的必要但不充分条件。在满足那些条件之后，要获得尽可能高的性能，还有很多需要注意的方面，其中最重要的是合理地使用各种设备内存。本章从整体上介绍~CUDA~中的内存组织，为后续章节的讨论打好理论基础。
