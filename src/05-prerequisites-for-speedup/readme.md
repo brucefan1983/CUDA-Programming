@@ -1,19 +1,21 @@
-\chapter{获得~GPU~加速的关键\label{chapter:speedup}}
+# Chapter 5 Prerequisites for obtaining high performance in CUDA programs
 
-前几章主要关注程序的正确性，没有强调程序的性能（执行速度）。从本章起，我们开始关注~CUDA~程序的性能。在开发~CUDA~程序时往往要验证某些改变是否提高了程序的性能，这就需要对程序进行比较精确的计时。所以，下面我们就从给主机和设备函数的计时讲起。
 
-\section{用CUDA事件计时\label{section:timing}}
 
-在~C++~中，有多种可以对一段代码进行计时的方法，包括使用~GCC~和~MSVC~都有的~\verb"clock"~函数和与头文件~\verb"<chrono>"~对应的时间库、GCC~中的~\verb"gettimeofday"~函数及~MSVC~中的~\verb"QueryPerformanceCounter"~和~\verb"QueryPerformanceFrequency"~函数等。CUDA~提供了一种基于~CUDA~事件（CUDA event）的计时方式，可用来给一段~CUDA~代码（可能包含了主机代码和设备代码）计时。为简单起见，我们这里仅介绍基于~CUDA~事件的计时方法。Listing~\ref{listing:timing}~给出了使用~CUDA~事件对一段代码进行计时的方式。
+In the previous chapters, we have only discussed the correctness of a CUDA program. Starting from this chapter, we will focus on the performance of CUDA programs. 
 
-\begin{lstlisting}[language=C++,caption={本书中常用的计时方式。},label={listing:timing}]
+## 5.1 Using CUDA events to time a block of code
+
+There are many methods of timing for a block of code in a CUDA program, but here we only introduce a method based on CUDA events:
+
+```c++
 cudaEvent_t start, stop;
 CHECK(cudaEventCreate(&start));
 CHECK(cudaEventCreate(&stop));
 CHECK(cudaEventRecord(start));
-cudaEventQuery(start); // 此处不能用 CHECK 宏函数（见第 4 章的讨论）
+cudaEventQuery(start); // cannot use the macro function CHECK here
 
-需要计时的代码块
+// The code block to be timed
 
 CHECK(cudaEventRecord(stop));
 CHECK(cudaEventSynchronize(stop));
@@ -23,63 +25,35 @@ printf("Time = %g ms.\n", elapsed_time);
 
 CHECK(cudaEventDestroy(start));
 CHECK(cudaEventDestroy(stop));
-\end{lstlisting}
+```
 
-下面是对该计时方式的解释：
-\begin{itemize}
-\item 第1行定义了两个CUDA事件类型（\verb"cudaEvent_t"）的变量~\verb"start"~和~\verb"stop"，第2行和第3行用cudaEventCreate函数初始化它们。
-\item 第~4~行将~\verb"start"~传入~cudaEventRecord~函数，在需要计时的代码块之前记录一个代表开始的事件。
-\item 第~5~行对处于~TCC~驱动模式的~GPU~来说可以省略，但对处于~WDDM~驱动模式的~GPU~来说必须保留。这是因为，在处于~WDDM~驱动模式的~GPU~中，一个~CUDA~流（CUDA stream）中的操作（如这里的~cudaEventRecord~函数）并不是直接提交给~GPU~执行，而是先提交到一个软件队列，需要添加一条对该流的~cudaEventQuery~操作（或者~cudaEventSynchronize）刷新队列，才能促使前面的操作在~GPU~执行。关于~CUDA~流，会在第~\ref{chapter:cuda-stream}~章详细讨论，读者暂时不必对此深究。
-\item 第~7~行代表一个需要计时的代码块，它可以是一段主机代码（如对一个主机函数的调用），也可以是一段设备代码（如对一个核函数的调用），还可以是一段混合代码。
-\item 第~9~行将~\verb"stop"~传入~cudaEventRecord~函数，在需要计时的代码块之后记录一个代表结束的事件。
-\item 第~10~行的~cudaEventSynchronize~函数让主机等待事件~\verb"stop"~被记录完毕。
-\item 第~11-13~行调用~cudaEventElapsedTime~函数计算~\verb"start"~和~\verb"stop"~这两个事件之间的时间差（单位是ms）并输出到屏幕。
-\item 第~15-16~行调用~cudaEventDestroy~函数销毁~\verb"start"~和~\verb"stop"~这两个~CUDA~事件。这是本书中唯一使用~CUDA~事件的地方，故这里不对~CUDA~事件做进一步讨论。下面，我们对前两章讨论过的数组相加程序进行计时。
-\end{itemize}
+This timing method can be understood as follows:
+
+* First, we define two CUDA events, `start` and `stop`, which are of type `cudaEvent_t`, and then initialize them using the `cudaEventCreate` function.
+* Next, we pass `start` into the function `cudaEventRecord` to record a time stamp representing the start of the code block to be timed. The next call to `cudaEventRecord` is only necessary for GPUs in the WDDM mode.
+* Then, after the code block, we pass `stop` into the function `cudaEventRecord` to record a time stamp representing the end of the code block. The next call to `cudaEventSynchronize` forces the host to wait for the completion of the previous statement.
+* Then, we use the function `cudaEventElapsedTime` to calculate the time interval `elapsed_time` between `stop` and `start`, in units of ms (micro second, or 1/1000 second).
+* The last two lines are used to clean up resources. 
+
+We first use this method time time the `add1cpu.cu` program of this chapter, which is adapted from the `add.cpp` program of chapter 3. We can use the following command to compile a version using single-precision floating point numbers in the code:
+
+```shell
+$ nvcc -O3 -arch=sm_75 add1cpu.cu
+```
+
+If we want to get a version using double-precision floating point numbers, we can use the the following command:
+
+```shell
+$ nvcc -O3 -arch=sm_75 -DUSE_DP add1cpu.cu
+```
+
+We can similarly build the single-precision and double-precision versions of the corresponding CUDA program `add2gpu.cu` of this chapter. Using single-precision, the host function `add` in `add1cpu.cu` takes about 60 ms and the CUDA kernel `add` in `add2gpu.cu` takes about 3.3 ms. Using double precision, they take about 120 ms and 6.8 ms, respectively. The author also tested the CUDA program `add2gpu.cu` using other GPUs, including K40, P100, V100, and RTX 2080ti. The relevant timing results are presented in the following table:
+
+| V100 (S) | V100 (D) | 2080ti (S) | 2080ti (D) | P100 (S) | P100 (D) | 2070 (S) | 2070 (D) | K40 (S) | K40 (D) |
+| :------- | :------- | :--------- | :--------- | :------- | :------- | :------- | :------- | :------ | :------ |
+| 1.5 ms   | 3.0 ms   | 2.1 ms     | 4.3 ms     | 2.2 ms   | 4.3 ms   | 3.3 ms   | 6.8 ms   | 6.5 ms  | 13 ms   |
 
 
-\subsection{为~C++~程序计时}
-
-先考虑~C++~版本的程序。本章的程序~\verb"add1cpu.cu"~是在第~\ref{chapter:framework}~章的程序~\verb"add.cpp"~的基础上改写的，主要有如下3个方面的改动：
-\begin{enumerate}
-\item 即使该程序中没有使用核函数，我们也将源文件的后缀名改成了~\verb".cu"，这样就不用包含一些~CUDA~头文件了。若用~\verb".cpp"~后缀，用~\verb"nvcc"~编译时需要明确地增加一些头文件的包含，用~\verb"g++"~编译时还要明确地链接一些~CUDA~库。
-\item 从本章起，我们用条件编译的方式选择程序中所用浮点数的精度。在程序的开头部分，有如下几行代码：
-\begin{verbatim}
-#ifdef USE_DP
-    typedef double real;
-    const real EPSILON = 1.0e-15;
-#else
-    typedef float real;
-    const real EPSILON = 1.0e-6f;
-#endif    
-\end{verbatim}
-当宏~\verb"USE_DP"~有定义时，程序中的~\verb"real"~就代表~\verb"double"，否则代表~\verb"float"。该宏可以通过编译选项定义（具体见后面的编译命令）。
-\item 我们用CUDA事件对该程序中函数~\verb"add"~的调用进行了计时，而且重复了11次。我们忽略第一次测得的时间，因为第一次计算时，机器（无论是CPU还是GPU）都可能处于预热状态，测得的时间往往偏大。我们根据后10次测试的时间计算一个平均值。具体细节见本章的程序~\verb"add1cpu.cu"。
-\end{enumerate}
-
-我们依然用~\verb"nvcc"~编译程序。这里，有几个编译选项值得注意。首先，C++~程序的性能显著地依赖于优化选项。我们将总是用~\verb"-O3"~选项。然后，正如前面提到过的，我们可以用条件编译的方式来选择程序中浮点数的精度。具体地说，如果将~\verb"-DUSE_DP"~加入编译选项，程序中的宏~\verb"USE_DP"~将有定义，从而使用双精度浮点数，否则使用单精度浮点数。最后，对本例来说~\verb"GPU"~架构的指定是无关紧要的，但还是可以指定一个具体的架构选项。
-
-我们首先用如下命令编译程序：
-\begin{verbatim}
-    $ nvcc -O3 -arch=sm_75 add1cpu.cu
-\end{verbatim}
-这将得到一个使用单精度浮点数的可执行文件。运行该可执行文件，程序将输出其中的~\verb"add"~函数所花的时间。在作者的计算机中，该主机函数耗时约60 ms。然后，我们用如下命令编译程序：
-\begin{verbatim}
-    $ nvcc -O3 -arch=sm_75 -DUSE_DP add1cpu.cu
-\end{verbatim}
-这将得到一个使用双精度浮点数的可执行文件。在该版本中，\verb"add"~函数耗时约120 ms。我们看到，双精度版本的~\verb"add"~函数所用时间大概是单精度版本的~\verb"add"~函数所用时间的2倍，这对于这种访存主导的函数来说是合理的。本章后面会继续讨论这一点。
-
-\subsection{为~CUDA~程序计时}
-
-类似地，我们在第~\ref{chapter:error-check}~章的~\verb"check1api.cu"~程序的基础上进行修改，用~CUDA~事件对其中的核函数~\verb"add"~进行计时，从而得到本章的~\verb"add2gpu.cu"~程序。我们用命令
-\begin{verbatim}
-    $ nvcc -O3 -arch=sm_75 add2gpu.cu
-\end{verbatim}
-编译出使用单精度浮点数的可执行文件，用命令
-\begin{verbatim}
-    $ nvcc -O3 -arch=sm_75 -DUSE_DP add2gpu.cu
-\end{verbatim}
-编译出使用双精度浮点数的可执行文件。在装有~GeForce RTX 2070~的计算机中测试，使用单精度浮点数时核函数~\verb"add"~所用时间约为3.3 ms，使用双精度浮点数时核函数~\verb"add"~所用时间约为6.8 ms。这两个时间的比值也约为2。作者也用其他一些GPU进行了测试，结果见表~\ref{table:add-timing}。可以看到，这个时间比值对每一款~GPU~都是基本适用的。从表~\ref{table:add-timing}~中可以看出，该比值与单、双精度浮点数运算峰值的比值没有关系。这是因为，对于数组相加的问题，其执行速度是由显存带宽决定的，而不是由浮点数运算峰值决定的。
 
 我们还可以计算数组相加问题在~GPU~中达到的有效显存带宽（effective memory bandwidth），并与表~\ref{table:add-timing}~中的理论显存带宽（theoretical memory bandwidth）进行比较。有效显存带宽定义为GPU在单位时间内访问设备内存的字节数。以作者计算机中的GeForce RTX 2070和使用单精度浮点数的情形为例，根据表中的数据，其有效显存带宽为
 \begin{equation}
@@ -115,26 +89,7 @@ GeForce RTX 2080ti & 7.5  & 616 GB/s & 0.4 (13) TFLOPS & 4.3 (2.1) ms \\
 
 从上述测试得到的数据可以看到一个令人惊讶的结果：核函数的运行时间不到数据复制时间的~$2\%$。如果将CPU与GPU之间的数据传输时间也计入，CUDA~程序相对于~C++~程序得到的不是性能提升，而是性能降低。总之，如果一个程序的计算任务仅仅是将来自主机端的两个数组相加，并且要将结果传回主机端，使用GPU就不是一个明智的选择。那么，什么样的计算任务能够用GPU获得加速呢？本章下面的内容将回答这个问题。
 
-在CUDA工具箱中有一个称为~\verb"nvprof"~的可执行文件，可用于对CUDA程序进行更多的性能剖析。在使用~\verb"nvprof"~时，可将它置于原来的程序执行命令之前，得到如下的运行命令：
-\begin{verbatim}
-    $ nvprof ./a.out
-\end{verbatim}
-如果用上述命令时遇到了类似如下的错误提示：
-\begin{verbatim}
-    Unable to profile application. Unified Memory profiling failed
-\end{verbatim}
-则可以尝试将运行命令换为
-\begin{verbatim}
-    $ nvprof --unified-memory-profiling off ./a.out
-\end{verbatim}
-对程序~\verb"add3memcpy.cu"~来说，在~GeForce RTX 2070~中使用上述命令，得到部分结果如下（单精度浮点数版本）：
-\begin{verbatim}
-    Time(%) Time     Calls Avg      Min      Max      Name
-    47.00%  134.38ms 2     67.191ms 62.854ms 71.527ms [CUDA memcpy HtoD] 
-    40.13%  114.74ms 1     114.74ms 114.74ms 114.74ms [CUDA memcpy DtoH] 
-    12.86%  36.778ms 11    3.3435ms 3.3424ms 3.3501ms add()
-\end{verbatim}
-为排版方便起见，我们将~\verb"add()"~函数中的参数类型省去了，而在原始的输出中函数的参数类型是保留的。这里的第一列是此处列出的每类操作所用时间的百分比，第二列是每类操作用的总时间，第三列是每类操作被调用的次数，第四列是每类操作单次调用所用时间的平均值，第五列是每类操作单次调用所用时间的最小值，第六列是每类操作单次调用所用时间的最大值，第七列是每类操作的名称。从这里的输出可以看出核函数的执行时间及数据传输所用时间，它们和用CUDA事件获得的结果是一致的。
+
 
 
 \section{几个影响~GPU 加速的关键因素}
