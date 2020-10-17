@@ -63,9 +63,9 @@ Using RTX 2070, the speedup factor of the CUDA kernel over the corresponding hos
 
 ### 5.2.1 Ratio of data transfer
 
-In the program `add2gpu.cu`, we have only timed the CUDA kernel. Here, we also include the data transfer before and after the kernel into the code block to be timed, as in the program `add3memcpy.cu`. Using RTX 2070, this part takes 180 ms and 360 ms, respectively, for the single-precision and double-precision versions.
+In the program `add2gpu.cu`, we have only timed the CUDA kernel. Here, we also include the data transfer before and after the kernel into the code block to be timed, as in the program `add3memcpy.cu`. Using RTX 2070, this part takes 180 ms and 360 ms, respectively, for the single-precision and double-precision versions. We see that if we include the time spent on data transfer, the CUDA program is even 3 times as slow as the C++ program.
 
-从上述测试得到的数据可以看到一个令人惊讶的结果：核函数的运行时间不到数据复制时间的~$2\%$。如果将CPU与GPU之间的数据传输时间也计入，CUDA~程序相对于~C++~程序得到的不是性能提升，而是性能降低。总之，如果一个程序的计算任务仅仅是将来自主机端的两个数组相加，并且要将结果传回主机端，使用GPU就不是一个明智的选择。那么，什么样的计算任务能够用GPU获得加速呢？本章下面的内容将回答这个问题。
+总之，如果一个程序的计算任务仅仅是将来自主机端的两个数组相加，并且要将结果传回主机端，使用GPU就不是一个明智的选择。那么，什么样的计算任务能够用GPU获得加速呢？本章下面的内容将回答这个问题。
 
 从第~\ref{section:timing}~节的讨论我们知道，如果一个程序的目的仅仅是计算两个数组的和，那么用~GPU~可能比用~CPU~还要慢。这是因为，花在数据传输（CPU~与~GPU~之间）上的时间比计算（求和）本身还要多很多。GPU~计算核心和设备内存之间数据传输的峰值理论带宽要远高于~GPU~和~CPU~之间数据传输的带宽。参看表~\ref{table:add-timing}，典型~GPU~的显存带宽理论值为几百吉字节每秒，而常用的连接GPU和CPU内存的PCIe x16 Gen3仅有16 GB/s的带宽。它们相差几十倍。要获得可观的GPU加速，就必须尽量缩减数据传输所花时间的比例。有时候，即使有些计算在GPU中的速度并不高，也要尽量在GPU中实现，避免过多的数据经由PCIe传递。这是CUDA编程中较重要的原则之一。
 
