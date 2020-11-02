@@ -100,7 +100,7 @@ We change the array length `N` from 10^3 to 10^8 and time the kernel, using sing
 
 ## 5.3 The math library in CUDA
 
-In the above program, we have used the `sqrt()` function in the kernel. This is one of the many math functions in the CUDA math API. For a full list math functions, one can check the official manual of the CUDA math API: http://docs.nvidia.com/cuda/cuda-math-api.
+In the above program, we have used the `sqrt()` function in the kernel. This is one of the many math functions in the CUDA math API. For a full list of math functions, one can check the official manual of the CUDA math API: http://docs.nvidia.com/cuda/cuda-math-api.
 
 Any math function such as `sqrt()` has been overloaded. For example, `sqrt()` has the following three prototypes:
 
