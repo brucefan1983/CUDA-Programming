@@ -15,7 +15,7 @@ https://github.com/YouQixiaowu/CUDA-Programming-with-Python
 
 
 ## 关于本书：
-  * 已交稿，将于 2020 年由清华大学出版社出版，语言为中文。 
+  * 已于2020年10月由清华大学出版社出版，语言为中文。 
   * 覆盖开普勒到图灵（计算能力从 3.0 到 7.5）的所有 GPU 架构。
   * 尽量同时照顾 Windows 和 Linux 用户。
   * 假设读者有如下基础：
