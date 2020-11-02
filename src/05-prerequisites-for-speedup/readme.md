@@ -94,7 +94,7 @@ When the array length is 10 000, the host function takes 320 ms and 450 ms, usin
 
 The **degree of parallelism** for a CUDA kernel is essentially the total number of threads assigned for the kernel. Each GPU consists of multiple streaming multiprocessors (SM) and each SM has a number of CUDA cores. Each SM can support about 1024 parallel threads and a typical GPU can thus support at least tens of thousands of parallel threads. If the number of threads assigned for a CUDA kernel is much smaller than this number, it would be hard to get high performance.
 
-![alt text](https://github.com/brucefan1983/CUDA-Programming/tree/master/src/05-prerequisites-for-speedup/speed.png "Speed test")
+![Effects of the degree of parallelism on the performance of the kernel](speed.png)
 
 
 
