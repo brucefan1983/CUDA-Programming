@@ -94,53 +94,21 @@ When the array length is 10 000, the host function takes 320 ms and 450 ms, usin
 
 The **degree of parallelism** for a CUDA kernel is essentially the total number of threads assigned for the kernel. Each GPU consists of multiple streaming multiprocessors (SM) and each SM has a number of CUDA cores. Each SM can support about 1024 parallel threads and a typical GPU can thus support at least tens of thousands of parallel threads. If the number of threads assigned for a CUDA kernel is much smaller than this number, it would be hard to get high performance.
 
-![Effects of the degree of parallelism on the performance of the kernel](speed.png)
+![parallelism](speed.png)
 
+We change the array length `N` from 10^3 to 10^8 and time the kernel, using single precision. The kernel execution times obtained using a GeForce RTX 2070 are shown in panel (a) of the above figure. The corresponding speedup factors relative to the CPU function are shown in panel (b). When `N` is large, the kernel execution time is proportional to `N`, and the speedup factor is saturated. When `N` is small, the kernel execution time tends to be a constant and speedup factor is nearly proportional to `N`. The computational resource of the GPU is only fully utilized when `N` is of the order of one million.
 
+## 5.3 The math library in CUDA
 
-为了验证这个论断，我们将~\verb"arithmetic2gpu.cu"~程序中的数组元素个数~\verb"N"~从~$10^3$~以10倍的间隔增加到~$10^8$，分别测试核函数的执行时间，结果展示在图~\ref{figure:data_size}（a）中。因为~CPU~中的计算时间基本上与数据量成正比，所以我们可以根据之前的结果计算~\verb"N"~取不同值时~GPU~程序相对于~CPU~程序的加速比，结果显示在图~\ref{figure:data_size}（b）中。
+In the above program, we have used the `sqrt()` function in the kernel. This is one of the many math functions in the CUDA math API. For a full list math functions, one can check the official manual of the CUDA math API: http://docs.nvidia.com/cuda/cuda-math-api.
 
-由图~\ref{figure:data_size}（a） 可知，在数组元素个数~\verb"N"~很大时，核函数的计算时间正比于~\verb"N"；在~\verb"N"~很小时，核函数的计算时间不依赖于~\verb"N"~ 的值，保持为常数。这两个极限情况都是容易理解的。当~\verb"N" 足够大时，GPU~是满负荷工作的，增加一倍的工作量就会增加一倍的计算时间。反之，当~\verb"N"~不够大时，GPU~中是有空闲的计算资源的，增加~\verb"N"~的值并不会增加计算时间。若要让~GPU~满负荷工作，则核函数中定义的线程总数要不少于某个值，该值在一般情况下和~GPU~中能够驻留的线程总数相当，但也有可能更小。只有在~GPU~满负荷工作的情况下，GPU~中的计算资源才能充分地发挥作用，从而获得较高的加速比。
+Any math function such as `sqrt()` has been overloaded. For example, `sqrt()` has the following three prototypes:
 
-因为我们的~CPU~程序中的计算是串行的，其性能基本上与数组长度无关，所以~GPU~程序相对于~CPU~程序的加速比在小~\verb"N"~的极限下几乎是正比于~\verb"N"~的。在大~\verb"N"~的极限下，GPU~程序相对于~CPU~程序的加速比接近饱和。总之，对于数据规模很小的问题，用~GPU~很难得到可观的加速。
-
-
-
-
-\section{CUDA~中的数学函数库}
-
-在前面的例子中，我们在核函数中使用了求平方根的数学函数。在~CUDA~数学库中，还有很多类似的数学函数，如幂函数、三角函数、指数函数、对数函数等。这些函数可以在如下网站查询：\url{http://docs.nvidia.com/cuda/cuda-math-api}。建议读者浏览该文档，了解~CUDA~的数学函数库都提供了哪些数学函数。这样，在需要使用时就容易想起来。
-
-CUDA~数学库中的函数可以归纳如下：
-\begin{enumerate}
-    \item 单精度浮点数内建函数和数学函数（single precision intrinsics and math functions）。使用该类函数时不需要包含任何额外的头文件。
-    \item 双精度浮点数内建函数和数学函数（double precision intrinsics and math functions）。使用该类函数时不需要包含任何额外的头文件。
-    \item 半精度浮点数内建函数和数学函数（half precision intrinsics and math functions）。使用该类函数时需要包含头文件~\verb"<cuda_fp16.h>"。本书不涉及此类函数。
-    \item 整数类型的内建函数（integer intrinsics）。使用该类函数时不需要包含任何额外的头文件。本书不涉及此类函数。
-    \item 类型转换内建函数（type casting intrinsics）。使用该类函数时不需要包含任何额外的头文件。本书不涉及此类函数。
-    \item 单指令-多数据内建函数（SIMD intrinsics）。使用该类函数时不需要包含任何额外的头文件。本书不涉及此类函数。
-\end{enumerate}
-
-本书将仅涉及单精度浮点数和双精度浮点数类型的数学函数和内建函数。其中数学函数（math functions）都是经过重载的。例如，求平方根的函数具有如下3种原型：
-\begin{verbatim}
+```c++
     double sqrt(double x);
     float sqrt(float x);
     float sqrtf(float x);
-\end{verbatim}
-所以，当~\verb"x"~是双精度浮点数时，我们只可以用~\verb"sqrt(x)"；当~\verb"x"~是单精度浮点数时，我们可以用~\verb"sqrt(x)"，也可以用~\verb"sqrtf(x)"。那么综合起来，我们可统一地用双精度函数的版本处理单精度浮点数和双精度浮点数类型的变量。
-
-内建函数指的是一些准确度较低，但效率较高的函数。例如，有如下版本的求平方根的内建函数：
-\begin{verbatim}
-__device__​ float __fsqrt_rd (float  x); // round-down mode
-__device__​ float __fsqrt_rn (float  x); // round-to-nearest-even mode
-__device__​ float __fsqrt_ru (float  x); // round-up mode
-__device__​ float __fsqrt_rz (float  x); // round-towards-zero mode
-__device__​ double __fsqrt_rd (double  x); // round-down mode
-__device__​ double __fsqrt_rn (double  x); // round-to-nearest-even mode
-__device__​ double __fsqrt_ru (double  x); // round-up mode
-__device__​ double __fsqrt_rz (double  x); // round-towards-zero mode   
-\end{verbatim}
-
-在开发~CUDA~程序时，浮点数精度的选择及数学函数和内建函数之间的选择都要视应用程序的要求而定。例如，在作者开发的分子动力学模拟程序~GPUMD（\url{https://github.com/brucefan1983/GPUMD}）中，绝大部分的代码使用了双精度浮点数，只在极个别的地方使用了单精度浮点数，而且没有使用内建函数；在作者开发的经验势拟合程序~GPUGA（\url{https://github.com/brucefan1983/GPUGA}）中，统一使用了单精度浮点数，而且使用了内建函数。之所以这样选择，是因为前者对计算精度要求较高，后者对计算精度要求较低。
+```
 
 
+Therefore, we can use `sqrt()` to deal with both single and double precision floating point numbers.
