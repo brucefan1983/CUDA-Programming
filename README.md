@@ -23,6 +23,13 @@ https://github.com/YouQixiaowu/CUDA-Programming-with-Python
     * 熟悉本科水平的物理（对第 13 章来说；本章可选读）
     * 熟悉本科水平的数学（对第 14 章来说；本章可选读）
     
+
+## 第一版勘误
+
+* 前言：“苏州吉普讯科技有限公司”应改为“苏州吉普迅科技有限公司”。
+
+
+
 ## 我的测试系统
 * Linux: 主机编译器用的 `g++`。
 * Windows: 仅使用命令行解释器 `CMD`，主机编译器用 Visual Studio 中的 `cl`。在用 `nvcc` 编译 CUDA 程序时，可能需要添加 `-Xcompiler "/wd 4819"` 选项消除和 unicode 有关的警告。
