@@ -26,7 +26,7 @@ https://github.com/YouQixiaowu/CUDA-Programming-with-Python
 
 ## 第一版勘误
 
-* 前言：“苏州吉普讯科技有限公司”应改为“苏州吉普迅科技有限公司”。
+* 前言：“苏州吉普**讯**科技有限公司”应改为“苏州吉普**迅**科技有限公司”。
 
 
 
