@@ -1,14 +1,5 @@
 # 《`CUDA` 编程：基础与实践》源代码
 
-
-## I am writing a simplified English version (about half size of the Chinese version) of the book:
-* [Chapter 1 (**finished**)](https://github.com/brucefan1983/CUDA-Programming/blob/master/src/01-introduction/readme.md)
-* [Chapter 2 (**finished**)](https://github.com/brucefan1983/CUDA-Programming/blob/master/src/02-thread-organization/readme.md)
-* [Chapter 3 (**finished**)](https://github.com/brucefan1983/CUDA-Programming/blob/master/src/03-basic-framework/readme.md)
-* [Chapter 4 (**finished**)](https://github.com/brucefan1983/CUDA-Programming/tree/master/src/04-error-check)
-* [Chapter 5 (**finished**)](https://github.com/brucefan1983/CUDA-Programming/tree/master/src/05-prerequisites-for-speedup)
-* [Chapter 6 (**on-going**)](https://github.com/brucefan1983/CUDA-Programming/tree/master/src/06-memory)
-* [Chapter 7 (**on-going**)](https://github.com/brucefan1983/CUDA-Programming/tree/master/src/07-global-memory)
 ## 相关仓库
 * 由琪同学正在用 pyCUDA 实现本书中的范例，见如下仓库：
 https://github.com/YouQixiaowu/CUDA-Programming-with-Python
@@ -167,11 +158,7 @@ https://github.com/YouQixiaowu/CUDA-Programming-with-Python
 14.5  cuRAND 库 181
 14.5.1  简介 181
 14.5.2  例子 182
-```  
-
-## 第一版勘误
-* 欢迎读者找错。找到一个其他人没有报告的错误并说服我改正者，我承诺送您此书第二版一本。
-* 前言：“苏州吉浦**讯**科技有限公司”应改为“苏州吉浦**迅**科技有限公司”。
+```
 
 
 ## 我的测试系统
