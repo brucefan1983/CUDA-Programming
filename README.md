@@ -1,18 +1,17 @@
 # 《`CUDA` 编程：基础与实践》源代码
 
-
 ## I am writing a simplified English version (about half size of the Chinese version) of the book:
 * [Chapter 1 (**finished**)](https://github.com/brucefan1983/CUDA-Programming/blob/master/src/01-introduction/readme.md)
 * [Chapter 2 (**finished**)](https://github.com/brucefan1983/CUDA-Programming/blob/master/src/02-thread-organization/readme.md)
 * [Chapter 3 (**finished**)](https://github.com/brucefan1983/CUDA-Programming/blob/master/src/03-basic-framework/readme.md)
 * [Chapter 4 (**finished**)](https://github.com/brucefan1983/CUDA-Programming/tree/master/src/04-error-check)
 * [Chapter 5 (**finished**)](https://github.com/brucefan1983/CUDA-Programming/tree/master/src/05-prerequisites-for-speedup)
+
 ## 相关仓库
 * 由琪同学正在用 pyCUDA 实现本书中的范例，见如下仓库：
 https://github.com/YouQixiaowu/CUDA-Programming-with-Python
 
-
-## 关于本书：
+## 关于本书第一版：
   * 已于2020年10月由清华大学出版社出版，语言为中文。在京东或者淘宝搜索“CUDA 编程 樊哲勇”可找到本书。
   * 覆盖开普勒到图灵（计算能力从 3.0 到 7.5）的所有 GPU 架构。
   * 尽量同时照顾 Windows 和 Linux 用户。
@@ -20,7 +19,10 @@ https://github.com/YouQixiaowu/CUDA-Programming-with-Python
     * 熟悉 `C++` (对全书来说)
     * 熟悉本科水平的物理（对第 13 章来说；本章可选读）
     * 熟悉本科水平的数学（对第 14 章来说；本章可选读）
-   * 全书目录：
+  * 第一版勘误
+    * 欢迎读者找错。找到一个其他人没有报告的错误并说服我改正者，我承诺送您此书第二版一本。
+    * 前言：“苏州吉浦**讯**科技有限公司”应改为“苏州吉浦**迅**科技有限公司”。
+  * 第一版全书目录：
 ```  
 第1章  GPU 硬件与 CUDA 程序开发工具 1
 1.1  GPU 硬件简介 1
@@ -166,11 +168,6 @@ https://github.com/YouQixiaowu/CUDA-Programming-with-Python
 14.5.1  简介 181
 14.5.2  例子 182
 ```
-
-## 第一版勘误
-* 欢迎读者找错。找到一个其他人没有报告的错误并说服我改正者，我承诺送您此书第二版一本。
-* 前言：“苏州吉浦**讯**科技有限公司”应改为“苏州吉浦**迅**科技有限公司”。
-
 
 ## 我的测试系统
 * Linux: 主机编译器用的 `g++`。
