@@ -19,6 +19,7 @@ https://github.com/YouQixiaowu/CUDA-Programming-with-Python
     * 熟悉 `C++` (对全书来说)
     * 熟悉本科水平的物理（对第 13 章来说；本章可选读）
     * 熟悉本科水平的数学（对第 14 章来说；本章可选读）
+  * 本仓库的 master 分支将对应开发版本，与第一版对应的源代码见如下发布版本：https://github.com/brucefan1983/CUDA-Programming/releases/tag/v1.0
   * 第一版勘误
     * 欢迎读者找错。找到一个其他人没有报告的错误并说服我改正者，我承诺送您此书第二版一本。
     * 前言：“苏州吉浦**讯**科技有限公司”应改为“苏州吉浦**迅**科技有限公司”。
