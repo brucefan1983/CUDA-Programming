@@ -12,6 +12,9 @@
 https://github.com/YouQixiaowu/CUDA-Programming-with-Python
 
 ## 关于本书第一版：
+
+* 封面：![Alt text](https://github.com/brucefan1983/CUDA-Programming/tree/master/src/cover/cover.jpg)
+
   * 已于2020年10月由清华大学出版社出版，语言为中文。在京东或者淘宝搜索“CUDA 编程 樊哲勇”可找到本书。购买此书的读者可以加入《CUDA 100%》QQ 群：195055206。若对书中的内容有疑问，可在此群讨论。
   * 覆盖开普勒到图灵（计算能力从 3.0 到 7.5）的所有 GPU 架构。
   * 尽量同时照顾 Windows 和 Linux 用户。
