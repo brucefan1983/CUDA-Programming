@@ -28,7 +28,7 @@ https://github.com/YouQixiaowu/CUDA-Programming-with-Python
 * 第一版勘误
   * 欢迎读者找错。找到一个其他人没有报告的错误并说服我改正者，我承诺送您此书第二版一本。
   * 前言：“苏州吉浦**讯**科技有限公司”应改为“苏州吉浦**迅**科技有限公司”。感谢 GPUSLady 指正。
-  * 第52~53页：`$ nvcc -O3 -arch=sm_75 -arithmetic1cpu.cu` 应改为 `$ nvcc -O3 -arch=sm_75 arithmetic1cpu.cu`。感谢 Ebrece 指正。
+  * 第52~53页：`$ nvcc -O3 -arch=sm_75 -arithmetic1cpu.cu` 应改为 `$ nvcc -O3 -arch=sm_75 arithmetic1cpu.cu`。类似地，`$ nvcc -O3 -arch=sm_75 -arithmetic2gpu.cu` 应改为 `$ nvcc -O3 -arch=sm_75 arithmetic2gpu.cu`。感谢 Ebrece 指正。
 * 第一版全书目录：
 ```  
 第1章  GPU 硬件与 CUDA 程序开发工具 1
