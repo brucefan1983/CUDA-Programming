@@ -29,6 +29,7 @@ https://github.com/YouQixiaowu/CUDA-Programming-with-Python
   * 欢迎读者找错。找到一个其他人没有报告的错误并说服我改正者，我承诺送您此书第二版一本。
   * 前言：“苏州吉浦**讯**科技有限公司”应改为“苏州吉浦**迅**科技有限公司”。感谢 GPUSLady 指正。
   * 第 52 页的 `$ nvcc -O3 -arch=sm_75 -arithmetic1cpu.cu` 应改为 `$ nvcc -O3 -arch=sm_75 arithmetic1cpu.cu`。类似地，第53页的 `$ nvcc -O3 -arch=sm_75 -arithmetic2gpu.cu` 应改为 `$ nvcc -O3 -arch=sm_75 arithmetic2gpu.cu`。感谢 Ebrece 指正。
+  * 第143页，程序中第23行核函数的第二个参数 `size` 应改为 `size / sizeof(uint64_t)`。我已经修改了本仓库中对应的程序 [对应的程序](https://github.com/brucefan1983/CUDA-Programming/blob/master/src/12-unified-memory/oversubscription2.cu)。感谢我自己找到这个错误。
 * 第一版全书目录：
 ```  
 第1章  GPU 硬件与 CUDA 程序开发工具 1
