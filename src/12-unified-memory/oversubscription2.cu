@@ -17,10 +17,11 @@ int main(void)
 {
     for (int n = 1; n <= N; ++n)
     {
-        const size_t size = size_t(n) * 1024 * 1024 * 1024;
+        const size_t memory_size = size_t(n) * 1024 * 1024 * 1024;
+        const size_t data_size = memory_size / sizeof(uint64_t);
         uint64_t *x;
-        CHECK(cudaMallocManaged(&x, size));
-        gpu_touch<<<size / sizeof(uint64_t) / 1024, 1024>>>(x, size);
+        CHECK(cudaMallocManaged(&x, memory_size));
+        gpu_touch<<<(data_size - 1) / 1024 + 1, 1024>>>(x, data_size);
         CHECK(cudaGetLastError());
         CHECK(cudaDeviceSynchronize());
         CHECK(cudaFree(x));
