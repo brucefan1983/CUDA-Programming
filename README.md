@@ -1,197 +1,49 @@
-# 《`CUDA` 编程：基础与实践》源代码
+[toc]
 
-## I am writing a simplified English version (about half size of the Chinese version) of the book:
+# English version
+
+I am writing a simplified English version (about half size of the Chinese version) of the book:
+
 * [Chapter 1 (**finished**)](https://github.com/brucefan1983/CUDA-Programming/blob/master/src/01-introduction/readme.md)
 * [Chapter 2 (**finished**)](https://github.com/brucefan1983/CUDA-Programming/blob/master/src/02-thread-organization/readme.md)
 * [Chapter 3 (**finished**)](https://github.com/brucefan1983/CUDA-Programming/blob/master/src/03-basic-framework/readme.md)
 * [Chapter 4 (**finished**)](https://github.com/brucefan1983/CUDA-Programming/tree/master/src/04-error-check)
 * [Chapter 5 (**finished**)](https://github.com/brucefan1983/CUDA-Programming/tree/master/src/05-prerequisites-for-speedup)
 
-## 相关仓库
+# 友情链接
 * 由琪同学正在用 pyCUDA 实现本书中的范例，见如下仓库：
 https://github.com/YouQixiaowu/CUDA-Programming-with-Python
+* 购买此书的读者可以加入《CUDA 100%》QQ 群：195055206。若对书中的内容有疑问，可在此群讨论。
 
-## 关于本书第一版：
+# 关于本书第一版：
 
-* 封面：
+## 封面
 
-  ![cover](cover.jpg)
+![cover](cover.jpg)
 
-* 已于2020年10月由清华大学出版社出版，语言为中文。在京东或者淘宝搜索“CUDA 编程 樊哲勇”可找到本书。购买此书的读者可以加入《CUDA 100%》QQ 群：195055206。若对书中的内容有疑问，可在此群讨论。
-* 覆盖开普勒到图灵（计算能力从 3.0 到 7.5）的所有 GPU 架构。
-* 尽量同时照顾 Windows 和 Linux 用户。
-* 假设读者有如下基础：
-  * 熟悉 `C++` (对全书来说)
-  * 熟悉本科水平的物理（对第 13 章来说；本章可选读）
-  * 熟悉本科水平的数学（对第 14 章来说；本章可选读）
-* 本仓库的 master 分支将对应开发版本，与第一版对应的源代码见如下发布版本：https://github.com/brucefan1983/CUDA-Programming/releases/tag/v1.0
-* 第一版勘误
-  * 欢迎读者找错。找到一个其他人没有报告的错误并说服我改正者，我承诺送您此书第二版一本。
-  * 前言：“苏州吉浦**讯**科技有限公司”应改为“苏州吉浦**迅**科技有限公司”。感谢 GPUSLady 指正。
-  * 第 52 页的 `$ nvcc -O3 -arch=sm_75 -arithmetic1cpu.cu` 应改为 `$ nvcc -O3 -arch=sm_75 arithmetic1cpu.cu`。类似地，第53页的 `$ nvcc -O3 -arch=sm_75 -arithmetic2gpu.cu` 应改为 `$ nvcc -O3 -arch=sm_75 arithmetic2gpu.cu`。感谢 Ebrece 指正。
-  * 第 135 页，倒数第二行，“函数将退化同步的”应改为“函数将退化**为**同步的”。感谢 Ebrece 指正。
-  * 第 143 页，程序中第 23 行核函数的第二个参数 `size` 应改为 `size / sizeof(uint64_t)`。我已修改本仓库中 [对应的程序](https://github.com/brucefan1983/CUDA-Programming/blob/master/src/12-unified-memory/oversubscription2.cu)。感谢我自己找到这个错误。
+## 购买渠道
 
-* 第一版全书目录：
-```  
-第1章  GPU 硬件与 CUDA 程序开发工具 1
-1.1  GPU 硬件简介 1
-1.2  CUDA 程序开发工具 4
-1.3  CUDA 开发环境搭建示例 6
-1.4  用 nvidia-smi 检查与设置设备 7
-1.5  其他学习资料 8
-第2章  CUDA 中的线程组织 10
-2.1  C++ 语言中的 Hello World 程序 10
-2.2  CUDA 中的 Hello World 程序 11
-2.2.1  只有主机函数的 CUDA 程序 11
-2.2.2  使用核函数的 CUDA 程序 12
-2.3  CUDA 中的线程组织 14
-2.3.1  使用多个线程的核函数 14
-2.3.2  使用线程索引 15
-2.3.3  推广至多维网格 17
-2.3.4  网格与线程块大小的限制 21
-2.4   CUDA 中的头文件 21
-2.5  用 nvcc 编译 CUDA 程序 22
-第3章  简单 CUDA 程序的基本框架 25
-3.1  例子：数组相加 25
-3.2  CUDA 程序的基本框架 27
-3.2.1  隐形的设备初始化 29
-3.2.2  设备内存的分配与释放 29
-3.2.3  主机与设备之间数据的传递 31
-3.2.4  核函数中数据与线程的对应 32
-3.2.5  核函数的要求 33
-3.2.6  核函数中 if 语句的必要性 34
-3.3  自定义设备函数 35
-3.3.1  函数执行空间标识符 35
-3.3.2  例子：为数组相加的核函数定义一个设备函数 36
-第4章  CUDA 程序的错误检测 38
-4.1  一个检测 CUDA 运行时错误的宏函数 38
-4.1.1  检查运行时 API 函数 40
-4.1.2  检查核函数 42
-4.2  用 CUDA-MEMCHECK 检查内存错误 44
-第5章  获得 GPU 加速的关键 46
-5.1  用 CUDA 事件计时 46
-5.1.1  为 C++ 程序计时 47
-5.1.2  为 CUDA 程序计时 48
-5.2  几个影响 GPU 加速的关键因素 50
-5.2.1  数据传输的比例 50
-5.2.2  算术强度 51
-5.2.3  并行规模 54
-5.2.4  总结 55
-5.3  CUDA 中的数学函数库 55
-第6章  CUDA 的内存组织 57
-6.1  CUDA 的内存组织简介 57
-6.2  CUDA 中不同类型的内存 58
-6.2.1  全局内存 58
-6.2.2  常量内存 61
-6.2.3  纹理内存和表面内存 62
-6.2.4  寄存器 62
-6.2.5  局部内存 63
-6.2.6  共享内存 63
-6.2.7  L1 和 L2 缓存 64
-6.3  SM 及其占有率 65
-6.3.1  SM 的构成 65
-6.3.2  SM 的占有率 65
-6.4  用 CUDA 运行时 API 函数查询设备 67
-第7 章  全局内存的合理使用 70
-7.1  全局内存的合并与非合并访问 70
-7.2  例子：矩阵转置 73
-7.2.1  矩阵复制 73
-7.2.2  使用全局内存进行矩阵转置 75
-第8 章  共享内存的合理使用 78
-8.1  例子：数组归约计算 78
-8.1.1  仅使用全局内存 79
-8.1.2  使用共享内存 82
-8.1.3  使用动态共享内存 84
-8.2  使用共享内存进行矩阵转置 85
-8.3  避免共享内存的 bank 冲突 86
-第9 章  原子函数的合理使用 90
-9.1  完全在 GPU 中进行归约 90
-9.2  原子函数 93
-9.3  例子：邻居列表的建立 95
-9.3.1  C++ 版本的开发 96
-9.3.2  利用原子操作的 CUDA 版本 98
-9.3.3  不用原子操作的 CUDA 版本 101
-第10章  线程束基本函数与协作组 104
-10.1  单指令-多线程执行模式 104
-10.2  线程束内的线程同步函数 106
-10.3  更多线程束内的基本函数 109
-10.3.1  介绍 109
-10.3.2  利用线程束洗牌函数进行归约计算 114
-10.4  协作组 116
-10.4.1  线程块级别的协作组 116
-10.4.2  利用协作组进行归约计算 118
-10.5 数组归约程序的进一步优化 119
-10.5.1  提高线程利用率 119
-10.5.2  避免反复分配与释放设备内存 122
-第11章  CUDA 流 124
-11.1  CUDA 流概述 124
-11.2  在默认流中重叠主机和设备计算 125
-11.3  用非默认 CUDA 流重叠多个核函数的执行 128
-11.3.1  核函数执行配置中的流参数 128
-11.3.2  重叠多个核函数的例子 129
-11.4  用非默认 CUDA 流重叠核函数的执行与数据传递 131
-11.4.1  不可分页主机内存与异步的数据传输函数 131
-11.4.2  重叠核函数执行与数据传输的例子 133
-第12章  使用统一内存编程 136
-12.1  统一内存简介 136
-12.1.1  统一内存的基本概念 136
-12.1.2  使用统一内存对硬件的要求 137
-12.1.3  统一内存编程的优势 137
-12.2  统一内存的基本使用方法 137
-12.2.1  动态统一内存 138
-12.2.2  静态统一内存 139
-12.3  使用统一内存申请超量的内存 140
-12.3.1  第一个测试 140
-12.3.2  第二个测试 142
-12.3.3  第三个测试 143
-12.4  优化使用统一内存的程序 144
-第13章  分子动力学模拟的 CUDA 程序开发 147
-13.1  分子动力学模拟的基本算法和C++实现 147
-13.1.1  程序的整体结构 147
-13.1.2  分子动力学模拟的基本流程 148
-13.1.3  初始条件 149
-13.1.4  边界条件 150
-13.1.5  相互作用 152
-13.1.6  运动方程的数值积分 156
-13.1.7  程序中使用的单位制 157
-13.1.8  程序的编译与运行 158
-13.1.9  能量守恒的测试 159
-13.1.10  C++ 版本程序运行速度的测试 160
-13.2  CUDA 版本的分子动力学模拟程序开发 161
-13.2.1  仅加速求力和能量的部分 161
-13.2.2  加速全部计算 165
-第14章  CUDA 标准库的使用 167
-14.1  CUDA 标准库简介 167
-14.2  Thrust 库 168
-14.2.1  简介 168
-14.2.2  数据结构 168
-14.2.3  算法 168
-14.2.4  例子：前缀和 169
-14.3  cuBLAS 库 171
-14.3.1  简介 171
-14.3.2  例子：矩阵乘法 172
-14.4  cuSolver 库 176
-14.4.1  简介 176
-14.4.2  例子：矩阵本征值 177
-14.5  cuRAND 库 181
-14.5.1  简介 181
-14.5.2  例子 182
-```
+已于2020年10月由清华大学出版社出版，语言为中文。在京东或者淘宝搜索“CUDA 编程 樊哲勇”可找到本书。
 
-## 我的测试系统
-* Linux: 主机编译器用的 `g++`。
-* Windows: 仅使用命令行解释器 `CMD`，主机编译器用 Visual Studio 中的 `cl`。在用 `nvcc` 编译 CUDA 程序时，可能需要添加 `-Xcompiler "/wd 4819"` 选项消除和 unicode 有关的警告。
-* 全书代码可在 `CUDA` 9.0-10.2 （包含）之间的版本运行。
+## 第一版勘误
 
-## 目录和源代码条目
+本仓库的 master 分支将对应开发版本，与第一版对应的源代码见如下发布版本：https://github.com/brucefan1983/CUDA-Programming/releases/tag/v1.0。欢迎读者找错。找到一个其他人没有报告的错误并说服我改正者，我承诺送您此书第二版一本。目前收到的错误报告如下：
 
-### 第 1 章：GPU 硬件和 CUDA 工具
+* 前言：“苏州吉浦**讯**科技有限公司”应改为“苏州吉浦**迅**科技有限公司”。感谢 GPUSLady 指正。
+* 第 52 页的 `$ nvcc -O3 -arch=sm_75 -arithmetic1cpu.cu` 应改为 `$ nvcc -O3 -arch=sm_75 arithmetic1cpu.cu`。类似地，第53页的 `$ nvcc -O3 -arch=sm_75 -arithmetic2gpu.cu` 应改为 `$ nvcc -O3 -arch=sm_75 arithmetic2gpu.cu`。感谢 Ebrece 指正。
+* 第 135 页，倒数第二行，“函数将退化同步的”应改为“函数将退化**为**同步的”。感谢 Ebrece 指正。
+* 第 143 页，程序中第 23 行核函数的第二个参数 `size` 应改为 `size / sizeof(uint64_t)`。我已修改本仓库中 [对应的程序](https://github.com/brucefan1983/CUDA-Programming/blob/master/src/12-unified-memory/oversubscription2.cu)。感谢我自己找到这个错误。
+
+# 目录和源代码条目
+
+
+
+## 第 1 章：GPU 硬件和 CUDA 工具
 
 本章无源代码。
 
 
-### 第 2 章：`CUDA` 中的线程组织
+## 第 2 章：`CUDA` 中的线程组织
 
 | 文件       | 知识点 |
 |:------------|:---------------|
@@ -203,7 +55,7 @@ https://github.com/YouQixiaowu/CUDA-Programming-with-Python
 | `hello5.cu` | 使用两维线程块 |
 
 
-### 第 3 章：`CUDA` 程序的基本框架
+## 第 3 章：`CUDA` 程序的基本框架
 
 | 文件        | 知识点 |
 |:------------|:---------------|
@@ -214,7 +66,7 @@ https://github.com/YouQixiaowu/CUDA-Programming-with-Python
 | `add4device.cu`| 定义与使用 `__device__` 函数 |
 
 
-### 第 4 章：`CUDA` 程序的错误检测
+## 第 4 章：`CUDA` 程序的错误检测
 
 | 文件       | 知识点 |
 |:------------|:---------------|
@@ -224,7 +76,7 @@ https://github.com/YouQixiaowu/CUDA-Programming-with-Python
 | `error.cuh`       | 本书常用的用于检测错误的宏函数 |
 
 
-### 第 5 章：获得 GPU 加速的前提
+## 第 5 章：获得 GPU 加速的前提
 
 | 文件       | 知识点 |
 |:------------|:---------------|
@@ -235,7 +87,7 @@ https://github.com/YouQixiaowu/CUDA-Programming-with-Python
 | `arithmetic2gpu.cu`       | 提高算术强度的核函数；GPU/CPU 加速比是不是很高？ |
 
 
-### 第 6 章： `CUDA` 中的内存组织
+## 第 6 章： `CUDA` 中的内存组织
 
 | 文件        | 知识点 |
 |:------------|:---------------|
@@ -243,13 +95,13 @@ https://github.com/YouQixiaowu/CUDA-Programming-with-Python
 | `query.cu`     | 如何在 CUDA 程序中查询所用 GPU 的相关技术指标 |
 
 
-### 第 7 章：全局内存的合理使用
+## 第 7 章：全局内存的合理使用
 
 | 文件        | 知识点 |
 |:------------|:---------------|
 | `matrix.cu` | 合并与非合并读、写对程序性能的影响 |
 
-### 第 8 章：共享内存的合理使用
+## 第 8 章：共享内存的合理使用
 
 | 文件        | 知识点 |
 |:------------|:---------------|
@@ -258,7 +110,7 @@ https://github.com/YouQixiaowu/CUDA-Programming-with-Python
 | `bank.cu`           | 使用共享内存实现矩阵转置并避免共享内存的 bank 冲突 |
 
 
-### 第 9 章：原子函数的合理使用
+## 第 9 章：原子函数的合理使用
 
 | 文件        | 知识点 |
 |:------------|:---------------|
@@ -267,7 +119,7 @@ https://github.com/YouQixiaowu/CUDA-Programming-with-Python
 | `neighbor2gpu.cu`  | GPU 版本的邻居列表构建函数，分使用和不使用原子函数的情况 |
 
 
-### 第 10 章: 线程束内部函数
+## 第 10 章: 线程束内部函数
 | 文件        | 知识点 |
 |:------------|:---------------|
 | `reduce.cu` | 线程束同步函数、线程束洗牌函数以及协作组的使用 |
@@ -275,7 +127,7 @@ https://github.com/YouQixiaowu/CUDA-Programming-with-Python
 | `reduce2static.cu` | 利用静态全局内存加速  |
 
 
-### 第 11 章： `CUDA` 流
+## 第 11 章： `CUDA` 流
 | 文件        | 知识点 |
 |:------------|:---------------|
 | `host-kernel.cu`     | 重叠主机与设备计算 |
@@ -283,7 +135,7 @@ https://github.com/YouQixiaowu/CUDA-Programming-with-Python
 | `kernel-transfer.cu` | 重叠核函数执行与数据传输 |
 
 
-### 第 12 章：统一内存
+## 第 12 章：统一内存
 | 文件       | 知识点 |
 |:------------|:---------------|
 | `add.cu` | 使用统一内存可以简化代码 |
@@ -292,14 +144,14 @@ https://github.com/YouQixiaowu/CUDA-Programming-with-Python
 | `oversubscription3.cu` | 用 CPU 先访问统一内存时不可超过主机内存容量 |
 | `prefetch.cu` | 使用 cudaMemPrefetchAsync 函数 |
 
-### 第 13 章：分子动力学模拟（MD）
+## 第 13 章：分子动力学模拟（MD）
 | 文件夹        | 知识点 |
 |:------------|:---------------|
 | `cpp`     | C++ 版本的 MD 程序 |
 | `force-only`   | 仅将求力的函数移植到 CUDA |
 | `whole-code` | 全部移植到 CUDA |
 
-### 第 14 章：CUDA 库
+## 第 14 章：CUDA 库
 | 文件        | 知识点 |
 |:------------|:---------------|
 | `thrust_scan_vector.cu`  | 使用 `thrust` 中的设备矢量 |
@@ -309,9 +161,15 @@ https://github.com/YouQixiaowu/CUDA-Programming-with-Python
 | `curand_host1.cu`        | 用 `cuRAND` 产生均匀分布的随机数 |
 | `curand_host2.cu`        | 用 `cuRAND` 产生高斯分布的随机数 |
 
-## 我的部分测试结果
+# 我的部分测试结果
 
-### 矢量相加 (第 5 章)
+## 我的测试系统
+
+* Linux: 主机编译器用的 `g++`。
+* Windows: 仅使用命令行解释器 `CMD`，主机编译器用 Visual Studio 中的 `cl`。在用 `nvcc` 编译 CUDA 程序时，可能需要添加 `-Xcompiler "/wd 4819"` 选项消除和 unicode 有关的警告。
+* 全书代码可在 `CUDA` 9.0-10.2 （包含）之间的版本运行。
+
+## 矢量相加 (第 5 章)
 
 * 数组元素个数 = 1.0e8。
 * CPU (我的笔记本) 函数的执行时间是 60 ms （单精度）和 120 ms （双精度）。
@@ -323,7 +181,7 @@ https://github.com/YouQixiaowu/CUDA-Programming-with-Python
 
 * 如果包含 cudaMemcpy 所花时间，GeForce RTX 2070-laptop 用时 180 ms （单精度）和 360 ms （双精度），是 CPU 版本的三倍慢！
 
-### 一个高算术强度的函数（第 5 章）
+## 一个高算术强度的函数（第 5 章）
 * CPU 函数（数组长度为 10^4）用时 320 ms （单精度）和 450 ms （双精度）。
 * GPU 函数（数组长度为 10^6）用时情况如下表：
 
@@ -342,7 +200,7 @@ https://github.com/YouQixiaowu/CUDA-Programming-with-Python
 | 10000000   | 250 ms |
 | 100000000  | 2500 ms |
 
-### 矩阵复制和转置 (第 7-8 章)
+## 矩阵复制和转置 (第 7-8 章)
 * 矩阵维度为 10000 乘 10000。
 * 核函数执行时间见下表：
 
@@ -356,7 +214,7 @@ https://github.com/YouQixiaowu/CUDA-Programming-with-Python
 | 利用共享内存转置，且无 bank 冲突      | 1.4 ms | 2.5 ms | 2.3 ms | 4.2 ms |  |
 
 
-### 数组归约（第 8-10 章）
+## 数组归约（第 8-10 章）
 
 * 数组长度为 1.0e8，每个元素为 1.23。
 * 归约的精确结果为 123000000。
@@ -377,7 +235,7 @@ https://github.com/YouQixiaowu/CUDA-Programming-with-Python
 | 共享内存+协作组+两个核函数+静态全局内存 | 1.5 ms |123000064 （**七位**正确的有效数字）|
 
 
-### 邻居列表（第 9 章）
+## 邻居列表（第 9 章）
 
 * 原子数为 22464。
 * 使用单精度或双精度时，CPU 都用时约 250 毫秒。
@@ -390,13 +248,13 @@ https://github.com/YouQixiaowu/CUDA-Programming-with-Python
 
 
 
-### 分子动力学模拟（第 13 章）
+## 分子动力学模拟（第 13 章）
 
 * 模拟体系为固态氩
 * GPU 为笔记本中的 RTX 2070，使用单精度浮点数
 * CPU 为 Intel i7-8750H 处理器
 
-#### CPU 版本计算速度测试
+### CPU 版本计算速度测试
 * 原子数 N = 10^3 * 4 = 4000
 * 产出步数 = 20000
 * 各个部分所花时间见下表
@@ -405,7 +263,7 @@ https://github.com/YouQixiaowu/CUDA-Programming-with-Python
 |:----------------|:---------|:-----------|
 | 62 s| 0.7 s | 62.7 s |
 
-#### force-only 版本的计算速度测试
+### force-only 版本的计算速度测试
 
 | 原子数  | 产出步数   | 求力和数据传输的时间 | 运动方程积分的时间  | 全部时间 | 整体速度|
 |:----------------|:---------|:-----------|:-----------|:-----------|:-----------|
@@ -414,7 +272,7 @@ https://github.com/YouQixiaowu/CUDA-Programming-with-Python
 | 108000 | 4000 | 5.4 s | 3.3 s  |  8.7 s  | 5.0e7 原子步每秒|
 | 256000 | 2000 | 5.4 s | 4.6 s  |  10 s  | 5.1e7 原子步每秒|
 
-#### whole-code 版本的计算速度测试
+### whole-code 版本的计算速度测试
 
 | 原子数  | 产出步数   | 求力的时间 | 运动方程积分的时间 | 全部时间 | 整体速度|
 |:----------------|:---------|:-----------|:----------|:-----------|:-----------|
