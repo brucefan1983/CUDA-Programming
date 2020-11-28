@@ -27,7 +27,7 @@ https://github.com/YouQixiaowu/CUDA-Programming-with-Python
 
 ## 第一版勘误
 
-本仓库的 master 分支将对应开发版本，与第一版对应的源代码见如下发布版本：https://github.com/brucefan1983/CUDA-Programming/releases/tag/v1.0。欢迎读者找错。找到一个其他人没有报告的错误并说服我改正者，我承诺送您此书第二版一本。目前收到的错误报告如下：
+本仓库的 master 分支将对应开发版本，与第一版对应的源代码见此[发布版本](https://github.com/brucefan1983/CUDA-Programming/releases/tag/v1.0)。欢迎读者针对本书找错。找到一个其他人没有报告的错误并说服我改正者，我承诺送您此书第二版一本。目前收到的错误报告如下：
 
 * 前言：“苏州吉浦**讯**科技有限公司”应改为“苏州吉浦**迅**科技有限公司”。感谢 GPUSLady 指正。
 * 第 52 页的 `$ nvcc -O3 -arch=sm_75 -arithmetic1cpu.cu` 应改为 `$ nvcc -O3 -arch=sm_75 arithmetic1cpu.cu`。类似地，第53页的 `$ nvcc -O3 -arch=sm_75 -arithmetic2gpu.cu` 应改为 `$ nvcc -O3 -arch=sm_75 arithmetic2gpu.cu`。感谢 Ebrece 指正。
@@ -36,12 +36,9 @@ https://github.com/YouQixiaowu/CUDA-Programming-with-Python
 
 # 目录和源代码条目
 
-
-
 ## 第 1 章：GPU 硬件和 CUDA 工具
 
 本章无源代码。
-
 
 ## 第 2 章：`CUDA` 中的线程组织
 
@@ -54,7 +51,6 @@ https://github.com/YouQixiaowu/CUDA-Programming-with-Python
 | `hello4.cu` | 使用多个线程块 |
 | `hello5.cu` | 使用两维线程块 |
 
-
 ## 第 3 章：`CUDA` 程序的基本框架
 
 | 文件        | 知识点 |
@@ -65,7 +61,6 @@ https://github.com/YouQixiaowu/CUDA-Programming-with-Python
 | `add3if.cu`    | 什么时候必须在核函数使用 if 语句？ |
 | `add4device.cu`| 定义与使用 `__device__` 函数 |
 
-
 ## 第 4 章：`CUDA` 程序的错误检测
 
 | 文件       | 知识点 |
@@ -74,7 +69,6 @@ https://github.com/YouQixiaowu/CUDA-Programming-with-Python
 | `check2kernel.cu` | 检测 `CUDA` 核函数的调用 |
 | `memcheck.cu`     | 用 `cuda-memcheck` 检测内存方面的错误 |
 | `error.cuh`       | 本书常用的用于检测错误的宏函数 |
-
 
 ## 第 5 章：获得 GPU 加速的前提
 
@@ -86,14 +80,12 @@ https://github.com/YouQixiaowu/CUDA-Programming-with-Python
 | `arithmetic1cpu.cu`       | 提高算术强度的 `C++` 函数 |
 | `arithmetic2gpu.cu`       | 提高算术强度的核函数；GPU/CPU 加速比是不是很高？ |
 
-
 ## 第 6 章： `CUDA` 中的内存组织
 
 | 文件        | 知识点 |
 |:------------|:---------------|
 | `static.cu`    | 如何使用静态全局内存 |
 | `query.cu`     | 如何在 CUDA 程序中查询所用 GPU 的相关技术指标 |
-
 
 ## 第 7 章：全局内存的合理使用
 
@@ -109,7 +101,6 @@ https://github.com/YouQixiaowu/CUDA-Programming-with-Python
 | `reduce2gpu.cu`     | 仅使用全局内存和同时使用全局内存和共享内存的归约核函数|
 | `bank.cu`           | 使用共享内存实现矩阵转置并避免共享内存的 bank 冲突 |
 
-
 ## 第 9 章：原子函数的合理使用
 
 | 文件        | 知识点 |
@@ -118,7 +109,6 @@ https://github.com/YouQixiaowu/CUDA-Programming-with-Python
 | `neighbor1cpu.cu`  | CPU 版本的邻居列表构建函数 |
 | `neighbor2gpu.cu`  | GPU 版本的邻居列表构建函数，分使用和不使用原子函数的情况 |
 
-
 ## 第 10 章: 线程束内部函数
 | 文件        | 知识点 |
 |:------------|:---------------|
@@ -126,14 +116,12 @@ https://github.com/YouQixiaowu/CUDA-Programming-with-Python
 | `reduce1parallelism.cu` | 提高线程利用率 |
 | `reduce2static.cu` | 利用静态全局内存加速  |
 
-
 ## 第 11 章： `CUDA` 流
 | 文件        | 知识点 |
 |:------------|:---------------|
 | `host-kernel.cu`     | 重叠主机与设备计算 |
 | `kernel-kernel.cu`   | 重叠核函数之间的计算 |
 | `kernel-transfer.cu` | 重叠核函数执行与数据传输 |
-
 
 ## 第 12 章：统一内存
 | 文件       | 知识点 |
@@ -213,7 +201,6 @@ https://github.com/YouQixiaowu/CUDA-Programming-with-Python
 | 利用共享内存转置，但有 bank 冲突      | 1.8 ms | 2.6 ms | 3.5 ms | 4.3 ms |  |
 | 利用共享内存转置，且无 bank 冲突      | 1.4 ms | 2.5 ms | 2.3 ms | 4.2 ms |  |
 
-
 ## 数组归约（第 8-10 章）
 
 * 数组长度为 1.0e8，每个元素为 1.23。
@@ -234,7 +221,6 @@ https://github.com/YouQixiaowu/CUDA-Programming-with-Python
 | 共享内存+协作组+两个核函数             | 2.0 ms |123000064 （**七位**正确的有效数字）|
 | 共享内存+协作组+两个核函数+静态全局内存 | 1.5 ms |123000064 （**七位**正确的有效数字）|
 
-
 ## 邻居列表（第 9 章）
 
 * 原子数为 22464。
@@ -245,8 +231,6 @@ https://github.com/YouQixiaowu/CUDA-Programming-with-Python
 |:----------------|:---------|:---------|:-----------|:-----------|
 | 否 | 1.9 ms | 2.6  ms | 2.8 ms | 23 ms |
 | 是    | 1.8 ms | 2.6  ms | 2.5 ms | 16 ms |
-
-
 
 ## 分子动力学模拟（第 13 章）
 
