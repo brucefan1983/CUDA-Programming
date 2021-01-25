@@ -13,7 +13,9 @@ I am writing a simplified English version (about half size of the Chinese versio
 # 友情链接
 * 由琪同学正在用 pyCUDA 实现本书中的范例，见如下仓库：
 https://github.com/YouQixiaowu/CUDA-Programming-with-Python
-* 购买此书的读者可以加入《CUDA 100%》QQ 群：195055206。若对书中的内容有疑问，可在此群讨论。注意：入群时需要回答一个问题，只有拿到书之后才能确定答案。
+* 读者也可以加入作者所在的如下QQ群，针对本书中的内容提问：
+  * 《CUDA Professional》QQ 群：45157483
+  * 《GPUMD》QQ 群：887975816
 
 # 关于本书第一版：
 
