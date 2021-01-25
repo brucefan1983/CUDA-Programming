@@ -21,6 +21,8 @@ https://github.com/YouQixiaowu/CUDA-Programming-with-Python
 
 ## 封面
 
+注意：本书仅有182页，没有如下封面展示的那么厚，因为这个封面只是编辑发给我的一个示意图，而不是实物图。要点：不要对本书的厚度（及深度）有太高的期望，否则会有点失望。
+
 ![cover](cover.jpg)
 
 ## 购买渠道
