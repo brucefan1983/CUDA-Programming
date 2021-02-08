@@ -39,6 +39,7 @@ https://github.com/YouQixiaowu/CUDA-Programming-with-Python
 | Ebrece | 笔误 | 第 52-53 页 | `$ nvcc -O3 -arch=sm_75 -arithmetic1cpu.cu` 应改为 `$ nvcc -O3 -arch=sm_75 arithmetic1cpu.cu`。类似地，`$ nvcc -O3 -arch=sm_75 -arithmetic2gpu.cu` 应改为 `$ nvcc -O3 -arch=sm_75 arithmetic2gpu.cu`。 | 
 | Ebrece | 笔误 | 第 135 页 | 倒数第二行的“函数将退化同步的”应改为“函数将退化**为**同步的”。|
 | 我自己 | 不安全的代码 | 第 143 页 | 程序中第 23 行核函数的第二个参数 `size` 应改为 `size / sizeof(uint64_t)`。我已修改本仓库中 [对应的程序](https://github.com/brucefan1983/CUDA-Programming/blob/master/src/12-unified-memory/oversubscription2.cu)。 |
+| 某网友 | 笔误 | 第 106 页 | “在10.1节”应改为“在第10.2节”|
 
 # 目录和源代码条目
 
