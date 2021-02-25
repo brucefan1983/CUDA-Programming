@@ -38,6 +38,7 @@ int main(void)
     
     CHECK(cudaMemPrefetchAsync(z, M, cudaCpuDeviceId, NULL));
 
+    CHECK(cudaDeviceSynchronize());
     check(z, N);
 
     CHECK(cudaFree(x));
