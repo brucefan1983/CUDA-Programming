@@ -36,6 +36,7 @@ https://github.com/YouQixiaowu/CUDA-Programming-with-Python
 | 报告者       | 错误类型 | 页码信息  |  更正信息 |
 |:------------|:---------------|:---------------|:---------------|
 | GPUSLady | 笔误 | 前言 | “苏州吉浦**讯**科技有限公司”应改为“苏州吉浦**迅**科技有限公司”。 |
+| EverNorif | 笔误 | 第 34 页 | “调用该核函时” 应改为 “调用该核函数时”。 | 
 | Ebrece | 笔误 | 第 52-53 页 | `$ nvcc -O3 -arch=sm_75 -arithmetic1cpu.cu` 应改为 `$ nvcc -O3 -arch=sm_75 arithmetic1cpu.cu`。类似地，`$ nvcc -O3 -arch=sm_75 -arithmetic2gpu.cu` 应改为 `$ nvcc -O3 -arch=sm_75 arithmetic2gpu.cu`。 | 
 | Ebrece | 笔误 | 第 135 页 | 倒数第二行的“函数将退化同步的”应改为“函数将退化**为**同步的”。|
 | 我自己 | 不安全的代码 | 第 143 页 | 程序中第 23 行核函数的第二个参数 `size` 应改为 `size / sizeof(uint64_t)`。我已修改本仓库中 [对应的程序](https://github.com/brucefan1983/CUDA-Programming/blob/master/src/12-unified-memory/oversubscription2.cu)。 |
