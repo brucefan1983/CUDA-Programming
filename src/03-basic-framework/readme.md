@@ -182,7 +182,7 @@ Kernels can call functions without a execution configuration, which are called d
 
 * Functions decorated as `__global__` are kernels, which are called from host and executed in device. 
 * Functions decorated as `__device__` are device functions, which are called from kernels and executed in device. 
-* Functions decorated as `__host__` are device functions, which are called from kernels and executed in device. This is usually used together with `__host__` to indicate that a function is simultaneously a host function and a device function. Compilers will generate both versions.
+* Functions decorated as `__host__` are host functions, which are called from host and executed in host. This is usually used together with `__device__` to indicate that a function is simultaneously a host function and a device function. Compilers will generate both versions.
 * It is apparent that `__device__` cannot be used together with `__global`.
 * It is apparent that `__host__` cannot be used together with `__global`.
 * `__noinline__` and `__forceinline` can be used for a device function to suggest the compiler treat it as a non-inline or inline function.
