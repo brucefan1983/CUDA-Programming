@@ -185,7 +185,7 @@ Kernels can call functions without a execution configuration, which are called d
 * Functions decorated as `__host__` are host functions, which are called from host and executed in host. This is usually used together with `__device__` to indicate that a function is simultaneously a host function and a device function. Compilers will generate both versions.
 * It is apparent that `__device__` cannot be used together with `__global__`.
 * It is apparent that `__host__` cannot be used together with `__global__`.
-* `__noinline__` and `__forceinline` can be used for a device function to suggest the compiler treat it as a non-inline or inline function.
+* `__noinline__` and `__forceinline__` can be used for a device function to suggest the compiler treat it as a non-inline or inline function.
 
 The program [add4device.cu](https://github.com/brucefan1983/CUDA-Programming/blob/master/src/03-basic-framework/add4device.cu) demonstrates the definition and use of device functions, using different styles of returning values. 
 
