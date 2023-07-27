@@ -15,7 +15,6 @@ I am writing a simplified English version (about half size of the Chinese versio
 https://github.com/YouQixiaowu/CUDA-Programming-with-Python
 * 读者也可以加入作者所在的如下QQ群，针对本书中的内容提问：
   * 《CUDA Professional》QQ 群：45157483
-  * 《GPUMD》QQ 群：887975816
 
 # 关于本书第一版：
 
