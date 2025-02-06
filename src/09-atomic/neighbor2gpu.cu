@@ -110,7 +110,6 @@ void __global__ find_neighbor_atomic
     const int n1 = blockIdx.x * blockDim.x + threadIdx.x;
     if (n1 < N)
     {
-        d_NN[n1] = 0;
         const real x1 = d_x[n1];
         const real y1 = d_y[n1];
         for (int n2 = n1 + 1; n2 < N; ++n2)
@@ -172,6 +171,7 @@ void timing
 
         if (atomic)
         {
+            CHECK(cudaMemset(d_NN, 0, sizeof(int) * N));
             find_neighbor_atomic<<<grid_size, block_size>>>
             (d_NN, d_NL, d_x, d_y, N, cutoff_square);
         }
