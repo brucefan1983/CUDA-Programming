@@ -11,10 +11,8 @@ I am writing a simplified English version (about half size of the Chinese versio
 * [Chapter 5 (**finished**)](https://github.com/brucefan1983/CUDA-Programming/tree/master/src/05-prerequisites-for-speedup)
 
 # 友情链接
-* 由琪同学正在用 pyCUDA 实现本书中的范例，见如下仓库：
+* 由琪同学正在用 pyCUDA 实现本书中的范例，见如下仓库（似乎已停止更新）：
 https://github.com/YouQixiaowu/CUDA-Programming-with-Python
-* 读者也可以加入作者所在的如下QQ群，针对本书中的内容提问：
-  * 《CUDA Professional》QQ 群：45157483
 
 # 关于本书第一版：
 
