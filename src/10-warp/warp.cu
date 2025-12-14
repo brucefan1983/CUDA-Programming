@@ -36,13 +36,13 @@ void __global__ test_warp_primitives(void)
     int result = __all_sync(FULL_MASK, tid);
     if (tid == 0) printf("all_sync (FULL_MASK): %d\n", result);
 
-    result = __all_sync(mask1, tid);
+    if (tid != 0) result = __all_sync(mask1, tid);
     if (tid == 1) printf("all_sync     (mask1): %d\n", result);
 
     result = __any_sync(FULL_MASK, tid);
     if (tid == 0) printf("any_sync (FULL_MASK): %d\n", result);
 
-    result = __any_sync(mask2, tid);
+    if (tid == 0) result = __any_sync(mask2, tid);
     if (tid == 0) printf("any_sync     (mask2): %d\n", result);
 
     int value = __shfl_sync(FULL_MASK, tid, 2, WIDTH);
