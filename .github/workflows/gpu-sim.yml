@@ -1,0 +1,129 @@
+name: CUDA samples (simulated H100)
+
+# Optional, non-required check. The hosted runners have no GPU, so this builds a
+# subset of the chapter 2-5 samples and runs them on a simulated NVIDIA H100
+# (https://github.com/pantheongpu/pantheonsim). A simulator cannot reproduce
+# hardware-specific behavior or timing, so it complements real-GPU testing and
+# does not replace it.
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "src/02-thread-organization/**"
+      - "src/03-basic-framework/**"
+      - "src/04-error-check/**"
+      - "src/05-prerequisites-for-speedup/**"
+      - ".github/workflows/gpu-sim.yml"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  cuda-sim:
+    name: CUDA 13.0, simulated H100
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
+        with:
+          persist-credentials: false
+
+      - name: Set up the simulated GPU and CUDA toolkit
+        uses: pantheongpu/setup-pantheonsim@656f502ef4782d94d34d8ddd368e333960609639 # v0.1.8
+        with:
+          gpu: nvidia/h100
+          cuda-toolkit: "13.0"
+
+      # The simulator runs PTX only (compute_90) and needs a shared CUDA runtime.
+      # The samples use 1e8 elements, so a copy is built with N reduced to about
+      # 1e6. Left out: hello1.cu, add1cpu.cu, arithmetic1cpu.cu (host only),
+      # memcheck.cu (out-of-bounds write by design, for compute-sanitizer) and
+      # chapters 1 and 6-14 (not covered yet).
+      - name: Build and run the samples
+        run: |
+          # Builds a subset of chapters 2-5 and runs it; fails on a wrong result.
+          set -u +e  # the hosted shell runs with -e; failures are counted instead
+          src=src; work="$RUNNER_TEMP/samples"; runner="vgpu run"
+          nvcc_flags="-arch=compute_90 -cudart shared"
+          rm -rf "${work:?}"; mkdir -p "$work"
+          cp -r "$src"/0[2-5]-* "$work"/
+          # The samples use 1e8 elements (800 MB per double array); shrink to ~1e6 for the simulator.
+          # 1024000 = 8000 * 128, so add1.cu (no bounds check) still covers every element exactly.
+          sed -i 's/= 100000000;/= 1024000;/; s/= 100000001;/= 1024001;/' "$work"/0[345]-*/*.cu
+          fails=0
+          fail() { echo "FAIL: $*"; fails=$((fails+1)); }
+
+          # run_case DIR FILE "EXTRA NVCC FLAGS" EXPECT ARGS...
+          #   EXPECT is one of: noerr:N (exit 0, N lines "No errors"), hello:N (exit 0, N GPU lines),
+          #   exit0 (exit 0, "Time" lines), cudaerr:TEXT (exit 1, prints TEXT), haserr (exit 0, "Has errors")
+          run_case() {
+            local dir=$1 file=$2 flags=$3 expect=$4; shift 4
+            local exe="$work/$dir/${file%.cu}${flags:+_$(echo "$flags" | tr -c 'A-Za-z0-9\n' _)}"
+            echo "::group::$dir/$file $flags"
+            if ! (cd "$work/$dir" && nvcc $nvcc_flags $flags "$file" -o "$exe"); then
+              echo "::endgroup::"; fail "$dir/$file: build"; return
+            fi
+            local out rc
+            out=$(cd "$work/$dir" && timeout -s KILL 600 $runner "$exe" "$@" 2>&1); rc=$?
+            echo "$out" | tail -n 15
+            echo "exit code: $rc"
+            echo "::endgroup::"
+            case $expect in
+              noerr:*) n=${expect#noerr:}; c=$(grep -cx "No errors" <<<"$out")
+                      [ $rc -eq 0 ] && [ "$c" -eq "$n" ] && ! grep -q "Has errors" <<<"$out" || fail "$dir/$file $flags: expected $n x 'No errors' and exit 0, got $c (exit $rc)" ;;
+              haserr) [ $rc -eq 0 ] && grep -qx "Has errors" <<<"$out" || fail "$dir/$file: expected the deliberate 'Has errors'" ;;
+              hello:*) n=${expect#hello:}; c=$(grep -c "^Hello World from" <<<"$out")
+                      [ $rc -eq 0 ] && [ "$c" -eq "$n" ] || fail "$dir/$file: expected $n GPU lines, got $c (exit $rc)" ;;
+              exit0)  [ $rc -eq 0 ] && grep -q "^Time = " <<<"$out" || fail "$dir/$file $flags: expected exit 0 and timing output" ;;
+              cudaerr:*) t=${expect#cudaerr:}; [ $rc -eq 1 ] && grep -q "Error text: $t" <<<"$out" || fail "$dir/$file: expected exit 1 with '$t'" ;;
+            esac
+          }
+
+          # Device guard: a missing device must fail the job, because several samples ignore API errors.
+          cat > "$work/guard.cu" <<'CU'
+          #include <stdio.h>
+          int main() {
+            int n = 0, v = 0;
+            cudaError_t e = cudaGetDeviceCount(&n);
+            if (e != cudaSuccess || n < 1) { printf("no CUDA device: %s\n", cudaGetErrorString(e)); return 1; }
+            cudaDeviceProp p; cudaGetDeviceProperties(&p, 0);
+            cudaRuntimeGetVersion(&v);
+            printf("device 0: %s sm_%d%d, %d SMs, runtime %d\n", p.name, p.major, p.minor, p.multiProcessorCount, v);
+            int *d; if (cudaMalloc(&d, 4) != cudaSuccess) { printf("cudaMalloc failed\n"); return 1; }
+            cudaFree(d);
+            return 0;
+          }
+          CU
+          nvcc $nvcc_flags "$work/guard.cu" -o "$work/guard" || exit 1
+          $runner "$work/guard" || { echo "FAIL: no usable CUDA device"; exit 1; }
+          $runner "$work/guard" | grep -q "H100" || { echo "FAIL: device is not the simulated H100"; exit 1; }
+
+          # Chapter 2: kernels print one line per GPU thread (hello1.cu is host only, skipped)
+          run_case 02-thread-organization hello2.cu "" hello:1
+          run_case 02-thread-organization hello3.cu "" hello:8
+          run_case 02-thread-organization hello4.cu "" hello:8
+          run_case 02-thread-organization hello5.cu "" hello:8
+          # Chapter 3
+          run_case 03-basic-framework add1.cu "" noerr:1
+          run_case 03-basic-framework add3if.cu "" noerr:1
+          run_case 03-basic-framework add4device.cu "" noerr:3
+          run_case 03-basic-framework add2wrong.cu "" haserr          # deliberately wrong cudaMemcpy direction
+          # Chapter 4: the two deliberately broken programs must report the error the book describes
+          run_case 04-error-check check1api.cu "" cudaerr:"invalid argument"
+          run_case 04-error-check check2kernel.cu "" cudaerr:"invalid argument"    # block size 1280 (CUDA 13 reports this too, not code 9 as in the book)
+          # Chapter 5: single and double precision, N reduced above
+          run_case 05-prerequisites-for-speedup add2gpu.cu "" noerr:1
+          run_case 05-prerequisites-for-speedup add2gpu.cu "-DUSE_DP" noerr:1
+          run_case 05-prerequisites-for-speedup add3memcpy.cu "" noerr:1
+          run_case 05-prerequisites-for-speedup add3memcpy.cu "-DUSE_DP" noerr:1
+          run_case 05-prerequisites-for-speedup arithmetic2gpu.cu "" exit0 10000
+          run_case 05-prerequisites-for-speedup arithmetic2gpu.cu "-DUSE_DP" exit0 10000
+
+          echo "failures: $fails"
+          [ "$fails" -eq 0 ]
